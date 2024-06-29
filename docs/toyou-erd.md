@@ -21,19 +21,19 @@ erDiagram
         bigint group_id FK
     }
 
-    USER ||--|{ ROLLING_PAPER: creates
-    USER ||--o{ ROLLING_PAPER: receives
+    MEMBER ||--|{ ROLLING_PAPER: creates
     ROLLING_PAPER {
         bigint id
         string title
-        bigint creator_id FK
+        bigint member_id FK
         bigint group_id FK
     }
 
-    ROLLING_PAPER ||--o{ COMMENT: written_by
+    ROLLING_PAPER ||--o{ COMMENT: has
+    MEMBER ||--o{ COMMENT: written_by
     COMMENT {
         bigint rolling_paper_id FK
-        bigint user_id FK
+        bigint member_id FK
         string message
     }
 
