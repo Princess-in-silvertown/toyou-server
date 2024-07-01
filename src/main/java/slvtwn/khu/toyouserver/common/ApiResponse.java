@@ -1,17 +1,23 @@
 package slvtwn.khu.toyouserver.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 
 @Getter
+@JsonPropertyOrder({"code", "message", "data", "pageInfo"})
 public class ApiResponse<T> {
 
 	private final String code;
 
 	private final String message;
 
+	@JsonInclude(Include.NON_NULL)
 	private final T data;
 
 	private final PageInfoResponse pageInfo;
+
 
 	ApiResponse(String code, String message) {
 		this.code = code;
