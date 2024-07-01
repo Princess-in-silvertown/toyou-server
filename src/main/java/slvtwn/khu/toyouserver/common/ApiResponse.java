@@ -11,7 +11,7 @@ public class ApiResponse<T> {
 
 	private final T data;
 
-	private final Object pageInfo;
+	private final PageInfoResponse pageInfo;
 
 	ApiResponse(String code, String message) {
 		this.code = code;
@@ -28,7 +28,7 @@ public class ApiResponse<T> {
 
 	}
 
-	ApiResponse(String code, String message, T data, Object pageInfo) {
+	ApiResponse(String code, String message, T data, PageInfoResponse pageInfo) {
 		this.code = code;
 		this.message = message;
 		this.data = data;
@@ -43,11 +43,28 @@ public class ApiResponse<T> {
 		return new ApiResponse<>(successType.getCode(), successType.getMessage(), data);
 	}
 
-	public static <T> ApiResponse<T> success(SuccessType successType, T data, Object pageInfo) {
+	public static <T> ApiResponse<T> success(SuccessType successType, T data, PageInfoResponse pageInfo) {
 		return new ApiResponse<>(successType.getCode(), successType.getMessage(), data, pageInfo);
 	}
 
-	public static <T> ApiResponse<T> error(ErrorType errorType) {
+	public static ApiResponse<?> error(ErrorType errorType) {
 		return new ApiResponse<>(errorType.getCode(), errorType.getMessage());
 	}
+
+	public static <T> ApiResponse<T> error(ErrorType errorType, T data) {
+		return new ApiResponse<>(errorType.getCode(), errorType.getMessage(), data);
+	}
+
+	public static ApiResponse<?> error(ErrorType errorType, String message) {
+		return new ApiResponse<>(errorType.getCode(), message);
+	}
+
+	public static <T> ApiResponse<T> error(ErrorType errorType, String message, T data) {
+		return new ApiResponse<>(errorType.getCode(), message, data);
+	}
+
+	public static <T> ApiResponse<Exception> error(ErrorType errorType, Exception e) {
+		return new ApiResponse<>(errorType.getCode(), errorType.getMessage(), e);
+	}
+
 }
