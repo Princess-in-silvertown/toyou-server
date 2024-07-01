@@ -18,20 +18,12 @@ public class ApiResponse<T> {
 
 	private final PageInfoResponse pageInfo;
 
-
 	ApiResponse(String code, String message) {
-		this.code = code;
-		this.message = message;
-		this.data = null;
-		this.pageInfo = null;
+		this(code, message, null, null);
 	}
 
 	ApiResponse(String code, String message, T data) {
-		this.code = code;
-		this.message = message;
-		this.data = data;
-		this.pageInfo = null;
-
+		this(code, message, data, null);
 	}
 
 	ApiResponse(String code, String message, T data, PageInfoResponse pageInfo) {
