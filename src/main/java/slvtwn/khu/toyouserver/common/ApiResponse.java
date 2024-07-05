@@ -1,13 +1,20 @@
 package slvtwn.khu.toyouserver.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-@JsonPropertyOrder({"code", "message", "data", "pageInfo"})
-public class ApiResponse<T> {
+@JsonPropertyOrder({"timestamp", "code", "message", "data"})
+public class ApiResponse {
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss", timezone = "Asia/Seoul")
+	@JsonProperty("timestamp")
+	private LocalDateTime timestamp = LocalDateTime.now();
 
 	private final String code;
 
@@ -24,7 +31,6 @@ public class ApiResponse<T> {
 		this.code = code;
 		this.message = message;
 		this.data = data;
-		this.pageInfo = pageInfo;
 	}
 
 	public static ApiResponse success(SuccessType successType, Object data) {
