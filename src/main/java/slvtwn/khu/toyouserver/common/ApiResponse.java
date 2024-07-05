@@ -14,55 +14,28 @@ public class ApiResponse<T> {
 	private final String message;
 
 	@JsonInclude(Include.NON_NULL)
-	private final T data;
-
-	private final PageInfoResponse pageInfo;
+	private final Object data;
 
 	ApiResponse(String code, String message) {
-		this(code, message, null, null);
+		this(code, message, null);
 	}
 
-	ApiResponse(String code, String message, T data) {
-		this(code, message, data, null);
-	}
-
-	ApiResponse(String code, String message, T data, PageInfoResponse pageInfo) {
+	ApiResponse(String code, String message, Object data) {
 		this.code = code;
 		this.message = message;
 		this.data = data;
 		this.pageInfo = pageInfo;
 	}
 
-	public static <T> ApiResponse<T> success(SuccessType successType) {
-		return new ApiResponse<>(successType.getCode(), successType.getMessage());
+	public static ApiResponse success(SuccessType successType, Object data) {
+		return new ApiResponse(successType.getCode(), successType.getMessage(), data);
 	}
 
-	public static <T> ApiResponse<T> success(SuccessType successType, T data) {
-		return new ApiResponse<>(successType.getCode(), successType.getMessage(), data);
+	public static ApiResponse error(ErrorType errorType) {
+		return new ApiResponse(errorType.code(), errorType.message());
 	}
 
-	public static <T> ApiResponse<T> success(SuccessType successType, T data, PageInfoResponse pageInfo) {
-		return new ApiResponse<>(successType.getCode(), successType.getMessage(), data, pageInfo);
+	public static ApiResponse error(ErrorType errorType, Object data) {
+		return new ApiResponse(errorType.code(), errorType.message(), data);
 	}
-
-	public static ApiResponse<?> error(ErrorType errorType) {
-		return new ApiResponse<>(errorType.getCode(), errorType.getMessage());
-	}
-
-	public static <T> ApiResponse<T> error(ErrorType errorType, T data) {
-		return new ApiResponse<>(errorType.getCode(), errorType.getMessage(), data);
-	}
-
-	public static ApiResponse<?> error(ErrorType errorType, String message) {
-		return new ApiResponse<>(errorType.getCode(), message);
-	}
-
-	public static <T> ApiResponse<T> error(ErrorType errorType, String message, T data) {
-		return new ApiResponse<>(errorType.getCode(), message, data);
-	}
-
-	public static <T> ApiResponse<Exception> error(ErrorType errorType, Exception e) {
-		return new ApiResponse<>(errorType.getCode(), errorType.getMessage(), e);
-	}
-
 }
