@@ -1,6 +1,9 @@
 package slvtwn.khu.toyouserver.common;
 
 
+import static slvtwn.khu.toyouserver.common.ApiResponseFactory.error;
+import static slvtwn.khu.toyouserver.common.ApiResponseFactory.success;
+
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
@@ -36,12 +39,12 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
 	private Object createResponseByHttpStatus(HttpStatus status, Object body) {
 		if (status.is2xxSuccessful()) {
-			return ApiResponse.success(SuccessType.OK, body);
+			return success(SuccessType.OK, body);
 		} else if (status.is4xxClientError()) {
-			return ApiResponse.error(ErrorType.BAD_REQUEST);
+			return error(ErrorType.BAD_REQUEST);
 		} else if (status.is5xxServerError()) {
-			return ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR);
+			return error(ErrorType.INTERNAL_SERVER_ERROR);
 		}
-		return ApiResponse.error(ErrorType.RESPONSE_FORMAT_ERROR, body);
+		return error(ErrorType.RESPONSE_FORMAT_ERROR, body);
 	}
 }

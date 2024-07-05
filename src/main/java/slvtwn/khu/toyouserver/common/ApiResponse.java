@@ -32,16 +32,4 @@ public class ApiResponse {
 		this.message = message;
 		this.data = data;
 	}
-
-	public static ApiResponse success(SuccessType successType, Object data) {
-		return new ApiResponse(successType.getCode(), successType.getMessage(), data);
-	}
-
-	public static ApiResponse error(ErrorType errorType) {
-		return new ApiResponse(errorType.code(), errorType.message());
-	}
-
-	public static ApiResponse error(ErrorType errorType, Object data) {
-		return new ApiResponse(errorType.code(), errorType.message(), data);
-	}
 }
