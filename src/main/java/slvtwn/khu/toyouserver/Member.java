@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import slvtwn.khu.toyouserver.user.domain.User;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
