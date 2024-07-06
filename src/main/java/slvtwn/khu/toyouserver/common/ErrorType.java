@@ -10,6 +10,7 @@ public enum ErrorType {
 	BAD_REQUEST(HttpStatus.BAD_REQUEST, "TYU-400", "잘못된 요청입니다."),
 	NOT_FOUND(HttpStatus.NOT_FOUND, "TYU-404", "요청한 자원을 찾을 수 없습니다."),
 	GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "TYU-4041", "그룹을 찾을 수 없습니다."),
+	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "TYU-4042", "사용자를 찾을 수 없습니다."),
 
 	// 500 ~ 599 (서버 오류)
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "TYU-500", "서버 내부 오류");
