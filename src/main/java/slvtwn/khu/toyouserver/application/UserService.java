@@ -20,6 +20,7 @@ public class UserService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
 
-		return new UserResponse(user.getId(), user.getName(), user.getProfilePicture());
+		return new UserResponse(user.getId(), user.getName(), user.getBirthday(),
+				user.getProfilePicture());
 	}
 }
