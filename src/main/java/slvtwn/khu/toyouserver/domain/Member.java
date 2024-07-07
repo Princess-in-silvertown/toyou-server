@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver;
+package slvtwn.khu.toyouserver.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +9,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import slvtwn.khu.toyouserver.user.domain.User;
+import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,8 +1,5 @@
 package slvtwn.khu.toyouserver.user.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -10,9 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import slvtwn.khu.toyouserver.user.domain.User;
-import slvtwn.khu.toyouserver.user.dto.UserResponse;
-import slvtwn.khu.toyouserver.user.repository.UserRepository;
+import slvtwn.khu.toyouserver.application.UserService;
+import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.persistance.UserRepository;
+import slvtwn.khu.toyouserver.dto.UserResponse;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)

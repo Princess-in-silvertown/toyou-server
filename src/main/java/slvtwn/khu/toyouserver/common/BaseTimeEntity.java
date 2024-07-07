@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver;
+package slvtwn.khu.toyouserver.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -12,10 +12,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdDate;
+	@CreatedDate
+	@Column(updatable = false)
+	private LocalDateTime createdDate;
 
-    @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+	@LastModifiedDate
+	private LocalDateTime lastModifiedDate;
 }

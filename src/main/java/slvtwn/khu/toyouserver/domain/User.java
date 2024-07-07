@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.user.domain;
+package slvtwn.khu.toyouserver.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import slvtwn.khu.toyouserver.BaseTimeEntity;
+import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 
 @Entity
 @Table(name = "users")
@@ -16,16 +16,16 @@ import slvtwn.khu.toyouserver.BaseTimeEntity;
 @Getter
 public class User extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private String profilePicture;
+	private String profilePicture;
 
-    public User(String name, String profilePicture) {
-        this.name = name;
-        this.profilePicture = profilePicture;
-    }
+	public User(String name, String profilePicture) {
+		this.name = name;
+		this.profilePicture = profilePicture;
+	}
 }

@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver;
+package slvtwn.khu.toyouserver.domain;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 
 @Entity
 @Table(name = "groups")
@@ -16,13 +17,13 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Group extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	private Long id;
 
-    private String name;
+	private String name;
 
-    public Group(String name) {
-        this.name = name;
-    }
+	public Group(String name) {
+		this.name = name;
+	}
 }
