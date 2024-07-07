@@ -1,5 +1,6 @@
 package slvtwn.khu.toyouserver.user.service;
 
+import java.time.LocalDate;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -9,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.application.UserService;
 import slvtwn.khu.toyouserver.domain.User;
-import slvtwn.khu.toyouserver.persistance.UserRepository;
 import slvtwn.khu.toyouserver.dto.UserResponse;
+import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -26,7 +27,7 @@ class UserServiceTest {
     @Test
     void 유저를_조회할_수_있다() {
         // given
-        User user = new User("teo", "www.profile-picture.com");
+        User user = new User("teo", LocalDate.now(), "www.profile-picture.com");
         userRepository.save(user);
 
         // when

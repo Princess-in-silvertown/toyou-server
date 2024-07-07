@@ -1,4 +1,6 @@
 package slvtwn.khu.toyouserver.dto;
 
-public record UserResponse(Long id, String name, String imageUrl) {
+import java.time.LocalDate;
+
+public record UserResponse(Long id, String name, LocalDate birthday, String imageUrl) {
 }
