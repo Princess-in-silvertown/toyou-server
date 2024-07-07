@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import slvtwn.khu.toyouserver.persistance.BaseTimeEntity;
+import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 
 @Entity
 @Table(name = "groups")

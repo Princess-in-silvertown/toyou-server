@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.persistance;
+package slvtwn.khu.toyouserver.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

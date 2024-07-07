@@ -6,7 +6,8 @@ import slvtwn.khu.toyouserver.common.ErrorType;
 
 @RequiredArgsConstructor
 @Getter
-public final class ToyouException extends RuntimeException {
+public class ToyouException extends RuntimeException {
+
 	private final ErrorType errorType;
 
 	public String code() {
