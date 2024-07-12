@@ -1,6 +1,5 @@
 package slvtwn.khu.toyouserver.application;
 
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
@@ -29,15 +28,13 @@ public class GroupService {
 				.orElseThrow(() -> new ToyouException(ErrorType.GROUP_NOT_FOUND));
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
-//		group.addMember(user);
 		return new GroupResponse(group.getId(), group.getName());
 	}
 
 	@Transactional
 	public GroupResponse create(String name) {
-		return Optional.of(new Group(name))
-				.map(groupRepository::save)
-				.map(group -> new GroupResponse(group.getId(), group.getName()))
-				.orElseThrow(() -> new ToyouException(ErrorType.INVALID_GROUP_DATA));
+		var group = new Group(name);
+		var savedGroup = groupRepository.save(group);
+		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
 	}
 }
