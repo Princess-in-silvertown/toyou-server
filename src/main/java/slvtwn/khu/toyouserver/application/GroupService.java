@@ -1,7 +1,5 @@
 package slvtwn.khu.toyouserver.application;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
@@ -12,7 +10,6 @@ import slvtwn.khu.toyouserver.dto.GroupResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
-import slvtwn.khu.toyouserver.presentation.GroupMemberResponse;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,9 +37,8 @@ public class GroupService {
 
 	@Transactional
 	public GroupResponse create(String name) {
-		var group = new Group(name);
-		var savedGroup = groupRepository.save(group);
+		Group group = new Group(name);
+		Group savedGroup = groupRepository.save(group);
 		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
-
 	}
 }
