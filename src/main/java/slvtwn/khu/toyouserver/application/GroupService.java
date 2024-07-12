@@ -29,8 +29,6 @@ public class GroupService {
 				.orElseThrow(() -> new ToyouException(ErrorType.GROUP_NOT_FOUND));
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
-
-		// TODO : 그룹에 유저를 가입시킨다. 유저는 멤버로 등록된다.
 //		group.addMember(user);
 		return new GroupResponse(group.getId(), group.getName());
 	}
