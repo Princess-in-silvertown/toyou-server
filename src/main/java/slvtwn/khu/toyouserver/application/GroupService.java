@@ -41,6 +41,7 @@ public class GroupService {
 		return new GroupResponse(group.getId(), group.getName());
 	}
 
+	@Transactional
 	public List<GroupMemberResponse> getRegisteredMembers(long groupId) {
 		return memberRepository.findByGroupId(groupId).stream()
 				.map(member -> new GroupMemberResponse(
