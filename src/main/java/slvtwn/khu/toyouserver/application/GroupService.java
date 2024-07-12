@@ -35,6 +35,8 @@ public class GroupService {
 				.orElseThrow(() -> new ToyouException(ErrorType.GROUP_NOT_FOUND));
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
+		return new GroupResponse(group.getId(), group.getName());
+	}
 
 	@Transactional
 	public GroupResponse create(String name) {
