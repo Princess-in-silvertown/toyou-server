@@ -15,6 +15,7 @@ public enum ErrorType {
 	// 500 ~ 599 (서버 오류)
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "TYU-500", "서버 내부 오류");
 
+
 	ErrorType(
 			final HttpStatusCode httpStatusCode,
 			final String code,

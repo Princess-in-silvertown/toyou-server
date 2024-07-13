@@ -1,7 +1,5 @@
 package slvtwn.khu.toyouserver.application;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
@@ -12,7 +10,6 @@ import slvtwn.khu.toyouserver.dto.GroupResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
-import slvtwn.khu.toyouserver.presentation.GroupMemberResponse;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,20 +32,13 @@ public class GroupService {
 				.orElseThrow(() -> new ToyouException(ErrorType.GROUP_NOT_FOUND));
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
-
-		// TODO : 그룹에 유저를 가입시킨다. 유저는 멤버로 등록된다.
-//		group.addMember(user);
 		return new GroupResponse(group.getId(), group.getName());
 	}
 
 	@Transactional
-	public List<GroupMemberResponse> getRegisteredMembers(long groupId) {
-		return memberRepository.findByGroupId(groupId).stream()
-				.map(member -> new GroupMemberResponse(
-						member.getId(),
-						member.getUser().getId(),
-						member.getUser().getName(),
-						member.getUser().getProfilePicture()))
-				.collect(Collectors.toList());
+	public GroupResponse create(String name) {
+		Group group = new Group(name);
+		Group savedGroup = groupRepository.save(group);
+		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
 	}
 }
