@@ -41,4 +41,12 @@ public class GroupService {
 		Group savedGroup = groupRepository.save(group);
 		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
 	}
+
+	@Transactional(readOnly = true)
+	public List<GroupResponse> findRegisteredGroups(long userId) {
+		List<Group> groups = memberRepository.findGroupsByUserId(userId);
+		return groups.stream()
+				.map(group -> new GroupResponse(group.getId(), group.getName()))
+				.toList();
+	}
 }
