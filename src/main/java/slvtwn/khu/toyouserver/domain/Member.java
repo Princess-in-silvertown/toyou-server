@@ -16,19 +16,24 @@ import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 @Getter
 public class Member extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private Group group;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "group_id")
+	private Group group;
 
-    public Member(Group group) {
-        this.group = group;
-    }
+	public Member(Group group) {
+		this.group = group;
+	}
+
+	public Member(User user, Group group) {
+		this.user = user;
+		this.group = group;
+	}
 }
