@@ -25,8 +25,8 @@ public class GroupController {
 	}
 
 	@PostMapping("/groups/{groupId}/members")
-	public GroupResponse registerMember(@PathVariable long groupId) {
-		return groupService.registerMember(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
+	public void registerMember(@PathVariable long groupId) {
+		groupService.registerMember(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
 	}
 
 	@GetMapping("/groups")

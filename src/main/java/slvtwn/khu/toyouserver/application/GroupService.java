@@ -3,47 +3,51 @@ package slvtwn.khu.toyouserver.application;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import slvtwn.khu.toyouserver.common.ErrorType;
 import slvtwn.khu.toyouserver.domain.Group;
+import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.MemberRepository;
+import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
+import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
+import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @Service
 public class GroupService {
 
-	private final GroupRepository groupRepository;
-	private final MemberRepository memberRepository;
-	private final MemberService memberService;
+    private final GroupRepository groupRepository;
+    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
-	public GroupService(GroupRepository groupRepository,
-	                    MemberRepository memberRepository, MemberService memberService) {
-		this.groupRepository = groupRepository;
-		this.memberRepository = memberRepository;
-		this.memberService = memberService;
-	}
+    public GroupService(GroupRepository groupRepository, MemberRepository memberRepository, UserRepository userRepository) {
+        this.groupRepository = groupRepository;
+        this.memberRepository = memberRepository;
+        this.userRepository = userRepository;
+    }
 
-	@Transactional
-	public GroupResponse registerMember(long groupId, long userId) {
-		Group savedGroup = memberService.registerMember(groupId, userId).getGroup();
-		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
-	}
+    @Transactional
+    public void registerMember(long groupId, long userId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ToyouException(ErrorType.GROUP_NOT_FOUND));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
 
-	public void findMembers(long groupId) {
+        memberRepository.save(new Member(user, group));
+    }
 
-	}
+    @Transactional
+    public GroupResponse createGroup(String name) {
+        Group group = new Group(name);
+        Group savedGroup = groupRepository.save(group);
+        return new GroupResponse(savedGroup.getId(), savedGroup.getName());
+    }
 
-	@Transactional
-	public GroupResponse createGroup(String name) {
-		Group group = new Group(name);
-		Group savedGroup = groupRepository.save(group);
-		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
-	}
-
-	@Transactional(readOnly = true)
-	public List<GroupResponse> findRegisteredGroups(long userId) {
-		List<Group> groups = memberRepository.findGroupsByUserId(userId);
-		return groups.stream()
-				.map(group -> new GroupResponse(group.getId(), group.getName()))
-				.toList();
-	}
+    @Transactional(readOnly = true)
+    public List<GroupResponse> findRegisteredGroups(long userId) {
+        List<Group> groups = memberRepository.findGroupsByUserId(userId);
+        return groups.stream()
+                .map(group -> new GroupResponse(group.getId(), group.getName()))
+                .toList();
+    }
 }
