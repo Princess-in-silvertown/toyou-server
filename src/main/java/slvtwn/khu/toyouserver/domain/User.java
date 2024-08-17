@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,19 +17,22 @@ import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 @Getter
 public class User extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private LocalDate birthday;
+    private LocalDate birthday;
 
-	private String profilePicture;
+    private String introduction;
 
-	public User(String name, LocalDate birthday, String profilePicture) {
-		this.name = name;
-		this.birthday = birthday;
-		this.profilePicture = profilePicture;
-	}
+    private String profilePicture;
+
+    public User(String name, LocalDate birthday, String introduction, String profilePicture) {
+        this.name = name;
+        this.birthday = birthday;
+        this.introduction = introduction;
+        this.profilePicture = profilePicture;
+    }
 }
