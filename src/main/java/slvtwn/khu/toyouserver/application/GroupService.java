@@ -1,6 +1,7 @@
 package slvtwn.khu.toyouserver.application;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
@@ -8,6 +9,7 @@ import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.MemberRepository;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
@@ -34,6 +36,12 @@ public class GroupService {
                 .orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
 
         memberRepository.save(new Member(user, group));
+    }
+
+    public List<GroupMemberResponse> findMembers(long groupId) {
+        return memberRepository.findByGroupId(groupId).stream()
+                .map(GroupMemberResponse::of)
+                .toList();
     }
 
     @Transactional

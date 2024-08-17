@@ -11,6 +11,7 @@ import slvtwn.khu.toyouserver.application.GroupService;
 import slvtwn.khu.toyouserver.common.UserAuthentication;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
+import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
 
 @RequiredArgsConstructor
@@ -27,6 +28,11 @@ public class GroupController {
 	@PostMapping("/groups/{groupId}/members")
 	public void registerMember(@PathVariable long groupId) {
 		groupService.registerMember(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
+	}
+
+	@GetMapping("/groups/{groupId}/members")
+	public List<GroupMemberResponse> findMembers(@PathVariable long groupId) {
+		return groupService.findMembers(groupId);
 	}
 
 	@GetMapping("/groups")
