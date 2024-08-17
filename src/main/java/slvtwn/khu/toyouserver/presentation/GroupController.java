@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import slvtwn.khu.toyouserver.application.GroupService;
 import slvtwn.khu.toyouserver.common.UserAuthentication;
@@ -25,18 +26,18 @@ public class GroupController {
 		return groupService.createGroup(request.name());
 	}
 
+	@GetMapping("/groups")
+	public List<GroupResponse> findRegisteredGroups(@RequestParam Long memberId) {
+		return groupService.findRegisteredGroups(memberId);
+	}
+
 	@PostMapping("/groups/{groupId}/members")
-	public void registerMember(@PathVariable long groupId) {
+	public void registerMember(@PathVariable Long groupId) {
 		groupService.registerMember(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
 	}
 
 	@GetMapping("/groups/{groupId}/members")
-	public List<GroupMemberResponse> findMembers(@PathVariable long groupId) {
+	public List<GroupMemberResponse> findMembers(@PathVariable Long groupId) {
 		return groupService.findMembers(groupId);
-	}
-
-	@GetMapping("/groups")
-	public List<GroupResponse> findRegisteredGroups(@UserAuthentication User user) {
-		return groupService.findRegisteredGroups(user.getId());
 	}
 }
