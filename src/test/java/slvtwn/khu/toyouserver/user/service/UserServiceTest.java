@@ -27,7 +27,7 @@ class UserServiceTest {
     @Test
     void 유저를_조회할_수_있다() {
         // given
-        User user = new User("teo", LocalDate.now(), "www.profile-picture.com");
+        User user = new User("teo", LocalDate.now(), "introduction", "www.profile-picture.com");
         userRepository.save(user);
 
         // when
