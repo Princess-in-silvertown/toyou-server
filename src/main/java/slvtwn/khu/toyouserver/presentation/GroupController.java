@@ -21,12 +21,12 @@ public class GroupController {
 
 	@PostMapping("/groups")
 	public GroupResponse createGroup(@RequestBody GroupCreateRequest request) {
-		return groupService.create(request.name());
+		return groupService.createGroup(request.name());
 	}
 
 	@PostMapping("/groups/{groupId}/members")
 	public GroupResponse registerMember(@PathVariable long groupId) {
-		return groupService.registerUser(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
+		return groupService.registerMember(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
 	}
 
 	@GetMapping("/groups")

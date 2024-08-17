@@ -33,7 +33,7 @@ class GroupServiceTest {
         Group group = new Group(groupName);
         groupRepository.save(group);
 
-        GroupResponse groupResponse = groupService.create(groupName);
+        GroupResponse groupResponse = groupService.createGroup(groupName);
         assertThat(groupResponse.name()).isEqualTo(groupName);
     }
 
@@ -45,7 +45,7 @@ class GroupServiceTest {
         User user = new User("Hart", LocalDate.now(), "introduction", "www.profile-picture.com");
         userRepository.save(user);
 
-        GroupResponse groupResponse = groupService.registerUser(group.getId(), 1L);
+        GroupResponse groupResponse = groupService.registerMember(group.getId(), 1L);
 
         assertThat(groupResponse.id()).isEqualTo(group.getId());
         assertThat(groupResponse.name()).isEqualTo(group.getName());
@@ -61,8 +61,8 @@ class GroupServiceTest {
         User user = new User("Hart", LocalDate.now(), "introduction", "www.profile-picture.com");
         userRepository.save(user);
 
-        groupService.registerUser(group1.getId(), user.getId());
-        groupService.registerUser(group2.getId(), user.getId());
+        groupService.registerMember(group1.getId(), user.getId());
+        groupService.registerMember(group2.getId(), user.getId());
 
         List<GroupResponse> groups = groupService.findRegisteredGroups(user.getId());
 

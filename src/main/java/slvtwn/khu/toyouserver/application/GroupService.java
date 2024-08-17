@@ -23,13 +23,17 @@ public class GroupService {
 	}
 
 	@Transactional
-	public GroupResponse registerUser(long groupId, long userId) {
+	public GroupResponse registerMember(long groupId, long userId) {
 		Group savedGroup = memberService.registerMember(groupId, userId).getGroup();
 		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
 	}
 
+	public void findMembers(long groupId) {
+
+	}
+
 	@Transactional
-	public GroupResponse create(String name) {
+	public GroupResponse createGroup(String name) {
 		Group group = new Group(name);
 		Group savedGroup = groupRepository.save(group);
 		return new GroupResponse(savedGroup.getId(), savedGroup.getName());
