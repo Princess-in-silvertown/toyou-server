@@ -2,7 +2,12 @@ package slvtwn.khu.toyouserver.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,16 +21,17 @@ import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 public class SessionUser extends BaseTimeEntity {
 
 	@Id
-	@Column(name = "session_id", nullable = false)
-	private String sessionId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	@Column(name = "user_id", nullable = false)
-	private Long userId;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	// TODO ; 카드
 
-	public SessionUser(String sessionId, Long userId) {
-		this.sessionId = sessionId;
-		this.userId = userId;
+	public SessionUser(Long id, User user) {
+		this.id = id;
+		this.user = user;
 	}
 }
