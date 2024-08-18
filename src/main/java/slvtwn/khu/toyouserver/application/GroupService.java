@@ -20,20 +20,16 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
-    private final UserRepository userRepository;
 
-    public GroupService(GroupRepository groupRepository, MemberRepository memberRepository, UserRepository userRepository) {
+    public GroupService(GroupRepository groupRepository, MemberRepository memberRepository) {
         this.groupRepository = groupRepository;
         this.memberRepository = memberRepository;
-        this.userRepository = userRepository;
     }
 
     @Transactional
-    public void registerMember(long groupId, long userId) {
+    public void registerMember(long groupId, User user) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ToyouException(ErrorType.GROUP_NOT_FOUND));
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ToyouException(ErrorType.USER_NOT_FOUND));
 
         memberRepository.save(new Member(user, group));
     }

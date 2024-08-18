@@ -18,25 +18,25 @@ import slvtwn.khu.toyouserver.dto.GroupResponse;
 @RestController
 public class GroupController {
 
-	private final GroupService groupService;
+    private final GroupService groupService;
 
-	@PostMapping("/groups")
-	public GroupResponse createGroup(@RequestBody GroupCreateRequest request) {
-		return groupService.createGroup(request);
-	}
+    @PostMapping("/groups")
+    public GroupResponse createGroup(@RequestBody GroupCreateRequest request) {
+        return groupService.createGroup(request);
+    }
 
-	@GetMapping("/groups")
-	public List<GroupResponse> findRegisteredGroups(@UserAuthentication User user) {
-		return groupService.findRegisteredGroupsByUser(user);
-	}
+    @GetMapping("/groups")
+    public List<GroupResponse> findRegisteredGroups(@UserAuthentication User user) {
+        return groupService.findRegisteredGroupsByUser(user);
+    }
 
-	@PostMapping("/groups/{groupId}/members")
-	public void registerMember(@PathVariable Long groupId) {
-		groupService.registerMember(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
-	}
+    @PostMapping("/groups/{groupId}/members")
+    public void registerMember(@UserAuthentication User user, @PathVariable Long groupId) {
+        groupService.registerMember(groupId, user);
+    }
 
-	@GetMapping("/groups/{groupId}/members")
-	public List<GroupMemberResponse> findMembers(@PathVariable Long groupId) {
-		return groupService.findMembers(groupId);
-	}
+    @GetMapping("/groups/{groupId}/members")
+    public List<GroupMemberResponse> findMembers(@PathVariable Long groupId) {
+        return groupService.findMembers(groupId);
+    }
 }
