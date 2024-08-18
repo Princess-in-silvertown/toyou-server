@@ -6,13 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
-import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
-import slvtwn.khu.toyouserver.persistance.MemberRepository;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
+import slvtwn.khu.toyouserver.persistance.MemberRepository;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @Service
@@ -52,10 +52,11 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public List<GroupResponse> findRegisteredGroups(long userId) {
-        List<Group> groups = memberRepository.findGroupsByUserId(userId);
-        return groups.stream()
-                .map(group -> new GroupResponse(group.getId(), group.getName()))
+    public List<GroupResponse> findRegisteredGroupsByUser(User user) {
+        // TODO: 쿼리 최적화
+        return memberRepository.findByUser(user).stream()
+                .map(Member::getGroup)
+                .map(each -> new GroupResponse(each.getId(), each.getName()))
                 .toList();
     }
 }

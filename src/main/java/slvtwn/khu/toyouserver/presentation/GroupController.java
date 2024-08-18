@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import slvtwn.khu.toyouserver.application.GroupService;
 import slvtwn.khu.toyouserver.common.UserAuthentication;
@@ -27,8 +26,8 @@ public class GroupController {
 	}
 
 	@GetMapping("/groups")
-	public List<GroupResponse> findRegisteredGroups(@RequestParam Long memberId) {
-		return groupService.findRegisteredGroups(memberId);
+	public List<GroupResponse> findRegisteredGroups(@UserAuthentication User user) {
+		return groupService.findRegisteredGroupsByUser(user);
 	}
 
 	@PostMapping("/groups/{groupId}/members")
