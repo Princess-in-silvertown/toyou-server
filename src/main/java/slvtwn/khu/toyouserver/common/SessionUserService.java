@@ -1,6 +1,7 @@
 package slvtwn.khu.toyouserver.common;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.SessionUser;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.exception.ToyouException;
@@ -8,6 +9,7 @@ import slvtwn.khu.toyouserver.persistance.SessionUserRepository;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class SessionUserService {
 
     private final SessionUserRepository sessionUserRepository;
