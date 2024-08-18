@@ -9,12 +9,4 @@ import slvtwn.khu.toyouserver.common.ErrorType;
 public class ToyouException extends RuntimeException {
 
 	private final ErrorType errorType;
-
-	public String code() {
-		return errorType.code();
-	}
-
-	public String message() {
-		return errorType.message();
-	}
 }
