@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
@@ -30,10 +31,9 @@ class GroupServiceTest {
     @Test
     void 그룹은_이름으로_생성된다() {
         String groupName = "Name Created Group";
-        Group group = new Group(groupName);
-        groupRepository.save(group);
+        GroupCreateRequest request = new GroupCreateRequest(groupName);
 
-        GroupResponse groupResponse = groupService.createGroup(groupName);
+        GroupResponse groupResponse = groupService.createGroup(request);
         assertThat(groupResponse.name()).isEqualTo(groupName);
     }
 

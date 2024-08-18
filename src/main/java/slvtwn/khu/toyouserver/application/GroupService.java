@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
+import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
@@ -44,8 +45,8 @@ public class GroupService {
     }
 
     @Transactional
-    public GroupResponse createGroup(String name) {
-        Group group = new Group(name);
+    public GroupResponse createGroup(GroupCreateRequest request) {
+        Group group = new Group(request.name());
         Group savedGroup = groupRepository.save(group);
         return new GroupResponse(savedGroup.getId(), savedGroup.getName());
     }

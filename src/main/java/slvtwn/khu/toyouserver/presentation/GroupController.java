@@ -23,7 +23,7 @@ public class GroupController {
 
 	@PostMapping("/groups")
 	public GroupResponse createGroup(@RequestBody GroupCreateRequest request) {
-		return groupService.createGroup(request.name());
+		return groupService.createGroup(request);
 	}
 
 	@GetMapping("/groups")
