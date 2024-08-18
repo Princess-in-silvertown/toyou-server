@@ -1,13 +1,12 @@
 package slvtwn.khu.toyouserver.application;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
-import slvtwn.khu.toyouserver.domain.MemberRepository;
+import slvtwn.khu.toyouserver.persistance.MemberRepository;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
