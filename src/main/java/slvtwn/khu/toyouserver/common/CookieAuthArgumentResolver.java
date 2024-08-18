@@ -6,15 +6,15 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import slvtwn.khu.toyouserver.application.SessionUserService;
+import slvtwn.khu.toyouserver.application.SessionService;
 
 public class CookieAuthArgumentResolver implements HandlerMethodArgumentResolver {
 	private final HttpSession httpSession;
-	private final SessionUserService sessionUserService;
+	private final SessionService sessionService;
 
-	public CookieAuthArgumentResolver(HttpSession httpSession, SessionUserService sessionUserService) {
+	public CookieAuthArgumentResolver(HttpSession httpSession, SessionService sessionService) {
 		this.httpSession = httpSession;
-		this.sessionUserService = sessionUserService;
+		this.sessionService = sessionService;
 	}
 
 	@Override
@@ -26,6 +26,6 @@ public class CookieAuthArgumentResolver implements HandlerMethodArgumentResolver
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 	                              NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		Long sessionId = Long.parseLong((String) httpSession.getAttribute("sessionId"));
-		return sessionUserService.findById(sessionId);
+		return sessionService.findById(sessionId);
 	}
 }

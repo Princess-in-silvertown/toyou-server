@@ -1,6 +1,5 @@
 package slvtwn.khu.toyouserver.domain;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,10 +14,9 @@ import lombok.NoArgsConstructor;
 import slvtwn.khu.toyouserver.common.BaseTimeEntity;
 
 @Entity
-@Table(name = "session_users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class SessionUser extends BaseTimeEntity {
+public class Session extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +28,7 @@ public class SessionUser extends BaseTimeEntity {
 
 	// TODO ; 카드
 
-	public SessionUser(Long id, User user) {
+	public Session(Long id, User user) {
 		this.id = id;
 		this.user = user;
 	}

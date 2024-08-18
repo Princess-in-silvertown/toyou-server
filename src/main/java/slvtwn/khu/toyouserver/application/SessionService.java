@@ -3,24 +3,24 @@ package slvtwn.khu.toyouserver.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.ErrorType;
-import slvtwn.khu.toyouserver.domain.SessionUser;
+import slvtwn.khu.toyouserver.domain.Session;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.exception.ToyouException;
-import slvtwn.khu.toyouserver.persistance.SessionUserRepository;
+import slvtwn.khu.toyouserver.persistance.SessionRepository;
 
 @Service
 @Transactional(readOnly = true)
-public class SessionUserService {
+public class SessionService {
 
-    private final SessionUserRepository sessionUserRepository;
+    private final SessionRepository sessionRepository;
 
-    public SessionUserService(SessionUserRepository sessionUserRepository) {
-        this.sessionUserRepository = sessionUserRepository;
+    public SessionService(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
     }
 
     public User findById(Long sessionId) {
-        SessionUser sessionUser = sessionUserRepository.findById(sessionId)
+        Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ToyouException(ErrorType.UNAUTHORIZED_USER_ACCESS));
-        return sessionUser.getUser();
+        return session.getUser();
     }
 }
