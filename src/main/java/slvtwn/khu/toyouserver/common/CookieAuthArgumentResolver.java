@@ -24,7 +24,7 @@ public class CookieAuthArgumentResolver implements HandlerMethodArgumentResolver
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 	                              NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-		String sessionId = (String) httpSession.getAttribute("sessionId");
-		return sessionUserService.findUserBySessionId(sessionId);
+		Long sessionId = Long.parseLong((String) httpSession.getAttribute("sessionId"));
+		return sessionUserService.findById(sessionId);
 	}
 }

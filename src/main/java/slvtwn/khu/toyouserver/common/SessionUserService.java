@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.SessionUser;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.SessionUserRepository;
 
 @Service
@@ -16,8 +17,9 @@ public class SessionUserService {
         this.sessionUserRepository = sessionUserRepository;
     }
 
-    public User findUserBySessionId(String sessionId) {
-        SessionUser sessionUser = sessionUserRepository.findBySessionId(sessionId);
+    public User findById(Long sessionId) {
+        SessionUser sessionUser = sessionUserRepository.findById(sessionId)
+                .orElseThrow(() -> new ToyouException(ErrorType.UNAUTHORIZED_USER_ACCESS));
         return sessionUser.getUser();
     }
 }
