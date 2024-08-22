@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import slvtwn.khu.toyouserver.application.GroupService;
 import slvtwn.khu.toyouserver.common.UserAuthentication;
@@ -19,25 +18,25 @@ import slvtwn.khu.toyouserver.dto.GroupResponse;
 @RestController
 public class GroupController {
 
-	private final GroupService groupService;
+    private final GroupService groupService;
 
-	@PostMapping("/groups")
-	public GroupResponse createGroup(@RequestBody GroupCreateRequest request) {
-		return groupService.createGroup(request.name());
-	}
+    @PostMapping("/groups")
+    public GroupResponse createGroup(@RequestBody GroupCreateRequest request) {
+        return groupService.createGroup(request);
+    }
 
-	@GetMapping("/groups")
-	public List<GroupResponse> findRegisteredGroups(@RequestParam Long memberId) {
-		return groupService.findRegisteredGroups(memberId);
-	}
+    @GetMapping("/groups")
+    public List<GroupResponse> findRegisteredGroups(@UserAuthentication User user) {
+        return groupService.findRegisteredGroupsByUser(user);
+    }
 
-	@PostMapping("/groups/{groupId}/members")
-	public void registerMember(@PathVariable Long groupId) {
-		groupService.registerMember(groupId, 1L); // TODO: user -> argumentResolver 등록 필요
-	}
+    @PostMapping("/groups/{groupId}/members")
+    public void registerMember(@UserAuthentication User user, @PathVariable Long groupId) {
+        groupService.registerMember(groupId, user);
+    }
 
-	@GetMapping("/groups/{groupId}/members")
-	public List<GroupMemberResponse> findMembers(@PathVariable Long groupId) {
-		return groupService.findMembers(groupId);
-	}
+    @GetMapping("/groups/{groupId}/members")
+    public List<GroupMemberResponse> findMembers(@PathVariable Long groupId) {
+        return groupService.findMembers(groupId);
+    }
 }
