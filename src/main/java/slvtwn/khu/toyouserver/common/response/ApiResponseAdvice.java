@@ -41,10 +41,10 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
     private Object createResponseByHttpStatus(HttpStatus status, Object data, PageInfo pageInfo) {
         if (status.is2xxSuccessful()) {
-            return ApiResponse.success(SuccessType.OK.getCode(), data, pageInfo);
+            return ApiResponse.success(ResponseType.OK.getCode(), data, pageInfo);
         } else if (status.is4xxClientError()) {
-            return ApiResponse.error(ErrorType.BAD_REQUEST.code(), ErrorType.BAD_REQUEST.message());
+            return ApiResponse.error(ResponseType.BAD_REQUEST.getCode(), ResponseType.BAD_REQUEST.getMessage());
         }
-        return ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR.code(), ErrorType.BAD_REQUEST.message());
+        return ApiResponse.error(ResponseType.INTERNAL_SERVER_ERROR.getCode(), ResponseType.BAD_REQUEST.getMessage());
     }
 }

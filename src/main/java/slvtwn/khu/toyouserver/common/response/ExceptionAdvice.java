@@ -1,9 +1,5 @@
 package slvtwn.khu.toyouserver.common.response;
 
-import static slvtwn.khu.toyouserver.common.response.ErrorType.BAD_REQUEST;
-import static slvtwn.khu.toyouserver.common.response.ErrorType.INTERNAL_SERVER_ERROR;
-import static slvtwn.khu.toyouserver.common.response.ErrorType.NOT_FOUND;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +17,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ToyouException.class)
 	public ResponseEntity<Object> handleToyouException(@NonNull ToyouException e) {
-		return createResponse(e.getErrorType());
+		return createResponse(e.getResponseType());
 	}
 
 	@Override
@@ -31,7 +27,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			 @NonNull HttpHeaders headers,
 			 @NonNull HttpStatusCode statusCode,
 			 @NonNull WebRequest request) {
-		return createResponse(INTERNAL_SERVER_ERROR);
+		return createResponse(ResponseType.INTERNAL_SERVER_ERROR);
 	}
 
 	@Override
@@ -40,7 +36,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			@NonNull HttpHeaders headers,
 			@NonNull HttpStatusCode status,
 			@NonNull WebRequest request) {
-		return createResponse(NOT_FOUND);
+		return createResponse(ResponseType.NOT_FOUND);
 	}
 
 	@Override
@@ -49,11 +45,11 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			@NonNull HttpHeaders headers,
 			@NonNull HttpStatusCode status,
 			@NonNull WebRequest request) {
-		return createResponse(BAD_REQUEST);
+		return createResponse(ResponseType.BAD_REQUEST);
 	}
 
-	private ResponseEntity<Object> createResponse(ErrorType errorType) {
-		return ResponseEntity.status(errorType.httpStatusCode())
-				.body(ApiResponse.error(errorType.code(), errorType.message()));
+	private ResponseEntity<Object> createResponse(ResponseType responseType) {
+		return ResponseEntity.status(responseType.getHttpStatusCode())
+				.body(ApiResponse.error(responseType.getCode(), responseType.getMessage()));
 	}
 }
