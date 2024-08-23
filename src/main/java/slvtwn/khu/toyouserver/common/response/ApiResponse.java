@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import slvtwn.khu.toyouserver.dto.PageInfoResponse;
+import slvtwn.khu.toyouserver.dto.PageInfo;
 
 @Getter
 @JsonPropertyOrder({"timestamp", "code", "message", "data"})
@@ -19,19 +19,28 @@ public class ApiResponse {
     private final String code;
 
     @JsonInclude(Include.NON_NULL)
+    private final String message;
+
+    @JsonInclude(Include.NON_NULL)
     private final Object data;
-    private final PageInfoResponse pageInfo;
+    @JsonInclude(Include.NON_NULL)
+    private final PageInfo pageInfo;
 
-    public ApiResponse(String code) {
-        this(code, null, null);
+    public static ApiResponse error(String code, String message) {
+        return new ApiResponse(code, message, null, null);
     }
 
-    public ApiResponse(String code, Object data) {
-        this(code, data, null);
+    public static ApiResponse success(String code, Object data) {
+        return new ApiResponse(code, null, data, null);
     }
 
-    public ApiResponse(String code, Object data, PageInfoResponse pageInfo) {
+    public static ApiResponse success(String code, Object data, PageInfo pageInfo) {
+        return new ApiResponse(code, null, data, pageInfo);
+    }
+
+    private ApiResponse(String code, String message, Object data, PageInfo pageInfo) {
         this.code = code;
+        this.message = message;
         this.data = data;
         this.pageInfo = pageInfo;
     }

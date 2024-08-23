@@ -1,6 +1,9 @@
 package slvtwn.khu.toyouserver.common.response;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,10 +12,13 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import slvtwn.khu.toyouserver.dto.PageInfo;
 
-// TODO: basePackage 필요함?
-@RestControllerAdvice(basePackages = "slvtwn.khu.toyouserver")
+@RestControllerAdvice
+@AllArgsConstructor
 public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
@@ -25,21 +31,20 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse =
                 ((ServletServerHttpResponse) response).getServletResponse();
 
-        HttpStatus resolve = HttpStatus.resolve(servletResponse.getStatus());
+        Map<String, Object> map = objectMapper.convertValue(body, Map.class);
+        PageInfo pageInfo = (PageInfo) map.get("pageInfo");
+        Object data = map.get("body");
 
-        if (!(body instanceof ApiResponse)) {
-            assert resolve != null;
-            return createResponseByHttpStatus(resolve, body);
-        }
-        return body;
+        HttpStatus httpStatus = HttpStatus.resolve(servletResponse.getStatus());
+        return createResponseByHttpStatus(httpStatus, data, pageInfo);
     }
 
-    private Object createResponseByHttpStatus(HttpStatus status, Object body) {
+    private Object createResponseByHttpStatus(HttpStatus status, Object data, PageInfo pageInfo) {
         if (status.is2xxSuccessful()) {
-            return new ApiResponse(SuccessType.OK.getCode(), body);
+            return ApiResponse.success(SuccessType.OK.getCode(), data, pageInfo);
         } else if (status.is4xxClientError()) {
-            return new ApiResponse(ErrorType.BAD_REQUEST.code());
+            return ApiResponse.error(ErrorType.BAD_REQUEST.code(), ErrorType.BAD_REQUEST.message());
         }
-        return new ApiResponse(ErrorType.INTERNAL_SERVER_ERROR.code());
+        return ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR.code(), ErrorType.BAD_REQUEST.message());
     }
 }

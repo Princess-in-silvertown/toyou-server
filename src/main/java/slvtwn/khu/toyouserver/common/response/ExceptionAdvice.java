@@ -20,51 +20,40 @@ import slvtwn.khu.toyouserver.exception.ToyouException;
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ToyouException.class)
-	public ResponseEntity<Object> handleToyouException(@NonNull final ToyouException e) {
+	public ResponseEntity<Object> handleToyouException(@NonNull ToyouException e) {
 		return createResponse(e.getErrorType());
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal
-			(@NonNull final Exception ex,
-			 @NonNull final Object body,
-			 @NonNull final HttpHeaders headers,
-			 @NonNull final HttpStatusCode statusCode,
-			 @NonNull final WebRequest request) {
+			(@NonNull Exception ex,
+			 @NonNull Object body,
+			 @NonNull HttpHeaders headers,
+			 @NonNull HttpStatusCode statusCode,
+			 @NonNull WebRequest request) {
 		return createResponse(INTERNAL_SERVER_ERROR);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleNoResourceFoundException(
-			@NonNull final NoResourceFoundException ex,
-			@NonNull final HttpHeaders headers,
-			@NonNull final HttpStatusCode status,
-			@NonNull final WebRequest request) {
+			@NonNull NoResourceFoundException ex,
+			@NonNull HttpHeaders headers,
+			@NonNull HttpStatusCode status,
+			@NonNull WebRequest request) {
 		return createResponse(NOT_FOUND);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleErrorResponseException(
-			@NonNull final ErrorResponseException ex,
-			@NonNull final HttpHeaders headers,
-			@NonNull final HttpStatusCode status,
-			@NonNull final WebRequest request) {
-		ApiResponse response = new ApiResponse(BAD_REQUEST.code(), ex.getBody().getTitle());
-		return createResponse(BAD_REQUEST.httpStatusCode(), response);
+			@NonNull ErrorResponseException ex,
+			@NonNull HttpHeaders headers,
+			@NonNull HttpStatusCode status,
+			@NonNull WebRequest request) {
+		return createResponse(BAD_REQUEST);
 	}
 
-	private ResponseEntity<Object> createResponse(final ErrorType errorType) {
-		return createResponse(
-				errorType.httpStatusCode(),
-				new ApiResponse(errorType.code(), errorType.message())
-		);
-	}
-
-	private ResponseEntity<Object> createResponse(
-			final HttpStatusCode httpStatus,
-			final ApiResponse response
-	) {
-		return ResponseEntity.status(httpStatus)
-				.body(response);
+	private ResponseEntity<Object> createResponse(ErrorType errorType) {
+		return ResponseEntity.status(errorType.httpStatusCode())
+				.body(ApiResponse.error(errorType.code(), errorType.message()));
 	}
 }
