@@ -1,8 +1,8 @@
-package slvtwn.khu.toyouserver.common;
+package slvtwn.khu.toyouserver.common.response;
 
 
-import static slvtwn.khu.toyouserver.common.ApiResponseFactory.error;
-import static slvtwn.khu.toyouserver.common.ApiResponseFactory.success;
+import static slvtwn.khu.toyouserver.common.response.ApiResponseFactory.error;
+import static slvtwn.khu.toyouserver.common.response.ApiResponseFactory.success;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;

@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.common;
+package slvtwn.khu.toyouserver.common.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

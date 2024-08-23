@@ -1,8 +1,8 @@
-package slvtwn.khu.toyouserver.common;
+package slvtwn.khu.toyouserver.common.response;
 
-import static slvtwn.khu.toyouserver.common.ErrorType.BAD_REQUEST;
-import static slvtwn.khu.toyouserver.common.ErrorType.INTERNAL_SERVER_ERROR;
-import static slvtwn.khu.toyouserver.common.ErrorType.NOT_FOUND;
+import static slvtwn.khu.toyouserver.common.response.ErrorType.BAD_REQUEST;
+import static slvtwn.khu.toyouserver.common.response.ErrorType.INTERNAL_SERVER_ERROR;
+import static slvtwn.khu.toyouserver.common.response.ErrorType.NOT_FOUND;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;

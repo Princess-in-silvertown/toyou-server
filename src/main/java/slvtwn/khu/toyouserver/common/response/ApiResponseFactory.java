@@ -1,6 +1,6 @@
-package slvtwn.khu.toyouserver.common;
+package slvtwn.khu.toyouserver.common.response;
 
-class ApiResponseFactory {
+public class ApiResponseFactory {
 
 	static ApiResponse success(SuccessType successType, Object data) {
 		return new ApiResponse(successType.getCode(), successType.getMessage(), data);

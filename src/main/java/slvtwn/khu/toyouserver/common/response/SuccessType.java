@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.common;
+package slvtwn.khu.toyouserver.common.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

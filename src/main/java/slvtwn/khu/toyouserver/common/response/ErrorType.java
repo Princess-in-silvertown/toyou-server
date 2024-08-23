@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.common;
+package slvtwn.khu.toyouserver.common.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

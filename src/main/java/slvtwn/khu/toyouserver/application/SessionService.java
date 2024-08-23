@@ -2,7 +2,7 @@ package slvtwn.khu.toyouserver.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import slvtwn.khu.toyouserver.common.ErrorType;
+import slvtwn.khu.toyouserver.common.response.ErrorType;
 import slvtwn.khu.toyouserver.domain.Session;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.exception.ToyouException;
