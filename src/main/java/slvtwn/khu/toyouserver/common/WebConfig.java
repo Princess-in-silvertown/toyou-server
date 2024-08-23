@@ -1,19 +1,20 @@
 package slvtwn.khu.toyouserver.common;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import slvtwn.khu.toyouserver.application.SessionService;
 
+@Configuration
+@AllArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-	private HttpSession httpSession;
+    private SessionService sessionService;
 
-	private SessionService sessionService;
-
-	@Override
-	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-		resolvers.add(new CookieAuthArgumentResolver(httpSession, sessionService));
-	}
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new CookieAuthArgumentResolver(sessionService));
+    }
 }

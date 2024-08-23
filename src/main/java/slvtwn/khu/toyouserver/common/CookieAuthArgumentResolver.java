@@ -1,6 +1,6 @@
 package slvtwn.khu.toyouserver.common;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -9,23 +9,23 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import slvtwn.khu.toyouserver.application.SessionService;
 
 public class CookieAuthArgumentResolver implements HandlerMethodArgumentResolver {
-	private final HttpSession httpSession;
-	private final SessionService sessionService;
 
-	public CookieAuthArgumentResolver(HttpSession httpSession, SessionService sessionService) {
-		this.httpSession = httpSession;
-		this.sessionService = sessionService;
-	}
+    private final SessionService sessionService;
 
-	@Override
-	public boolean supportsParameter(MethodParameter parameter) {
-		return UserAuthentication.class.isAssignableFrom(parameter.getParameterType());
-	}
+    public CookieAuthArgumentResolver(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
-	@Override
-	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-	                              NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-		Long sessionId = Long.parseLong((String) httpSession.getAttribute("sessionId"));
-		return sessionService.findById(sessionId);
-	}
+    @Override
+    public boolean supportsParameter(MethodParameter parameter) {
+        return UserAuthentication.class.isAssignableFrom(parameter.getParameterType());
+    }
+
+    @Override
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
+        Long sessionId = Long.parseLong(httpServletRequest.getHeader("sessionId"));
+        return sessionService.findById(sessionId);
+    }
 }
