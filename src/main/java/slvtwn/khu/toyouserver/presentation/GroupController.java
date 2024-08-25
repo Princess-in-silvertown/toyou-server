@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import slvtwn.khu.toyouserver.application.GroupService;
-import slvtwn.khu.toyouserver.common.UserAuthentication;
+import slvtwn.khu.toyouserver.common.authentication.UserAuthentication;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;

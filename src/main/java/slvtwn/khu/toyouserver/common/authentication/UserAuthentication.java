@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.common;
+package slvtwn.khu.toyouserver.common.authentication;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

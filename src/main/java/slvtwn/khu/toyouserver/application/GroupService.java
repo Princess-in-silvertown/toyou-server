@@ -3,7 +3,7 @@ package slvtwn.khu.toyouserver.application;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import slvtwn.khu.toyouserver.common.ErrorType;
+import slvtwn.khu.toyouserver.common.response.ResponseType;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.User;
@@ -13,7 +13,6 @@ import slvtwn.khu.toyouserver.dto.GroupResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
-import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @Service
 public class GroupService {
@@ -29,7 +28,7 @@ public class GroupService {
     @Transactional
     public void registerMember(long groupId, User user) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ToyouException(ErrorType.GROUP_NOT_FOUND));
+                .orElseThrow(() -> new ToyouException(ResponseType.GROUP_NOT_FOUND));
 
         memberRepository.save(new Member(user, group));
     }

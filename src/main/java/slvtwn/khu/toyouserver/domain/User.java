@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import slvtwn.khu.toyouserver.common.BaseTimeEntity;
+import slvtwn.khu.toyouserver.common.entity.BaseTimeEntity;
 
 @Entity
 @Table(name = "users")
