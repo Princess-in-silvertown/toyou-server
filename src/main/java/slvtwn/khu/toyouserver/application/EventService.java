@@ -35,7 +35,7 @@ public class EventService {
         LocalDate baseDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), FIRST_DAY_OF_MONTH);
 
         List<EventByDateResponse> eventByDateResponses = new ArrayList<>();
-        Map<LocalDate, List<Event>> eventsCollectedByDate = eventRepository.findEventsByDateEqualsOrDateAfter(baseDate)
+        Map<LocalDate, List<Event>> eventsCollectedByDate = eventRepository.findEventsByDateGreaterThanEqual(baseDate)
                 .stream()
                 .collect(Collectors.groupingBy(Event::getDate));
 
