@@ -2,6 +2,8 @@ package slvtwn.khu.toyouserver.domain;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +25,7 @@ public class Event {
 
     private LocalDate date;
 
-    @Embedded
+    @Enumerated(value = EnumType.STRING)
     private EventType eventType;
 
     private String description;
