@@ -31,9 +31,9 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse =
                 ((ServletServerHttpResponse) response).getServletResponse();
 
-        Map<String, Object> map = objectMapper.convertValue(body, Map.class);
-        PageInfo pageInfo = (PageInfo) map.get("pageInfo");
-        Object data = map.get("body");
+        ToyouResponse toyouResponse = objectMapper.convertValue(body, ToyouResponse.class);
+        Object data = toyouResponse.data();
+        PageInfo pageInfo = toyouResponse.pageInfo();
 
         HttpStatus httpStatus = HttpStatus.resolve(servletResponse.getStatus());
         return createResponseByHttpStatus(httpStatus, data, pageInfo);
