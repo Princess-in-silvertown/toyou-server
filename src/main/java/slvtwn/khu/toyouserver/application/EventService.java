@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import slvtwn.khu.toyouserver.common.response.ToyouResponse;
 import slvtwn.khu.toyouserver.domain.Event;
 import slvtwn.khu.toyouserver.dto.EventByDateResponse;
 import slvtwn.khu.toyouserver.dto.EventResponse;
@@ -24,14 +25,14 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public EventsByYearMonthResponse findEventsWithFilteringOptions(YearMonth yearMonth, LocalDate date) {
+    public ToyouResponse<EventsByYearMonthResponse> findEventsWithFilteringOptions(YearMonth yearMonth, LocalDate date) {
         if (yearMonth != null) {
             return findEventsByYearMonth(yearMonth);
         }
         return findEventsByDate(date);
     }
 
-    private EventsByYearMonthResponse findEventsByYearMonth(YearMonth yearMonth) {
+    private ToyouResponse<EventsByYearMonthResponse> findEventsByYearMonth(YearMonth yearMonth) {
         LocalDate baseDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), FIRST_DAY_OF_MONTH);
 
         List<EventByDateResponse> eventByDateResponses = new ArrayList<>();
@@ -40,17 +41,18 @@ public class EventService {
                 .collect(Collectors.groupingBy(Event::getDate));
 
         convertCollectedEventsToEventResponses(eventByDateResponses, eventsCollectedByDate);
-        return new EventsByYearMonthResponse(eventByDateResponses);
+        return ToyouResponse.from(new EventsByYearMonthResponse(eventByDateResponses));
     }
 
-    private EventsByYearMonthResponse findEventsByDate(LocalDate date) {
+    private ToyouResponse<EventsByYearMonthResponse> findEventsByDate(LocalDate date) {
         List<EventResponse> eventResponses = eventRepository.findEventsByDate(date)
                 .stream()
                 .map(EventResponse::from)
                 .toList();
 
-        return new EventsByYearMonthResponse(
-                List.of(new EventByDateResponse(date, eventResponses)));
+        return ToyouResponse.from(new EventsByYearMonthResponse(
+                List.of(new EventByDateResponse(date, eventResponses)))
+        );
     }
 
     private static void convertCollectedEventsToEventResponses(List<EventByDateResponse> eventByDateResponses, Map<LocalDate,
