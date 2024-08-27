@@ -18,6 +18,6 @@ public class EventController {
     @GetMapping("/events")
     public EventsByYearMonthResponse findEventsWithDate(@RequestParam(required = false) YearMonth yearMonth,
                                    @RequestParam(required = false) LocalDate date) {
-        return eventService.findEventsWithYearMonth(yearMonth);
+        return eventService.findEventsWithFilteringOptions(yearMonth, date);
     }
 }

@@ -24,16 +24,33 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public EventsByYearMonthResponse findEventsWithYearMonth(YearMonth yearMonth) {
+    public EventsByYearMonthResponse findEventsWithFilteringOptions(YearMonth yearMonth, LocalDate date) {
+        if (yearMonth != null) {
+            return findEventsByYearMonth(yearMonth);
+        }
+        return findEventsByDate(date);
+    }
+
+    private EventsByYearMonthResponse findEventsByYearMonth(YearMonth yearMonth) {
         LocalDate baseDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), FIRST_DAY_OF_MONTH);
 
         List<EventByDateResponse> eventByDateResponses = new ArrayList<>();
-        Map<LocalDate, List<Event>> eventsCollectedByDate = eventRepository.findEventByDateEqualsOrDateAfter(baseDate)
+        Map<LocalDate, List<Event>> eventsCollectedByDate = eventRepository.findEventsByDateEqualsOrDateAfter(baseDate)
                 .stream()
                 .collect(Collectors.groupingBy(Event::getDate));
 
         convertCollectedEventsToEventResponses(eventByDateResponses, eventsCollectedByDate);
         return new EventsByYearMonthResponse(eventByDateResponses);
+    }
+
+    private EventsByYearMonthResponse findEventsByDate(LocalDate date) {
+        List<EventResponse> eventResponses = eventRepository.findEventsByDate(date)
+                .stream()
+                .map(EventResponse::from)
+                .toList();
+
+        return new EventsByYearMonthResponse(
+                List.of(new EventByDateResponse(date, eventResponses)));
     }
 
     private static void convertCollectedEventsToEventResponses(List<EventByDateResponse> eventByDateResponses, Map<LocalDate,
