@@ -9,9 +9,11 @@ import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.User;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
 	List<Member> findByGroupId(Long groupId);
 	List<Member> findByUser(User user);
 
-	@Query("SELECT m.group FROM Member m WHERE m.user.id = :userId")
-	List<Group> findGroupsByUserId(Long userId);
+	@Query("select m from Member m join m.user u where m.group = :group and u.name like %:pattern%")
+	List<Member> findByGroupAndUserNameLike(Group group, String pattern);
+
 }

@@ -18,7 +18,7 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping("/events")
-    public ToyouResponse<EventsByYearMonthResponse> findEventsWithDate(
+    public ToyouResponse<EventsByYearMonthResponse> findEventsWithFilteringOptions(
             @DateTimeFormat(pattern = "yyyy-MM") @RequestParam(required = false) YearMonth yearMonth,
             @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(required = false) LocalDate date) {
         return eventService.findEventsWithFilteringOptions(yearMonth, date);
