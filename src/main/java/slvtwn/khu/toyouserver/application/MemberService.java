@@ -1,6 +1,7 @@
 package slvtwn.khu.toyouserver.application;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.response.ResponseType;
@@ -12,17 +13,13 @@ import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
 
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final GroupRepository groupRepository;
-
-    public MemberService(MemberRepository memberRepository, GroupRepository groupRepository) {
-        this.memberRepository = memberRepository;
-        this.groupRepository = groupRepository;
-    }
 
     // TODO: 쿼리 / 구조 최적화
     public List<MemberResponse> findMembersWithFilteringOptions(User user, String search, Long groupId) {

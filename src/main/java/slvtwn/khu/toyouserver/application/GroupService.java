@@ -1,6 +1,8 @@
 package slvtwn.khu.toyouserver.application;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.response.ResponseType;
@@ -14,16 +16,12 @@ import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
 
+@RequiredArgsConstructor
 @Service
 public class GroupService {
 
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
-
-    public GroupService(GroupRepository groupRepository, MemberRepository memberRepository) {
-        this.groupRepository = groupRepository;
-        this.memberRepository = memberRepository;
-    }
 
     @Transactional
     public void registerMember(long groupId, User user) {

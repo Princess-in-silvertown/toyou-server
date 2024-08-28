@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
@@ -16,9 +17,9 @@ import slvtwn.khu.toyouserver.dto.EventResponse;
 import slvtwn.khu.toyouserver.dto.EventsByYearMonthResponse;
 import slvtwn.khu.toyouserver.persistance.EventRepository;
 
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-@AllArgsConstructor
 public class EventService {
 
     private static final int FIRST_DAY_OF_MONTH = 1;
