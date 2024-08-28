@@ -24,6 +24,8 @@ public class RollingPaper extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String coverImageUrl;
+
     private String title;
 
     private String content;
@@ -37,7 +39,8 @@ public class RollingPaper extends BaseTimeEntity {
     @OneToMany(mappedBy = "rollingPaper")
     private List<Sticker> stickers = new ArrayList<>();
 
-    public RollingPaper(String title, String content, Long themeId, Member member) {
+    public RollingPaper(String coverImageUrl, String title, String content, Long themeId, Member member) {
+        this.coverImageUrl = coverImageUrl;
         this.title = title;
         this.content = content;
         this.themeId = themeId;
