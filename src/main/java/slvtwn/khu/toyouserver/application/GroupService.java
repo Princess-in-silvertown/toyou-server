@@ -18,6 +18,7 @@ import slvtwn.khu.toyouserver.persistance.MemberRepository;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class GroupService {
 
     private final GroupRepository groupRepository;
@@ -44,7 +45,6 @@ public class GroupService {
         return new GroupResponse(savedGroup.getId(), savedGroup.getName());
     }
 
-    @Transactional(readOnly = true)
     public List<GroupResponse> findRegisteredGroupsByUser(User user) {
         // TODO: 쿼리 최적화
         return memberRepository.findByUser(user).stream()
