@@ -10,6 +10,7 @@ import slvtwn.khu.toyouserver.domain.RollingPaper;
 import slvtwn.khu.toyouserver.domain.Sticker;
 import slvtwn.khu.toyouserver.domain.StickerSide;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
+import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
 import slvtwn.khu.toyouserver.persistance.RollingPaperRepository;
@@ -41,5 +42,13 @@ public class RollingPaperService {
                 .map(each -> new Sticker(rollingPaper, each.imageUrl(), each.x(), each.y(),
                         each.rotate(), each.scale(), StickerSide.valueOf(each.side())))
                 .toList();
+    }
+
+    public RollingPaperResponse getRollingPaper(Long groupId, Long memberId, Long rollingPaperId) {
+        // TODO: 검증 필요
+        RollingPaper rollingPaper = rollingPaperRepository.findById(rollingPaperId)
+                .orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+
+        return RollingPaperResponse.from(rollingPaper);
     }
 }
