@@ -25,10 +25,19 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot 설정
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // 데이터베이스 의존성 설정
+    runtimeOnly 'com.h2database:h2'
+
+    // Lombok 설정
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // 테스트 환경 설정
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
