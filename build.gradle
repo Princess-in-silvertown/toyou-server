@@ -4,6 +4,10 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.5'
 }
 
+ext {
+    springCloudVersion = "2023.0.3"
+}
+
 group = 'slvtwn.khu'
 version = '0.0.1-SNAPSHOT'
 
@@ -40,6 +44,16 @@ dependencies {
     // 테스트 환경 설정
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // OpenFeign 설정
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
 }
 
 tasks.named('test') {
