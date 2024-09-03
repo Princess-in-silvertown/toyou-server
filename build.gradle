@@ -48,6 +48,10 @@ dependencies {
     // OpenFeign 설정
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+    // JWT 설정
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
 dependencyManagement {
