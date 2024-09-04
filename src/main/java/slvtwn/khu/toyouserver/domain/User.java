@@ -17,22 +17,26 @@ import slvtwn.khu.toyouserver.common.entity.BaseTimeEntity;
 @Getter
 public class User extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private LocalDate birthday;
+	private LocalDate birthday;
 
-    private String introduction;
+	private String introduction;
 
-    private String profilePicture;
+	private String profilePicture;
 
-    public User(String name, LocalDate birthday, String introduction, String profilePicture) {
-        this.name = name;
-        this.birthday = birthday;
-        this.introduction = introduction;
-        this.profilePicture = profilePicture;
-    }
+	public User(String name, LocalDate birthday, String introduction, String profilePicture) {
+		this.name = name;
+		this.birthday = birthday;
+		this.introduction = introduction;
+		this.profilePicture = profilePicture;
+	}
+
+	public static User create(String name, String profilePicture) {
+		return new User(name, null, null, profilePicture);
+	}
 }
