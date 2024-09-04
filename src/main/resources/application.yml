@@ -1,6 +1,6 @@
 spring:
   jpa:
-#    database: mysql
+    #    database: mysql
     open-in-view: false
     generate-ddl: true
     show-sql: true
@@ -14,3 +14,9 @@ spring:
     username: sa
     password:
 
+oauth:
+  kakao:
+    client-id: ${KAKAO_CLIENT_ID}
+    client-secret: ${KAKAO_CLIENT_SECRET}
+    grant-type: authorization_code
+    redirect-uri: ${KAKAO_REDIRECT_URI}
