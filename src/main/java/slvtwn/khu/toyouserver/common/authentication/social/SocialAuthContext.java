@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.application.auth;
+package slvtwn.khu.toyouserver.common.authentication.social;
 
 import static slvtwn.khu.toyouserver.common.response.ResponseType.NOT_SUPPORTED_AUTH_PROVIDER;
 
@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import slvtwn.khu.toyouserver.application.auth.strategy.KakaoAuthStrategy;
-import slvtwn.khu.toyouserver.application.auth.strategy.SocialAuthStrategy;
+import slvtwn.khu.toyouserver.common.authentication.social.strategy.KakaoAuthStrategy;
+import slvtwn.khu.toyouserver.common.authentication.social.strategy.SocialAuthStrategy;
 import slvtwn.khu.toyouserver.domain.SocialAuthProvider;
 import slvtwn.khu.toyouserver.dto.SocialAuthRequest;
 import slvtwn.khu.toyouserver.dto.SocialAuthResponse;

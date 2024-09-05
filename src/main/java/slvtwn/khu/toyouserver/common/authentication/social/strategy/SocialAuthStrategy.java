@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.application.auth.strategy;
+package slvtwn.khu.toyouserver.common.authentication.social.strategy;
 
 import slvtwn.khu.toyouserver.dto.SocialAuthRequest;
 import slvtwn.khu.toyouserver.dto.SocialAuthResponse;

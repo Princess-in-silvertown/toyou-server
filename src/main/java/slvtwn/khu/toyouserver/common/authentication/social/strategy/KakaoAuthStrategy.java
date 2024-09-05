@@ -1,4 +1,4 @@
-package slvtwn.khu.toyouserver.application.auth.strategy;
+package slvtwn.khu.toyouserver.common.authentication.social.strategy;
 
 import static slvtwn.khu.toyouserver.domain.SocialAuthProvider.KAKAO;
 
@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import slvtwn.khu.toyouserver.application.AuthService;
+import slvtwn.khu.toyouserver.common.authentication.jwt.JwtProvider;
+import slvtwn.khu.toyouserver.common.authentication.jwt.Token;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.KakaoAuthApiClient;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.KakaoResourceApiClient;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.web.KakaoTokenResponse;
@@ -16,14 +17,12 @@ import slvtwn.khu.toyouserver.domain.UserOAuthCredential;
 import slvtwn.khu.toyouserver.domain.UserOAuthCredentialRepository;
 import slvtwn.khu.toyouserver.dto.SocialAuthRequest;
 import slvtwn.khu.toyouserver.dto.SocialAuthResponse;
-import slvtwn.khu.toyouserver.dto.TokenResponse;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class KakaoAuthStrategy implements SocialAuthStrategy {
 
-	private final AuthService authService;
 	@Value("${oauth.kakao.client-id}")
 	private String kakaoClientId;
 	@Value("${oauth.kakao.redirect-uri}")
@@ -37,7 +36,7 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 	private final UserRepository userRepository;
 	private final UserOAuthCredentialRepository userOAuthCredentialRepository;
 
-	private final JwtTokenProvider jwtTokenProvider;
+	private final JwtProvider jwtProvider;
 
 	@Override
 	@Transactional
@@ -51,8 +50,7 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 		KakaoUserResponse userResponse = kakaoResourceApiClient.getUserInformation(
 				"Bearer " + tokenResponse.accessToken());
 		User user = handleUserOAuthCredential(userResponse);
-		TokenResponse token = new TokenResponse(jwtTokenProvider.generateAccessToken(user.getId()),
-				jwtTokenProvider.generateRefreshToken(user.getId()));
+		Token token = jwtProvider.issueTokens(user.getId());
 		return SocialAuthResponse.of(user.getId(), user.getName(), KAKAO, token);
 	}
 

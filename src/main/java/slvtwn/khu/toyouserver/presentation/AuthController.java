@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import slvtwn.khu.toyouserver.application.auth.SocialAuthContext;
+import slvtwn.khu.toyouserver.common.authentication.social.SocialAuthContext;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
 import slvtwn.khu.toyouserver.dto.SocialAuthRequest;
 import slvtwn.khu.toyouserver.dto.SocialAuthResponse;
