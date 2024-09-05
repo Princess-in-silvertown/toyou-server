@@ -60,14 +60,14 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 	}
 
 	private User handleUserOAuthCredential(KakaoUserResponse userResponse) {
-		UserOAuthCredential userOAuthCredential = userOAuthCredentialRepository.findBySerialId(userResponse.serialId())
+		UserOAuthCredential userOAuthCredential = userOAuthCredentialRepository.findBySerialId(userResponse.id())
 				.orElse(null);
 
 		User authenticatedUser;
 		if (userOAuthCredential == null) {
 			authenticatedUser = User.create(userResponse.kakaoAccount().profile().nickname(),
 					userResponse.kakaoAccount().profile().profileImageUrl());
-			userOAuthCredential = UserOAuthCredential.recordKAKAOCredential(authenticatedUser, userResponse.serialId());
+			userOAuthCredential = UserOAuthCredential.recordKAKAOCredential(authenticatedUser, userResponse.id());
 
 			userRepository.save(authenticatedUser);
 			userOAuthCredentialRepository.save(userOAuthCredential);
