@@ -15,7 +15,7 @@ public class ChatGptAgent {
 
     private ChatGptConfiguration configuration;
 
-    public Mono<ChatGptResponse> requestWithPrompt(String prompt) {
+    public ChatGptResponse requestWithPrompt(String prompt) {
         HashMap<String, Object> body = setupBody(prompt);
 
         return WebClient.create()
@@ -27,7 +27,8 @@ public class ChatGptAgent {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         clientResponse -> clientResponse.bodyToMono(String.class).map(Exception::new))
-                .bodyToMono(ChatGptResponse.class);
+                .bodyToMono(ChatGptResponse.class)
+                .block();
     }
 
 
