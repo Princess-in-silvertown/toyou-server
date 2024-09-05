@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
 @Component
@@ -20,7 +19,7 @@ public class ChatGptAgent {
 
         return WebClient.create()
                 .post()
-                .uri(configuration.getImageModelEndpoint())
+                .uri(configuration.getTextModel())
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + configuration.getOpenaiKey())
                 .bodyValue(body)
