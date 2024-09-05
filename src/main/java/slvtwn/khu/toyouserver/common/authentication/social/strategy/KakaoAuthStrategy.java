@@ -42,7 +42,7 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 	@Transactional
 	public SocialAuthResponse login(SocialAuthRequest request) {
 		KakaoTokenResponse tokenResponse = kakaoAuthApiClient.getOAuth2AccessToken(
-				grantType,
+				"authorization_code",
 				kakaoClientId,
 				kakaoRedirectUri,
 				request.authorizationCode()

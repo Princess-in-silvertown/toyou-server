@@ -18,7 +18,7 @@ import slvtwn.khu.toyouserver.exception.ToyouException;
 @RequiredArgsConstructor
 public class SocialAuthContext {
 
-	private KakaoAuthStrategy kakaoAuthStrategy;
+	private final KakaoAuthStrategy kakaoAuthStrategy;
 
 	private final List<SocialAuthStrategy> socialAuthStrategies = new ArrayList<>();
 
