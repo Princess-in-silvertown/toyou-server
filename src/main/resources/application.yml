@@ -20,3 +20,8 @@ oauth:
     client-secret: ${KAKAO_CLIENT_SECRET}
     grant-type: authorization_code
     redirect-uri: ${KAKAO_REDIRECT_URI}
+
+jwt:
+  secret: ILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOW
+  access-token-expiration: 1209600000
+  refresh-token-expiration: 2419200000

@@ -16,6 +16,14 @@ public enum ResponseType {
 
 	// 401 Unauthorized
 	UNAUTHORIZED_USER_ACCESS(HttpStatus.UNAUTHORIZED, "TYU-4012", "인증되지 않은 사용자 접근입니다."),
+	INVALID_ACCESS_TOKEN_VALUE(HttpStatus.UNAUTHORIZED, "TYU-4013", "액세스 토큰의 값이 일치하지 않습니다."),
+	EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "TYU-4014", "액세스 토큰이 만료되었습니다."),
+	INVALID_REFRESH_TOKEN_VALUE(HttpStatus.UNAUTHORIZED, "TYU-4015", "리프레시 토큰의 값이 일치하지 않습니다."),
+	EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "TYU-4016", "리프레시 토큰이 만료되었습니다."),
+	MISMATCH_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "TYU-401", "리프레시 토큰이 일치하지 않습니다."),
+	EXPIRED_IDENTITY_TOKEN(HttpStatus.UNAUTHORIZED, "TYU-401", "아이덴티티 토큰이 만료되었습니다."),
+	INVALID_IDENTITY_TOKEN_VALUE(HttpStatus.UNAUTHORIZED, "TYU-401", "애플 아이덴티티 토큰의 값이 일치하지 않습니다."),
+	MISSING_BEARER_PREFIX(HttpStatus.UNAUTHORIZED, "TYU-401", "Bearer가 누락되었습니다."),
 
 	// 403 Forbidden
 
