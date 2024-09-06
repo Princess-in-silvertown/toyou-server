@@ -13,8 +13,6 @@ import slvtwn.khu.toyouserver.common.feign.auth.kakao.KakaoResourceApiClient;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.web.KakaoTokenResponse;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.web.KakaoUserResponse;
 import slvtwn.khu.toyouserver.domain.User;
-import slvtwn.khu.toyouserver.domain.UserOAuthCredential;
-import slvtwn.khu.toyouserver.domain.UserOAuthCredentialRepository;
 import slvtwn.khu.toyouserver.dto.SocialAuthRequest;
 import slvtwn.khu.toyouserver.dto.SocialAuthResponse;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
@@ -34,7 +32,6 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 	private final KakaoResourceApiClient kakaoResourceApiClient;
 
 	private final UserRepository userRepository;
-	private final UserOAuthCredentialRepository userOAuthCredentialRepository;
 
 	private final JwtProvider jwtProvider;
 
@@ -49,7 +46,7 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 		);
 		KakaoUserResponse userResponse = kakaoResourceApiClient.getUserInformation(
 				"Bearer " + tokenResponse.accessToken());
-		User user = handleUserOAuthCredential(userResponse);
+		User user = registerUser(userResponse);
 		Token token = jwtProvider.issueTokens(user.getId());
 		return SocialAuthResponse.of(user.getId(), user.getName(), KAKAO, token);
 	}
@@ -59,21 +56,13 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 		return provider.equals("KAKAO");
 	}
 
-	private User handleUserOAuthCredential(KakaoUserResponse userResponse) {
-		UserOAuthCredential userOAuthCredential = userOAuthCredentialRepository.findBySerialId(userResponse.id())
-				.orElse(null);
-
-		User authenticatedUser;
-		if (userOAuthCredential == null) {
-			authenticatedUser = User.create(userResponse.kakaoAccount().profile().nickname(),
+	private User registerUser(KakaoUserResponse userResponse) {
+		User user = userRepository.findBySerialId(userResponse.id()).orElse(null);
+		if (user == null) {
+			user = User.create(userResponse.kakaoAccount().profile().nickname(),
 					userResponse.kakaoAccount().profile().profileImageUrl());
-			userOAuthCredential = UserOAuthCredential.recordKAKAOCredential(authenticatedUser, userResponse.id());
-
-			userRepository.save(authenticatedUser);
-			userOAuthCredentialRepository.save(userOAuthCredential);
-		} else {
-			authenticatedUser = userOAuthCredential.getUser();
 		}
-		return authenticatedUser;
+		userRepository.save(user);
+		return user;
 	}
 }

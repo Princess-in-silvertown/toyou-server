@@ -1,6 +1,8 @@
 package slvtwn.khu.toyouserver.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,6 +30,11 @@ public class User extends BaseTimeEntity {
 	private String introduction;
 
 	private String profilePicture;
+
+	private String serialId;
+	
+	@Enumerated(EnumType.STRING)
+	SocialAuthProvider provider;
 
 	public User(String name, LocalDate birthday, String introduction, String profilePicture) {
 		this.name = name;
