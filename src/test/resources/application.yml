@@ -14,7 +14,7 @@ spring:
     password:
 
 openai:
-  key: ${OPEN_AI_KEY}
+  key: test-key
 
   text-generation:
     endpoint: https://api.openai.com/v1/chat/completions
