@@ -1,0 +1,21 @@
+spring:
+  jpa:
+    open-in-view: false
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+openai:
+  key: test-key
+
+  text-generation:
+    endpoint: https://api.openai.com/v1/chat/completions
+    model: gpt-4o-mini

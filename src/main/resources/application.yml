@@ -1,6 +1,5 @@
 spring:
   jpa:
-    #    database: mysql
     open-in-view: false
     generate-ddl: true
     show-sql: true
@@ -25,3 +24,11 @@ jwt:
   secret: ILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOW
   access-token-expiration: 1209600000
   refresh-token-expiration: 2419200000
+
+openai:
+  key: ${OPEN_AI_KEY}
+
+  text-generation:
+    endpoint: https://api.openai.com/v1/chat/completions
+    model: gpt-4o-mini
+
