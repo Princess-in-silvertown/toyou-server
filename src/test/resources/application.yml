@@ -29,7 +29,7 @@ openai:
   key: test-key
 
   text-generation:
-    endpoint: https://api.openai.com/v1/chat/completions
+    endpoint: test
     model: gpt-4o-mini
 
 model-labs:
