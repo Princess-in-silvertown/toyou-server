@@ -13,9 +13,22 @@ spring:
     username: sa
     password:
 
+oauth:
+  kakao:
+    client-id: test-id
+    client-secret: test-secret
+    grant-type: authorization_code
+    redirect-uri: test-uri
+
+jwt:
+  secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
+  access-token-expiration: 1209600000
+  refresh-token-expiration: 2419200000
+
 openai:
-  key: test-key
+  key: test
 
   text-generation:
-    endpoint: https://api.openai.com/v1/chat/completions
-    model: gpt-4o-mini
+    endpoint: endpoint
+    model: test-model
+
