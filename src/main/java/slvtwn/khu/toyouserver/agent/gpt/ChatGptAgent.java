@@ -3,31 +3,23 @@ package slvtwn.khu.toyouserver.agent.gpt;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatusCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import slvtwn.khu.toyouserver.agent.WebClientWrapper;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class ChatGptAgent {
 
-    private ChatGptConfiguration configuration;
+    private final ChatGptConfiguration configuration;
+    private final WebClientWrapper webClientWrapper;
 
     public ChatGptResponse requestWithPrompt(String prompt) {
         HashMap<String, Object> body = setupBody(prompt);
 
-        return WebClient.create()
-                .post()
-                .uri(configuration.getTextModel())
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + configuration.getOpenaiKey())
-                .bodyValue(body)
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError,
-                        clientResponse -> clientResponse.bodyToMono(String.class).map(Exception::new))
-                .bodyToMono(ChatGptResponse.class)
-                .block();
+        return webClientWrapper.send(configuration.getTextModel(), (httpHeaders -> {
+            httpHeaders.add("Authorization", "Bearer " + configuration.getOpenaiKey());
+        }), body, ChatGptResponse.class);
     }
 
 

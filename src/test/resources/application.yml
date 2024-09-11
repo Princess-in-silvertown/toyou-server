@@ -26,9 +26,13 @@ jwt:
   refresh-token-expiration: 2419200000
 
 openai:
-  key: test
+  key: test-key
 
   text-generation:
-    endpoint: endpoint
-    model: test-model
+    endpoint: test
+    model: gpt-4o-mini
 
+model-labs:
+  endpoint: test
+  key: test
+  model-id: test
