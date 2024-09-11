@@ -13,6 +13,18 @@ spring:
     username: sa
     password:
 
+oauth:
+  kakao:
+    client-id: test-id
+    client-secret: test-secret
+    grant-type: authorization_code
+    redirect-uri: test-uri
+
+jwt:
+  secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
+  access-token-expiration: 1209600000
+  refresh-token-expiration: 2419200000
+
 openai:
   key: test-key
 
