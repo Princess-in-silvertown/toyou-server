@@ -23,6 +23,8 @@ public class RollingPaper extends BaseTimeEntity {
 
 	private String title;
 
+	private String coverImageUrl;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
@@ -30,4 +32,8 @@ public class RollingPaper extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "group_id")
 	private Group group;
+
+	public void updateCoverImage(String coverImageUrl) {
+		this.coverImageUrl = coverImageUrl;
+	}
 }
