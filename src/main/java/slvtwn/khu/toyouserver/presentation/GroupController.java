@@ -31,7 +31,7 @@ public class GroupController {
         return ToyouResponse.from(groupService.findRegisteredGroupsByUser(user));
     }
 
-    @PostMapping("/groups/{groupId}/members")
+    @PostMapping("/groups/{groupId}/register")
     public void registerMember(@UserAuthentication User user, @PathVariable Long groupId) {
         groupService.registerMember(groupId, user);
     }
