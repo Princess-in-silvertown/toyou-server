@@ -20,30 +20,38 @@ import slvtwn.khu.toyouserver.common.entity.BaseTimeEntity;
 @Getter
 public class RollingPaper extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String coverImageUrl;
+	private String title;
 
-    private String title;
+	private String content;
 
-    private String content;
+	private String coverImageUrl;
 
-    private Long themeId;
+	private Long themeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private Member member;
 
-    @OneToMany(mappedBy = "rollingPaper")
-    private List<Sticker> stickers = new ArrayList<>();
+	@OneToMany(mappedBy = "rollingPaper")
+	private final List<Sticker> stickers = new ArrayList<>();
 
-    public RollingPaper(String coverImageUrl, String title, String content, Long themeId, Member member) {
-        this.coverImageUrl = coverImageUrl;
-        this.title = title;
-        this.content = content;
-        this.themeId = themeId;
-        this.member = member;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "group_id")
+	private Group group;
+
+	public RollingPaper(String coverImageUrl, String title, String content, Long themeId, Member member) {
+		this.coverImageUrl = coverImageUrl;
+		this.title = title;
+		this.content = content;
+		this.themeId = themeId;
+		this.member = member;
+	}
+
+	public void updateCoverImage(String coverImageUrl) {
+		this.coverImageUrl = coverImageUrl;
+	}
 }

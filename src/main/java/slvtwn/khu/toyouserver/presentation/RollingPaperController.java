@@ -11,6 +11,7 @@ import slvtwn.khu.toyouserver.application.RollingPaperService;
 import slvtwn.khu.toyouserver.common.authentication.UserAuthentication;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.dto.CoverRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 
@@ -31,5 +32,11 @@ public class RollingPaperController {
 	                             @PathVariable(name = "userId") Long recipientUserId,
 	                             @RequestBody RollingPaperRequest rollingPaperRequest) {
 		rollingPaperService.sendRollingPaper(recipientUserId, rollingPaperRequest);
+	}
+
+	@PostMapping("/rollingpapers/{rollingPaperId}/generate-cover")
+	public void generateCoverImage(@UserAuthentication User user,
+	                               @PathVariable Long rollingPaperId, @RequestBody CoverRequest request) {
+		rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaperId);
 	}
 }
