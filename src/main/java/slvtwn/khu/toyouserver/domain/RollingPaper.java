@@ -50,7 +50,7 @@ public class RollingPaper extends BaseTimeEntity {
 		this.themeId = themeId;
 		this.member = member;
 	}
-
+  
 	public void updateCoverImage(String coverImageUrl) {
 		this.coverImageUrl = coverImageUrl;
 	}

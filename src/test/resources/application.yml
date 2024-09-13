@@ -15,24 +15,24 @@ spring:
 
 oauth:
   kakao:
-    client-id: ${KAKAO_CLIENT_ID}
-    client-secret: ${KAKAO_CLIENT_SECRET}
+    client-id: test-id
+    client-secret: test-secret
     grant-type: authorization_code
-    redirect-uri: ${KAKAO_REDIRECT_URI}
+    redirect-uri: test-uri
 
 jwt:
-  secret: ILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOW
+  secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
   access-token-expiration: 1209600000
   refresh-token-expiration: 2419200000
 
 openai:
-  key: ${OPEN_AI_KEY}
+  key: test-key
 
   text-generation:
-    endpoint: https://api.openai.com/v1/chat/completions
+    endpoint: test
     model: gpt-4o-mini
 
 model-labs:
-  endpoint: abc
-  key: abc
-  model-id: abc
+  endpoint: test
+  key: test
+  model-id: test
