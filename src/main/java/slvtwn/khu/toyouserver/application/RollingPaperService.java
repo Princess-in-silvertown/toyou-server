@@ -9,6 +9,7 @@ import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
 import slvtwn.khu.toyouserver.domain.Sticker;
 import slvtwn.khu.toyouserver.domain.StickerSide;
+import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
@@ -43,11 +44,16 @@ public class RollingPaperService {
 				.toList();
 	}
 
-    public RollingPaperResponse getRollingPaper(Long groupId, Long memberId, Long rollingPaperId) {
-        // TODO: 검증 필요
-        RollingPaper rollingPaper = rollingPaperRepository.findById(rollingPaperId)
-                .orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+	public RollingPaperResponse findById(User user, Long rollingPaperId) {
+		RollingPaper rollingPaper = rollingPaperRepository.findById(rollingPaperId)
+				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+		assertUserIsRollingPaperOwner(user, rollingPaper);
+		return RollingPaperResponse.from(rollingPaper);
+	}
 
-        return RollingPaperResponse.from(rollingPaper);
-    }
+	private void assertUserIsRollingPaperOwner(User user, RollingPaper rollingPaper) {
+		if (!rollingPaper.getMember().getUser().equals(user)) {
+			throw new ToyouException(ResponseType.UNAUTHORIZED_USER_ACCESS);
+		}
+	}
 }
