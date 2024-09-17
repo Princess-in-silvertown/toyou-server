@@ -7,6 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,16 +26,31 @@ public class RollingPaper extends BaseTimeEntity {
 
 	private String title;
 
+	private String content;
+
 	private String coverImageUrl;
+
+	private Long themeId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
+	@OneToMany(mappedBy = "rollingPaper")
+	private final List<Sticker> stickers = new ArrayList<>();
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "group_id")
 	private Group group;
 
+	public RollingPaper(String coverImageUrl, String title, String content, Long themeId, Member member) {
+		this.coverImageUrl = coverImageUrl;
+		this.title = title;
+		this.content = content;
+		this.themeId = themeId;
+		this.member = member;
+	}
+  
 	public void updateCoverImage(String coverImageUrl) {
 		this.coverImageUrl = coverImageUrl;
 	}
