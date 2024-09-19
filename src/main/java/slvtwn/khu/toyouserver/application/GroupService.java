@@ -25,6 +25,13 @@ public class GroupService {
     private final MemberRepository memberRepository;
 
     @Transactional
+    public GroupResponse createGroup(GroupCreateRequest request) {
+        Group group = new Group(request.name());
+        Group savedGroup = groupRepository.save(group);
+        return new GroupResponse(savedGroup.getId(), savedGroup.getName());
+    }
+
+    @Transactional
     public void registerMember(long groupId, User user) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ToyouException(ResponseType.GROUP_NOT_FOUND));
@@ -36,13 +43,6 @@ public class GroupService {
         return memberRepository.findByGroupId(groupId).stream()
                 .map(GroupMemberResponse::of)
                 .toList();
-    }
-
-    @Transactional
-    public GroupResponse createGroup(GroupCreateRequest request) {
-        Group group = new Group(request.name());
-        Group savedGroup = groupRepository.save(group);
-        return new GroupResponse(savedGroup.getId(), savedGroup.getName());
     }
 
     public List<GroupResponse> findRegisteredGroupsByUser(User user) {
