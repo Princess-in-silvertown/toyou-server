@@ -36,3 +36,9 @@ model-labs:
   endpoint: abc
   key: abc
   model-id: abc
+
+external:
+  search:
+    school:
+      url: www.career.go.kr/cnet/openapi
+      key: ${SCHOOL_SEARCH_KEY}
