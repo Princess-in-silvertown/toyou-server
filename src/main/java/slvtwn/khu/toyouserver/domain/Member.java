@@ -28,10 +28,6 @@ public class Member extends BaseTimeEntity {
 	@JoinColumn(name = "group_id")
 	private Group group;
 
-	public Member(Group group) {
-		this.group = group;
-	}
-
 	public Member(User user, Group group) {
 		this.user = user;
 		this.group = group;
