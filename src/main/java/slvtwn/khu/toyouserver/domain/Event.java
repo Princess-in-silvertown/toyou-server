@@ -4,9 +4,12 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,13 +33,15 @@ public class Event {
 
     private String description;
 
-    private String profileImageUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Event(String name, LocalDate date, EventType eventType, String description, String profileImageUrl) {
+    public Event(String name, LocalDate date, EventType eventType, String description, User user) {
         this.name = name;
         this.date = date;
         this.eventType = eventType;
         this.description = description;
-        this.profileImageUrl = profileImageUrl;
+        this.user = user;
     }
 }
