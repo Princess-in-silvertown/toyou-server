@@ -45,17 +45,6 @@ public class EventService {
         return ToyouResponse.from(new EventsByYearMonthResponse(eventByDateResponses));
     }
 
-    private ToyouResponse<EventsByYearMonthResponse> findEventsByDate(LocalDate date) {
-        List<EventResponse> eventResponses = eventRepository.findEventsByDate(date)
-                .stream()
-                .map(EventResponse::from)
-                .toList();
-
-        return ToyouResponse.from(new EventsByYearMonthResponse(
-                List.of(new EventByDateResponse(date, eventResponses)))
-        );
-    }
-
     private static void convertCollectedEventsToEventResponses(List<EventByDateResponse> eventByDateResponses, Map<LocalDate,
             List<Event>> eventsCollectedByDate) {
         for (Map.Entry<LocalDate, List<Event>> entry : eventsCollectedByDate.entrySet()) {
@@ -67,5 +56,16 @@ public class EventService {
             EventByDateResponse eventByDateResponse = new EventByDateResponse(date, eventResponses);
             eventByDateResponses.add(eventByDateResponse);
         }
+    }
+
+    private ToyouResponse<EventsByYearMonthResponse> findEventsByDate(LocalDate date) {
+        List<EventResponse> eventResponses = eventRepository.findEventsByDate(date)
+                .stream()
+                .map(EventResponse::from)
+                .toList();
+
+        return ToyouResponse.from(new EventsByYearMonthResponse(
+                List.of(new EventByDateResponse(date, eventResponses)))
+        );
     }
 }
