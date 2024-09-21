@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import slvtwn.khu.toyouserver.external.search.school.web.SchoolSearchResult;
+import slvtwn.khu.toyouserver.external.search.school.web.CareerNetSchoolResult;
 
-@FeignClient(name = "SchoolSearchClient", url = "${external.search.school.url}")
-public interface SchoolSearchClient {
+@FeignClient(name = "CareerNetSchoolSearchClient", url = "https://www.career.go.kr/cnet/openapi")
+public interface CareerNetSchoolSearchClient {
 
-	@Value("${external.search.school.key}")
+	@Value("${external.careerNet.key}")
 	String getApiKey();
 
 	/**
@@ -23,9 +23,9 @@ public interface SchoolSearchClient {
 	 * @param est           설립 유형. 대학교: 국립, 사립, 공립 / 대안학교: 인가, 비인가, 위탁형
 	 * @param thisPage      현재 페이지
 	 * @param perPage       페이지당 결과 수
-	 * @return SchoolSearchResult
+	 * @return CareerNetSchoolResult
 	 */
-	default SchoolSearchResult searchSchools(
+	default CareerNetSchoolResult searchSchools(
 			String gubun,
 			String searchSchulNm,
 			String region,
@@ -43,7 +43,7 @@ public interface SchoolSearchClient {
 	}
 
 	@GetMapping("/getOpenApi")
-	SchoolSearchResult searchSchoolsInternal(
+	CareerNetSchoolResult searchSchoolsInternal(
 			@RequestParam("apiKey") String apiKey,
 			@RequestParam("svcType") String svcType,
 			@RequestParam("svcCode") String svcCode,

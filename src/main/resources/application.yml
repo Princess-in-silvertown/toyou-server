@@ -38,7 +38,5 @@ model-labs:
   model-id: abc
 
 external:
-  search:
-    school:
-      url: www.career.go.kr/cnet/openapi
-      key: ${SCHOOL_SEARCH_KEY}
+  careerNet:
+    key: undefined_key

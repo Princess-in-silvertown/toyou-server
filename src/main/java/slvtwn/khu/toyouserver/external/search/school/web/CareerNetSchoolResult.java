@@ -2,7 +2,7 @@ package slvtwn.khu.toyouserver.external.search.school.web;
 
 import java.util.List;
 
-public record SchoolSearchResult(
+public record CareerNetSchoolResult(
 		SchoolDataResults dataSearch
 ) {
 	/**
@@ -30,8 +30,5 @@ public record SchoolSearchResult(
 	/**
 	 * @param content 학교별 검색 결과 정보 리스트
 	 */
-	public record SchoolDataResults(
-			List<Content> content
-	) {
-	}
+	public record SchoolDataResults(List<Content> content) {}
 }
