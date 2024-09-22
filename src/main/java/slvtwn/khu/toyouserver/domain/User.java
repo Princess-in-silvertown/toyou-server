@@ -31,8 +31,6 @@ public class User extends BaseTimeEntity {
 
 	private String profilePicture;
 
-	private String serialId;
-	
 	@Enumerated(EnumType.STRING)
 	SocialAuthProvider provider;
 

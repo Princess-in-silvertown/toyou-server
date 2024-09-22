@@ -6,6 +6,6 @@ public record EventResponse(Long id, String name, String eventType, String descr
 
     public static EventResponse from(Event event) {
         return new EventResponse(event.getId(), event.getName(), event.getEventType().name(),
-                event.getDescription(), event.getProfileImageUrl());
+                event.getDescription(), event.getUser().getProfilePicture());
     }
 }
