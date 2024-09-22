@@ -55,6 +55,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
+task copyGitSubmodule(type: Copy) {
+    copy {
+        from './toyou-server-config'
+        include '*.yml'
+        into './src/main/resources'
+    }
+}
+
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"

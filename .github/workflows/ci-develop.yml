@@ -11,14 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    env:
-      KAKAO_CLIENT_ID: ${{secrets.KAKAO_CLIENT_ID}}
-      KAKAO_CLIENT_SECRET: ${{secrets.KAKAO_CLIENT_SECRET}}
-      KAKAO_REDIRECT_URI: ${{secrets.KAKAO_REDIRECT_URI}}
 
     steps:
       - name: checkout to develop branch
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.TOYOU_GH_SUBMODULE_TOKEN }}
+          submodules: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
