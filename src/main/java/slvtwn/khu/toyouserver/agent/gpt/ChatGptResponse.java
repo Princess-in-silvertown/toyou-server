@@ -5,10 +5,16 @@ import java.util.List;
 public record ChatGptResponse(String id, String object, Long created, List<Choice> choices, Usage usage) {
 
     public record Choice(
-            String text,
             int index,
+            Message message,
             String logprobs,
             String finish_reason
+    ) {
+    }
+
+    public record Message(
+            String role,
+            String content
     ) {
     }
 

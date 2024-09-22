@@ -55,8 +55,8 @@ public class AgentService {
     }
 
     private List<String> parseKeywordFromChoice(ChatGptResponse.Choice choice) {
-        String text = choice.text();
-        return Arrays.stream(text.split(","))
+        String text = choice.message().content();
+        return Arrays.stream(text.split(", "))
                 .toList();
     }
 }
