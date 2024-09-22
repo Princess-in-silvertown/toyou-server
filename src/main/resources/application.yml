@@ -36,3 +36,7 @@ model-labs:
   endpoint: abc
   key: abc
   model-id: abc
+
+external:
+  careerNet:
+    key: undefined_key
