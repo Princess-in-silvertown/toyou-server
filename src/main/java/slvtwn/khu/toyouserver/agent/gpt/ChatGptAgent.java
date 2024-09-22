@@ -17,7 +17,7 @@ public class ChatGptAgent {
     public ChatGptResponse requestWithPrompt(String prompt) {
         HashMap<String, Object> body = setupBody(prompt);
 
-        return webClientWrapper.send(configuration.getTextModel(), (httpHeaders -> {
+        return webClientWrapper.send(configuration.getTextModelEndpoint(), (httpHeaders -> {
             httpHeaders.add("Authorization", "Bearer " + configuration.getOpenaiKey());
         }), body, ChatGptResponse.class);
     }
