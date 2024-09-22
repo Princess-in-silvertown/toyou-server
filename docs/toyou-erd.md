@@ -2,45 +2,58 @@
 
 ```mermaid
 erDiagram
-    USER ||--o{ MEMBER: belongs_to
-    USER {
-        bigint id
-        string name
-        string profile_picture
+    User {
+        Long id
+        String name
+        LocalDate birthday
+        String introduction
+        String profilePicture
+        SocialAuthProvider provider
     }
 
-    GROUP ||--o{ ROLLING_PAPER: within
-    GROUP {
-        bigint id
-        string name
+    Sticker {
+        Long id
+        String imageUrl
+        Integer x
+        Integer y
+        Double rotate
+        Double scale
+        StickerSide side
     }
 
-    GROUP ||--o{ MEMBER: has
-    MEMBER {
-        bigint user_id FK
-        bigint group_id FK
+    RollingPaper {
+        Long id
+        String title
+        String content
+        String coverImageUrl
+        Long themeId
     }
 
-    MEMBER ||--|{ ROLLING_PAPER: creates
-    ROLLING_PAPER {
-        bigint id
-        string title
-        bigint member_id FK
-        bigint group_id FK
+    Member {
+        Long id
     }
 
-    ROLLING_PAPER ||--o{ COMMENT: has
-    MEMBER ||--o{ COMMENT: written_by
-    COMMENT {
-        bigint rolling_paper_id FK
-        bigint member_id FK
-        string message
+    Group {
+        Long id
+        String name
     }
 
-    BaseTimeEntity {
-        timestamp created_at
-        timestamp updated_at
+    Event {
+        Long id
+        String name
+        LocalDate date
+        EventType eventType
+        String description
     }
+
+    User ||--o{ Member : has
+    Member ||--o{ Group : belongs_to
+    RollingPaper ||--o{ Sticker : has
+    RollingPaper ||--o| Member : belongs_to
+    Member ||--o| Group : belongs_to
+    Sticker ||--o| RollingPaper : belongs_to
+    Event ||--o| User : associated_with
+
 ```
 
 ### Details
