@@ -17,6 +17,13 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+### Configuration submodules ###
+src/main/resources/application-dev.yml
+src/main/resources/application-test.yml
+src/main/resources/application-datasource.yml
+src/main/resources/application-key.yml
+
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

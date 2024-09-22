@@ -1,0 +1,4 @@
+[submodule "toyou-server-config"]
+        path = toyou-server-config
+        url = git@github.com:Princess-in-silvertown/toyou-server-config.git
+	branch = main

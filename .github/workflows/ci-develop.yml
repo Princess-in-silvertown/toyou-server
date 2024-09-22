@@ -19,6 +19,9 @@ jobs:
     steps:
       - name: checkout to develop branch
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.NOFFICE_GH_SUBMODULE_TOKEN }}
+          submodules: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
