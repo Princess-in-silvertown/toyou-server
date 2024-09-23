@@ -8,16 +8,20 @@ import slvtwn.khu.toyouserver.common.response.ResponseType;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.dto.GroupRequest;
 import slvtwn.khu.toyouserver.dto.UserResponse;
+import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
+import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class UserService {
 
+    private final UserRepository userRepository;
     private final MemberRepository memberRepository;
     private final GroupRepository groupRepository;
 
@@ -49,5 +53,32 @@ public class UserService {
                 .filter(each -> !each.getId().equals(user.getId()))
                 .map(UserResponse::of)
                 .toList();
+    }
+
+    @Transactional
+    public void updateUser(User user, UserUpdateRequest request) {
+        User updatedUser = userRepository.findById(request.id())
+                .map(each -> each.updateInfo(request.name(), request.birthday(),
+                        request.introduction(), request.imageUrl()))
+                .orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+
+        updateUserGroups(user, request.groups());
+        userRepository.save(updatedUser);
+    }
+
+    private void updateUserGroups(User user, List<GroupRequest> groupRequests) {
+        List<Member> members = memberRepository.findByUser(user);
+        memberRepository.deleteAll(members);
+        saveMembersWithNewGroups(user, groupRequests);
+    }
+
+    private void saveMembersWithNewGroups(User user, List<GroupRequest> groupRequests) {
+        List<Member> newMembers = groupRequests.stream()
+                .map(each -> groupRepository.findById(each.id())
+                        .orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST)))
+                .map(each -> new Member(user, each))
+                .map(memberRepository::save)
+                .toList();
+        memberRepository.saveAll(newMembers);
     }
 }

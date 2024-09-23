@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -15,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.dto.GroupRequest;
 import slvtwn.khu.toyouserver.dto.UserResponse;
+import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -75,5 +78,34 @@ class UserServiceTest {
         // then
         assertThat(response)
                 .containsExactly(UserResponse.of(user2));
+    }
+
+    @Test
+    void 유저_정보를_업데이트_할_수_있다() {
+        // given
+        User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
+        Group group1 = new Group("name");
+        Group group2 = new Group("name");
+        Member member = new Member(user, group1);
+
+        entityManager.persist(user);
+        entityManager.persist(group1);
+        entityManager.persist(group2);
+        entityManager.persist(member);
+
+        UserUpdateRequest request = new UserUpdateRequest(user.getId(), LocalDate.now().plus(1, ChronoUnit.DAYS),
+                "new_name", "new_introduction", "new_image_url", List.of(
+                new GroupRequest(group1.getId(), group1.getName()),
+                new GroupRequest(group2.getId(), group2.getName())));
+
+        // when
+        userService.updateUser(user, request);
+
+        // then
+        User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl());
+
+        assertThat(user).usingRecursiveComparison()
+                .ignoringFields("id", "createdDate", "lastModifiedDate")
+                .isEqualTo(expectedUser);
     }
 }

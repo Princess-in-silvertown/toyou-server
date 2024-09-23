@@ -44,4 +44,12 @@ public class User extends BaseTimeEntity {
 	public static User create(String name, String profilePicture) {
 		return new User(name, null, null, profilePicture);
 	}
+
+	public User updateInfo(String name, LocalDate birthday, String introduction, String profilePicture) {
+		this.name = name;
+		this.birthday = birthday;
+		this.introduction = introduction;
+		this.profilePicture = profilePicture;
+		return this;
+	}
 }
