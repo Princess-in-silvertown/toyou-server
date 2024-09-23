@@ -44,6 +44,9 @@ public class SecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
 		configuration.addAllowedOrigin("http://localhost:8080");
+		
+		// TODO: Frontend 도메인 추가에 따른 제약 필요
+		configuration.addAllowedOrigin("*");
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
 		configuration.addExposedHeader("Authorization");
