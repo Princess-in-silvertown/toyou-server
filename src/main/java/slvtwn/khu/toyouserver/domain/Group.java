@@ -24,6 +24,11 @@ public class Group extends BaseTimeEntity {
 	private String name;
 
 	public Group(String name) {
+		this(null, name);
+	}
+
+	public Group(Long id, String name) {
+		this.id = id;
 		this.name = name;
 	}
 }
