@@ -40,7 +40,7 @@ public class RollingPaper extends BaseTimeEntity {
 	private final List<Sticker> stickers = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "group_id")
+	@JoinColumn(name = "groups_id")
 	private Group group;
 
 	public RollingPaper(String coverImageUrl, String title, String content, Long themeId, Member member) {
@@ -50,7 +50,7 @@ public class RollingPaper extends BaseTimeEntity {
 		this.themeId = themeId;
 		this.member = member;
 	}
-  
+
 	public void updateCoverImage(String coverImageUrl) {
 		this.coverImageUrl = coverImageUrl;
 	}

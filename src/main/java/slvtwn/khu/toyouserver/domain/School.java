@@ -22,6 +22,7 @@ public class School {
 	private String address;
 	private String region;
 	private String homepageUrl;
+	private String institutionType;
 
 	public School(String name, String address, String region, String homepageUrl) {
 		this.name = name;

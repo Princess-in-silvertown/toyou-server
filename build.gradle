@@ -43,6 +43,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // MySQL 설정
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+
     // OpenFeign 설정
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
@@ -55,9 +58,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
-task copyGitSubmodule(type: Copy) {
+tasks.register('importConfigSubmodule', Copy) {
     copy {
-        from './toyou-server-config'
+        from './toyou-server-config/src/main/resources/'
         include '*.yml'
         into './src/main/resources'
     }
