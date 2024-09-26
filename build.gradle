@@ -60,7 +60,7 @@ dependencies {
 
 tasks.register('importConfigSubmodule', Copy) {
     copy {
-        from 'toyou-server-config/src/main/resources/'
+        from './toyou-server-config/src/main/resources/'
         include '*.yml'
         into './src/main/resources'
     }
