@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import slvtwn.khu.toyouserver.common.entity.BaseTimeEntity;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "`groups`")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Group extends BaseTimeEntity {
