@@ -55,9 +55,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
-task copyGitSubmodule(type: Copy) {
+tasks.register('importConfigSubmodule', Copy) {
     copy {
-        from './toyou-server-config'
+        from 'toyou-server-config/src/main/resources/'
         include '*.yml'
         into './src/main/resources'
     }

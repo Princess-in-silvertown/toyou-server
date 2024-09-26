@@ -1,42 +1,10 @@
 spring:
-  jpa:
-    open-in-view: false
-    generate-ddl: true
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+  profiles:
+    group:
+      local: "local, key"
+      dev: "develop, datasource, key"
+      prod: "production, datasource, key"
+    active: dev
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
-oauth:
-  kakao:
-    client-id: ${KAKAO_CLIENT_ID}
-    client-secret: ${KAKAO_CLIENT_SECRET}
-    grant-type: authorization_code
-    redirect-uri: ${KAKAO_REDIRECT_URI}
-
-jwt:
-  secret: ILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOWILOVEYOUMORETHANYOUKNOW
-  access-token-expiration: 1209600000
-  refresh-token-expiration: 2419200000
-
-openai:
-  key: ${OPEN_AI_KEY}
-
-  text-generation:
-    endpoint: https://api.openai.com/v1/chat/completions
-    model: gpt-4o-mini
-
-model-labs:
-  endpoint: abc
-  key: abc
-  model-id: abc
-
-external:
-  careerNet:
-    key: undefined_key
+  jackson:
+    property-naming-strategy: LOWER_CAMEL_CASE

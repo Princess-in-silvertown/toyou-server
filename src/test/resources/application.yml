@@ -27,7 +27,6 @@ jwt:
 
 openai:
   key: test-key
-
   text-generation:
     endpoint: test
     model: gpt-4o-mini
