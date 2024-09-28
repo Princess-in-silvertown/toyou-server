@@ -60,9 +60,10 @@ dependencies {
 
 tasks.register('importConfigSubmodule', Copy) {
     copy {
-        from './toyou-server-config/src/main/resources/'
-        include '*.yml'
-        into './src/main/resources'
+        from "${project.rootDir}/toyou-server-config/src/main/resources/"
+        include 'application*.yml'
+        into "${project.projectDir}/src/main/resources"
+        outputs.upToDateWhen { false }
     }
 }
 
@@ -70,6 +71,10 @@ dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
     }
+}
+
+tasks.named('processResources') {
+    dependsOn 'importConfigSubmodule'
 }
 
 tasks.named('test') {
