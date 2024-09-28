@@ -1,6 +1,6 @@
 package slvtwn.khu.toyouserver.common.authentication.filter;
 
-import static slvtwn.khu.toyouserver.common.authentication.UserEntityAuthentication.createMemberAuthentication;
+import static slvtwn.khu.toyouserver.common.authentication.UserEntityAuthentication.createUserAuthentication;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -48,8 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private void doAuthentication(
 			HttpServletRequest request,
-			Long memberId) {
-		UserEntityAuthentication authentication = createMemberAuthentication(memberId);
+			Long userId) {
+		UserEntityAuthentication authentication = createUserAuthentication(userId);
 		createAndSetWebAuthenticationDetails(request, authentication);
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		securityContext.setAuthentication(authentication);

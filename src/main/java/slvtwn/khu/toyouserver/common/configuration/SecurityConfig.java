@@ -9,10 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import slvtwn.khu.toyouserver.common.authentication.JwtAuthenticationEntryPoint;
+import slvtwn.khu.toyouserver.common.authentication.filter.ExceptionHandlerFilter;
+import slvtwn.khu.toyouserver.common.authentication.filter.JwtAuthenticationFilter;
 import slvtwn.khu.toyouserver.common.authentication.jwt.JwtProvider;
 import slvtwn.khu.toyouserver.common.authentication.jwt.JwtValidator;
 
@@ -40,6 +43,12 @@ public class SecurityConfig {
 								.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
 						authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
+				.exceptionHandling(exceptionHandlingConfigurer ->
+						exceptionHandlingConfigurer
+								.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+				.addFilterBefore(new JwtAuthenticationFilter(jwtValidator, jwtProvider),
+						UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class)
 				.build();
 	}
 
