@@ -11,29 +11,29 @@ import slvtwn.khu.toyouserver.application.UserService;
 import slvtwn.khu.toyouserver.common.authentication.UserAuthentication;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
 import slvtwn.khu.toyouserver.domain.User;
-import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 import slvtwn.khu.toyouserver.dto.UserResponse;
+import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 
 @RequiredArgsConstructor
 @RestController
 public class UserController {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    @GetMapping("/me")
-    public ToyouResponse<UserResponse> getProfile(@UserAuthentication User user) {
-        return ToyouResponse.from(UserResponse.of(user));
-    }
+	@GetMapping("/me")
+	public ToyouResponse<UserResponse> getProfile(@UserAuthentication Long userId) {
+		return ToyouResponse.from(userService.getProfile(userId));
+	}
 
-    @PutMapping("/users")
-    public void updateProfile(@UserAuthentication User user, @RequestBody UserUpdateRequest request) {
-        userService.updateUser(user, request);
-    }
+	@PutMapping("/users")
+	public void updateProfile(@UserAuthentication User user, @RequestBody UserUpdateRequest request) {
+		userService.updateUser(user, request);
+	}
 
-    @GetMapping("/users")
-    public ToyouResponse<List<UserResponse>> findMembersWithFilteringOptions(
-            @UserAuthentication User user,
-            @RequestParam String search, @RequestParam(required = false) Long groupId) {
-        return ToyouResponse.from(userService.findUsersWithFilteringOptions(user, search, groupId));
-    }
+	@GetMapping("/users")
+	public ToyouResponse<List<UserResponse>> findMembersWithFilteringOptions(
+			@UserAuthentication User user,
+			@RequestParam String search, @RequestParam(required = false) Long groupId) {
+		return ToyouResponse.from(userService.findUsersWithFilteringOptions(user, search, groupId));
+	}
 }
