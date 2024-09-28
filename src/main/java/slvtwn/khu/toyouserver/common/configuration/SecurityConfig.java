@@ -1,6 +1,7 @@
 package slvtwn.khu.toyouserver.common.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,9 @@ import slvtwn.khu.toyouserver.common.authentication.jwt.JwtValidator;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+	@Value("${server.domain}")
+	private String serverDomain;
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtValidator jwtValidator;
@@ -44,9 +48,7 @@ public class SecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
 		configuration.addAllowedOrigin("http://localhost:8080");
-		
-		// TODO: Frontend 도메인 추가에 따른 제약 필요
-		configuration.addAllowedOrigin("*");
+		configuration.addAllowedOrigin("serverDomain");
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
 		configuration.addExposedHeader("Authorization");
