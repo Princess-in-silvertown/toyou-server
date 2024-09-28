@@ -13,6 +13,9 @@ spring:
     username: sa
     password:
 
+server:
+  domain: http://localhost:8080
+
 oauth:
   kakao:
     client-id: test-id
