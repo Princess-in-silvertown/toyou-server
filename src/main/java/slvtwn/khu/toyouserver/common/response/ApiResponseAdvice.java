@@ -31,6 +31,11 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 		HttpServletResponse servletResponse =
 				((ServletServerHttpResponse) response).getServletResponse();
 
+		if (returnType.getParameterType() == Void.class) {
+			HttpStatus httpStatus = HttpStatus.resolve(servletResponse.getStatus());
+			return createResponseByHttpStatus(httpStatus, null, null);
+		}
+
 		ToyouResponse toyouResponse = objectMapper.convertValue(body, ToyouResponse.class);
 		Object data = toyouResponse.data();
 		PageInfo pageInfo = toyouResponse.pageInfo();
