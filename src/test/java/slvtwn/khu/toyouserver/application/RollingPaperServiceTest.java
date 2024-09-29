@@ -20,6 +20,7 @@ import slvtwn.khu.toyouserver.agent.modellabs.ModelLabsAgent;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
+import slvtwn.khu.toyouserver.domain.SocialAuthProvider;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.CoverRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
@@ -44,7 +45,7 @@ class RollingPaperServiceTest {
 	void 커버_이미지를_생성하면_롤링페이퍼_커버가_업데이트된다() {
 		// given
 		Group group = new Group("name");
-		User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Member member = new Member(user, group);
 		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
 
@@ -70,8 +71,8 @@ class RollingPaperServiceTest {
 	void 롤링페이퍼를_전송할_수_있다() {
 		// given
 		Group group = new Group("name");
-		User user1 = new User("name", LocalDate.now(), "introduction", "profile_picture");
-		User user2 = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		User user1 = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
+		User user2 = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Member member1 = new Member(user1, group);
 		Member member2 = new Member(user2, group);
 
@@ -94,7 +95,7 @@ class RollingPaperServiceTest {
 	void 롤링페이퍼를_조회할_수_있다() {
 		// given
 		Group group = new Group("name");
-		User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Member member = new Member(user, group);
 		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
 

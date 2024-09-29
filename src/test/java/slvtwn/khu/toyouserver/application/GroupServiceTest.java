@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
+import slvtwn.khu.toyouserver.domain.SocialAuthProvider;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
@@ -49,7 +50,7 @@ class GroupServiceTest {
 	@Test
 	void 유저는_그룹에_가입할_수_있다() {
 		// given
-		User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_pic", null);
 		Group group = new Group("group_name");
 
 		entityManager.persist(user);
@@ -63,7 +64,7 @@ class GroupServiceTest {
 	@Test
 	void 그룹이_존재하지_않는다면_가입이_불가능하다() {
 		// given
-		User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_pic", null);
 		long groupIdNonExists = 1L;
 
 		entityManager.persist(user);
@@ -76,8 +77,8 @@ class GroupServiceTest {
 	@Test
 	void 그룹에_속한_멤버들을_찾을_수_있다() {
 		// given
-		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_pic");
-		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_pic");
+		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_pic", null);
+		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_pic", null);
 
 		Group group = new Group("group_name");
 
@@ -101,7 +102,7 @@ class GroupServiceTest {
 	@Test
 	void 유저는_가입한_그룹을_조회할_수_있다() {
 		// given
-		User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_pic", null);
 		Group group1 = new Group("group_name1");
 		Group group2 = new Group("group_name2");
 		Member member1 = new Member(user, group1);
