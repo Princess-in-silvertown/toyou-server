@@ -26,8 +26,9 @@ public class GroupController {
 	}
 
 	@GetMapping("/groups")
-	public ToyouResponse<List<GroupResponse>> findRegisteredGroups(@UserAuthentication Long userId) {
-		return ToyouResponse.from(groupService.findRegisteredGroupsByUser(userId));
+	public ToyouResponse<List<GroupResponse>> findGroups(@UserAuthentication Long userId,
+														 String keywords) {
+		return ToyouResponse.from(groupService.findGroups(userId, keywords));
 	}
 
 	@PostMapping("/groups/{groupId}/register")

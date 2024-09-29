@@ -48,12 +48,25 @@ public class GroupService {
 				.toList();
 	}
 
-	public List<GroupResponse> findRegisteredGroupsByUser(Long userId) {
+	public List<GroupResponse> findGroups(Long userId, String keyword) {
+		if (keyword == null) {
+			return findRegisteredGroups(userId);
+		}
+		return findGroupsByKeywords(keyword);
+	}
+
+	private List<GroupResponse> findRegisteredGroups(Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
 		// TODO: 쿼리 최적화
 		return memberRepository.findByUser(user).stream()
 				.map(Member::getGroup)
+				.map(each -> new GroupResponse(each.getId(), each.getName()))
+				.toList();
+	}
+
+	private List<GroupResponse> findGroupsByKeywords(String keyword) {
+		return groupRepository.findByNameLike(keyword).stream()
 				.map(each -> new GroupResponse(each.getId(), each.getName()))
 				.toList();
 	}
