@@ -31,21 +31,22 @@ public class RollingPaperController {
 	public ToyouResponse<List<RollingPaperResponse>> findReceivedRollingPapers(@UserAuthentication Long userId,
 	                                                                           @RequestParam Long groupId,
 	                                                                           @RequestParam Long targetId,
-	                                                                           @RequestParam Integer limit) {
+	                                                                           @RequestParam(defaultValue = "10") int limit) {
 		return ToyouResponse.from(rollingPaperService.findReceivedRollingPapers(userId, groupId, targetId, limit));
 	}
 
 	@PostMapping("/users/{userId}/rollingpapers")
 	public ToyouResponse<Void> sendRollingPaper(@UserAuthentication Long RequestUserId,
-												@PathVariable(name = "userId") Long recipientUserId,
-												@RequestBody RollingPaperRequest rollingPaperRequest) {
+	                                            @PathVariable(name = "userId") Long recipientUserId,
+	                                            @RequestBody RollingPaperRequest rollingPaperRequest) {
 		rollingPaperService.sendRollingPaper(recipientUserId, rollingPaperRequest);
 		return ToyouResponse.noContent();
 	}
 
 	@PostMapping("/rollingpapers/{rollingPaperId}/generate-cover")
 	public ToyouResponse<Void> generateCoverImage(@UserAuthentication Long userId,
-	                               @PathVariable Long rollingPaperId, @RequestBody CoverRequest request) {
+	                                              @PathVariable Long rollingPaperId,
+	                                              @RequestBody CoverRequest request) {
 		rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaperId);
 		return ToyouResponse.noContent();
 	}
