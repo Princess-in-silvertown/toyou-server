@@ -27,15 +27,17 @@ public class RollingPaperController {
 	}
 
 	@PostMapping("/users/{userId}/rollingpapers")
-	public void sendRollingPaper(@UserAuthentication Long RequestUserId,
-	                             @PathVariable(name = "userId") Long recipientUserId,
-	                             @RequestBody RollingPaperRequest rollingPaperRequest) {
+	public ToyouResponse<Void> sendRollingPaper(@UserAuthentication Long RequestUserId,
+												@PathVariable(name = "userId") Long recipientUserId,
+												@RequestBody RollingPaperRequest rollingPaperRequest) {
 		rollingPaperService.sendRollingPaper(recipientUserId, rollingPaperRequest);
+		return ToyouResponse.noContent();
 	}
 
 	@PostMapping("/rollingpapers/{rollingPaperId}/generate-cover")
-	public void generateCoverImage(@UserAuthentication Long userId,
+	public ToyouResponse<Void> generateCoverImage(@UserAuthentication Long userId,
 	                               @PathVariable Long rollingPaperId, @RequestBody CoverRequest request) {
 		rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaperId);
+		return ToyouResponse.noContent();
 	}
 }

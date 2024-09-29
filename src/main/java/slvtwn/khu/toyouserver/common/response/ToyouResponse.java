@@ -11,4 +11,8 @@ public record ToyouResponse<T>(T data, PageInfo pageInfo) {
     public static <T> ToyouResponse<T> of(T data, PageInfo pageInfo) {
         return new ToyouResponse<>(data, pageInfo);
     }
+
+    public static ToyouResponse<Void> noContent() {
+        return new ToyouResponse<>(null, null);
+    }
 }

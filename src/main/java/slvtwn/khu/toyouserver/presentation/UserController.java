@@ -29,8 +29,9 @@ UserController {
 	}
 
 	@PutMapping("/users")
-	public void updateProfile(@UserAuthentication Long userId, @RequestBody UserUpdateRequest request) {
+	public ToyouResponse<Void> updateProfile(@UserAuthentication Long userId, @RequestBody UserUpdateRequest request) {
 		userService.updateUser(userId, request);
+		return ToyouResponse.noContent();
 	}
 
 	@GetMapping("/users")
