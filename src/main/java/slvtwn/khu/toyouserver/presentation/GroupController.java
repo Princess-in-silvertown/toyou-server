@@ -33,8 +33,9 @@ public class GroupController {
 	}
 
 	@PostMapping("/groups/{groupId}/register")
-	public void registerMember(@UserAuthentication Long userId, @PathVariable Long groupId) {
+	public ToyouResponse<Void> registerMember(@UserAuthentication Long userId, @PathVariable Long groupId) {
 		groupService.registerMember(groupId, userId);
+		return ToyouResponse.noContent();
 	}
 
 	@GetMapping("/groups/{groupId}/members")
