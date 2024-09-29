@@ -16,8 +16,15 @@ public class SecurityWhiteListPaths {
 			"/auth/login"
 	};
 
-	public static boolean isWhitelisted(HttpServletRequest request) {
+	/*
+	 * JWT User Authentication Whitelist (JWT 사용자 인증만을 거치지 않고 접근 허용되는 경로)
+	 */
+	public static final List<String> JWT_USER_AUTHENTICATION_WHITELIST = List.of(
+			"/auth/login"
+	);
+
+	public static boolean isJWTUserAuthenticationWhitelisted(HttpServletRequest request) {
 		String path = request.getRequestURI();
-		return FILTER_WHITE_LIST.stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
+		return JWT_USER_AUTHENTICATION_WHITELIST.stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
 	}
 }

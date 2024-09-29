@@ -16,6 +16,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import slvtwn.khu.toyouserver.common.authentication.SecurityWhiteListPaths;
 import slvtwn.khu.toyouserver.common.authentication.UserEntityAuthentication;
 import slvtwn.khu.toyouserver.common.authentication.jwt.JwtProvider;
 import slvtwn.khu.toyouserver.common.authentication.jwt.JwtValidator;
@@ -32,6 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		if (SecurityWhiteListPaths.isJWTUserAuthenticationWhitelisted(request)) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 		final String accessToken = getAccessToken(request);
 		jwtValidator.validateAccessToken(accessToken);
 		doAuthentication(request, jwtProvider.getSubject(accessToken));
