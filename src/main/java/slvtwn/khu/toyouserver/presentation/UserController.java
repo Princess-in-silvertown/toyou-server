@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import slvtwn.khu.toyouserver.application.UserProfileFacade;
 import slvtwn.khu.toyouserver.application.UserService;
 import slvtwn.khu.toyouserver.common.authentication.UserAuthentication;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
+import slvtwn.khu.toyouserver.dto.UserProfileResponse;
 import slvtwn.khu.toyouserver.dto.UserResponse;
 import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 
@@ -18,11 +20,12 @@ import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 public class
 UserController {
 
+	private final UserProfileFacade userProfileFacade;
 	private final UserService userService;
 
 	@GetMapping("/me")
-	public ToyouResponse<UserResponse> getProfile(@UserAuthentication Long userId) {
-		return ToyouResponse.from(userService.getProfile(userId));
+	public ToyouResponse<UserProfileResponse> getProfile(@UserAuthentication Long userId) {
+		return ToyouResponse.from(userProfileFacade.getProfile(userId));
 	}
 
 	@PutMapping("/users")
