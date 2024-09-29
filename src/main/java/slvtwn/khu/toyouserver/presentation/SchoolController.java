@@ -13,7 +13,7 @@ import slvtwn.khu.toyouserver.dto.SchoolSearchResponse;
 @RestController
 public class SchoolController {
 
-	private SchoolSearchService schoolSearchService;
+	private final SchoolSearchService schoolSearchService;
 
 	@GetMapping("/schools/search")
 	public ToyouResponse<List<SchoolSearchResponse>> searchSchools(@RequestParam String keyword) {
