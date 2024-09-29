@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
-import slvtwn.khu.toyouserver.domain.SocialAuthProvider;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
@@ -115,10 +115,54 @@ class GroupServiceTest {
 		entityManager.persist(member2);
 
 		// when
-		List<GroupResponse> response = groupService.findRegisteredGroupsByUser(user.getId());
+		List<GroupResponse> response = groupService.findGroups(user.getId(), null);
 
 		// then
 		assertThat(response).extracting(GroupResponse::name)
 				.containsExactlyInAnyOrder(group1.getName(), group2.getName());
+	}
+
+	@Test
+	void 이름을_기준으로_그룹을_검색한다() {
+		// given
+		Group group = new Group("경희어린이집", "경기도 용인시 기흥구 덕영대로 1732", "경기도", "https://www.khu.ac.kr");
+		entityManager.persist(group);
+		String keyword = "경희";
+
+		// when
+		List<GroupResponse> response = groupService.findGroups(null, keyword);
+
+		// then
+		assertThat(response).containsExactlyInAnyOrder(new GroupResponse(group.getId(), group.getName()));
+	}
+
+	@Test
+	void 검색어가_포함된_그룹이_없다면_빈_리스트를_반환한다() {
+		// given
+		String keyword = "섭섭어린이집";
+
+		// when
+		List<GroupResponse> response = groupService.findGroups(null, keyword);
+
+		// then
+		assertThat(response).isEmpty();
+	}
+
+	@Test
+	void 검색어가_포함된_그룹_여러_개를_반환할_수_있다() {
+		// given
+		Group group1 = new Group("경희어린이집1", "경기도 용인시 기흥구 덕영대로 1732", "경기도", "https://www.khu.ac.kr");
+		Group group2 = new Group("경희어린이집2", "경기도 용인시 기흥구 덕영대로 1732", "경기도", "https://www.khu.ac.kr");
+		entityManager.persist(group1);
+		entityManager.persist(group2);
+		String keyword = "경희어린이집";
+
+		// when
+		List<GroupResponse> response = groupService.findGroups(null, keyword);
+
+		// then
+		assertThat(response).containsExactlyInAnyOrder(
+				new GroupResponse(group1.getId(), group1.getName()),
+				new GroupResponse(group2.getId(), group2.getName()));
 	}
 }

@@ -23,12 +23,18 @@ public class Group extends BaseTimeEntity {
 
 	private String name;
 
+	private String address;
+	private String region;
+	private String homepageUrl;
+
 	public Group(String name) {
-		this(null, name);
+		this(name, null, null, null);
 	}
 
-	public Group(Long id, String name) {
-		this.id = id;
+	public Group(String name, String address, String region, String homepageUrl) {
 		this.name = name;
+		this.address = address;
+		this.region = region;
+		this.homepageUrl = homepageUrl;
 	}
 }

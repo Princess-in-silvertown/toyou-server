@@ -3,7 +3,6 @@ package slvtwn.khu.toyouserver.application;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
 import slvtwn.khu.toyouserver.dto.UserProfileResponse;
@@ -19,7 +18,7 @@ public class UserProfileFacade {
     @Transactional(readOnly = true)
     public UserProfileResponse getProfile(Long userId) {
         UserResponse userResponse = userService.getProfile(userId);
-        List<GroupResponse> groupResponses = groupService.findRegisteredGroupsByUser(userId);
+        List<GroupResponse> groupResponses = groupService.findGroups(userId, null);
 
         return new UserProfileResponse(userResponse.id(), userResponse.birthday(), userResponse.name(),
                 userResponse.introduction(), userResponse.imageUrl(), groupResponses);
