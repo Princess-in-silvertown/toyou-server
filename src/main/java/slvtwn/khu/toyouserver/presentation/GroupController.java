@@ -13,6 +13,7 @@ import slvtwn.khu.toyouserver.common.response.ToyouResponse;
 import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
+import slvtwn.khu.toyouserver.dto.GroupsResponse;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,8 +27,8 @@ public class GroupController {
 	}
 
 	@GetMapping("/groups")
-	public ToyouResponse<List<GroupResponse>> findGroups(@UserAuthentication Long userId,
-														 String keywords) {
+	public ToyouResponse<GroupsResponse> findGroups(@UserAuthentication Long userId,
+													String keywords) {
 		return ToyouResponse.from(groupService.findGroups(userId, keywords));
 	}
 
