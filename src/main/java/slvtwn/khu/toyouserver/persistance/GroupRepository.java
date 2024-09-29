@@ -6,5 +6,5 @@ import slvtwn.khu.toyouserver.domain.Group;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
-	List<Group> findTop50ByNameLike(String keyword);
+	List<Group> findTop30ByNameLike(String keyword);
 }
