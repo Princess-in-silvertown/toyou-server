@@ -32,17 +32,17 @@ public class User extends BaseTimeEntity {
 	private String profilePicture;
 
 	@Enumerated(EnumType.STRING)
-	SocialAuthProvider provider;
+	private SocialAuthProvider provider;
 
-	public User(String name, LocalDate birthday, String introduction, String profilePicture) {
+	public User(String name, LocalDate birthday, String introduction, String profilePicture, SocialAuthProvider provider) {
 		this.name = name;
 		this.birthday = birthday;
 		this.introduction = introduction;
 		this.profilePicture = profilePicture;
 	}
 
-	public static User create(String name, String profilePicture) {
-		return new User(name, null, null, profilePicture);
+	public static User create(String name, String profilePicture, SocialAuthProvider provider) {
+		return new User(name, null, null, profilePicture, provider);
 	}
 
 	public User updateInfo(String name, LocalDate birthday, String introduction, String profilePicture) {

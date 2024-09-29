@@ -63,7 +63,7 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
         User user = userRepository.findById(Long.parseLong(userResponse.id())).orElse(null);
         if (user == null) {
             user = User.create(userResponse.kakaoAccount().profile().nickname(),
-                    userResponse.kakaoAccount().profile().profileImageUrl());
+                    userResponse.kakaoAccount().profile().profileImageUrl(), KAKAO);
         }
         userRepository.save(user);
         return user;
