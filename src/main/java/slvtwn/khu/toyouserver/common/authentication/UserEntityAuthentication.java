@@ -13,7 +13,7 @@ public class UserEntityAuthentication extends UsernamePasswordAuthenticationToke
 		super(principal, credentials, authorities);
 	}
 
-	public static UserEntityAuthentication createMemberAuthentication(Long userId) {
+	public static UserEntityAuthentication createUserAuthentication(Long userId) {
 		return new UserEntityAuthentication(userId, null, null);
 	}
 }

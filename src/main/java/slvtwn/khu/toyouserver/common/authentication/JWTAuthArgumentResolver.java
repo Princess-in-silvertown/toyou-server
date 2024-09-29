@@ -7,7 +7,6 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import slvtwn.khu.toyouserver.domain.User;
 
 @Component
 public class JWTAuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -15,7 +14,7 @@ public class JWTAuthArgumentResolver implements HandlerMethodArgumentResolver {
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		boolean hasAuthMemberAnnotation = parameter.hasParameterAnnotation(UserAuthentication.class);
-		boolean isUserEntityType = parameter.getParameterType().equals(User.class);
+		boolean isUserEntityType = parameter.getParameterType().equals(Long.class);
 		return hasAuthMemberAnnotation && isUserEntityType;
 	}
 

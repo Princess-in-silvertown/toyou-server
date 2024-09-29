@@ -18,7 +18,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 	                     AuthenticationException authException) throws IOException {
-		if (!SecurityWhiteListPaths.isWhitelisted(request)) {
+		if (!SecurityWhiteListPaths.isJWTUserAuthenticationWhitelisted(request)) {
 			handleException(response);
 		}
 	}

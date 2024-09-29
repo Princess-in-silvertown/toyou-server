@@ -31,83 +31,83 @@ import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 @SpringBootTest
 class RollingPaperServiceTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @MockBean
-    private ModelLabsAgent modelLabsAgent;
+	@MockBean
+	private ModelLabsAgent modelLabsAgent;
 
-    @Autowired
-    private RollingPaperService rollingPaperService;
+	@Autowired
+	private RollingPaperService rollingPaperService;
 
-    @Test
-    void 커버_이미지를_생성하면_롤링페이퍼_커버가_업데이트된다() {
-        // given
-        Group group = new Group("name");
-        User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
-        Member member = new Member(user, group);
-        RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
+	@Test
+	void 커버_이미지를_생성하면_롤링페이퍼_커버가_업데이트된다() {
+		// given
+		Group group = new Group("name");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		Member member = new Member(user, group);
+		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
 
-        entityManager.persist(user);
-        entityManager.persist(group);
-        entityManager.persist(member);
-        entityManager.persist(rollingPaper);
+		entityManager.persist(user);
+		entityManager.persist(group);
+		entityManager.persist(member);
+		entityManager.persist(rollingPaper);
 
-        String coverImageUrl = "cover_image_url";
-        CoverRequest request = new CoverRequest(List.of());
+		String coverImageUrl = "cover_image_url";
+		CoverRequest request = new CoverRequest(List.of());
 
-        given(modelLabsAgent.generateCoverWithKeywords(any()))
-                .willReturn(List.of(coverImageUrl));
+		given(modelLabsAgent.generateCoverWithKeywords(any()))
+				.willReturn(List.of(coverImageUrl));
 
-        // when
-        rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaper.getId());
+		// when
+		rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaper.getId());
 
-        // then
-        assertThat(rollingPaper.getCoverImageUrl()).isEqualTo(coverImageUrl);
-    }
+		// then
+		assertThat(rollingPaper.getCoverImageUrl()).isEqualTo(coverImageUrl);
+	}
 
-    @Test
-    void 롤링페이퍼를_전송할_수_있다() {
-        // given
-        Group group = new Group("name");
-        User user1 = new User("name", LocalDate.now(), "introduction", "profile_picture");
-        User user2 = new User("name", LocalDate.now(), "introduction", "profile_picture");
-        Member member1 = new Member(user1, group);
-        Member member2 = new Member(user2, group);
+	@Test
+	void 롤링페이퍼를_전송할_수_있다() {
+		// given
+		Group group = new Group("name");
+		User user1 = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		User user2 = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		Member member1 = new Member(user1, group);
+		Member member2 = new Member(user2, group);
 
-        entityManager.persist(user1);
-        entityManager.persist(user2);
-        entityManager.persist(group);
-        entityManager.persist(member1);
-        entityManager.persist(member2);
+		entityManager.persist(user1);
+		entityManager.persist(user2);
+		entityManager.persist(group);
+		entityManager.persist(member1);
+		entityManager.persist(member2);
 
-        // when
-        RollingPaperRequest request = new RollingPaperRequest(group.getId(), "cover_image_url",
-                "title", "content", 1L, List.of());
+		// when
+		RollingPaperRequest request = new RollingPaperRequest(group.getId(), "cover_image_url",
+				"title", "content", 1L, List.of());
 
-        // then
-        assertThatCode(() -> rollingPaperService.sendRollingPaper(user2.getId(), request))
-                .doesNotThrowAnyException();
-    }
+		// then
+		assertThatCode(() -> rollingPaperService.sendRollingPaper(user2.getId(), request))
+				.doesNotThrowAnyException();
+	}
 
-    @Test
-    void 롤링페이퍼를_조회할_수_있다() {
-        // given
-        Group group = new Group("name");
-        User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
-        Member member = new Member(user, group);
-        RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
+	@Test
+	void 롤링페이퍼를_조회할_수_있다() {
+		// given
+		Group group = new Group("name");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		Member member = new Member(user, group);
+		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
 
-        entityManager.persist(user);
-        entityManager.persist(group);
-        entityManager.persist(member);
-        entityManager.persist(rollingPaper);
+		entityManager.persist(user);
+		entityManager.persist(group);
+		entityManager.persist(member);
+		entityManager.persist(rollingPaper);
 
-        // when
-        RollingPaperResponse response = rollingPaperService.findById(user, rollingPaper.getId());
+		// when
+		RollingPaperResponse response = rollingPaperService.findById(user.getId(), rollingPaper.getId());
 
-        // then
-        assertThat(response).usingRecursiveComparison()
-                .isEqualTo(RollingPaperResponse.from(rollingPaper));
-    }
+		// then
+		assertThat(response).usingRecursiveComparison()
+				.isEqualTo(RollingPaperResponse.from(rollingPaper));
+	}
 }
