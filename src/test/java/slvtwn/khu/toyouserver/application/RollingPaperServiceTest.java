@@ -235,4 +235,39 @@ class RollingPaperServiceTest {
 		assertThat(response).usingRecursiveComparison()
 				.isEqualTo(expectedResponse);
 	}
+
+	@Test
+	void 수신한_롤링페이퍼_조회는_생성된_시간이_최신인_롤링페이퍼부터_조회된다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
+		Group group = new Group("group");
+		Member member = new Member(user, group);
+
+		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1", 1L, member);
+		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2", 1L, member);
+		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3", 1L, member);
+
+		entityManager.persist(user);
+		entityManager.persist(group);
+		entityManager.persist(member);
+		entityManager.persist(rollingPaper1);
+		entityManager.persist(rollingPaper2);
+		entityManager.persist(rollingPaper3);
+
+		// when
+		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(
+				user.getId(),
+				group.getId(),
+				rollingPaper3.getId() + 1, 10);
+
+		// then
+		List<RollingPaperResponse> expectedResponse = List.of(
+				RollingPaperResponse.from(rollingPaper3),
+				RollingPaperResponse.from(rollingPaper2),
+				RollingPaperResponse.from(rollingPaper1)
+		);
+
+		assertThat(response).usingRecursiveComparison()
+				.isEqualTo(expectedResponse);
+	}
 }
