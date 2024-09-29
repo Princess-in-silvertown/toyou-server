@@ -34,8 +34,8 @@ class UserServiceTest {
 	@Test
 	void 같은_그룹의_유저들을_키워드로_검색할_수_있다() {
 		// given
-		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture");
-		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture");
+		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture", null);
+		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group = new Group("name");
 		Member member1 = new Member(user1, group);
 		Member member2 = new Member(user2, group);
@@ -57,8 +57,8 @@ class UserServiceTest {
 	@Test
 	void 다른_그룹의_유저들을_키워드로_검색할_수_있다() {
 		// given
-		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture");
-		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture");
+		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture", null);
+		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group1 = new Group("name");
 		Group group2 = new Group("name");
 		Member member1 = new Member(user1, group1);
@@ -82,7 +82,7 @@ class UserServiceTest {
 	@Test
 	void 유저_정보를_업데이트_할_수_있다() {
 		// given
-		User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group1 = new Group("name");
 		Group group2 = new Group("name");
 		Member member = new Member(user, group1);
@@ -101,7 +101,7 @@ class UserServiceTest {
 		userService.updateUser(user.getId(), request);
 
 		// then
-		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl());
+		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl(), null);
 
 		assertThat(user).usingRecursiveComparison()
 				.ignoringFields("id", "createdDate", "lastModifiedDate")

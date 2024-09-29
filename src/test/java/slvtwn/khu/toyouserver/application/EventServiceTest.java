@@ -38,8 +38,8 @@ class EventServiceTest {
     void 연월로_이벤트를_조회할_수_있다() {
         // given
         LocalDate baseDate = LocalDate.of(2024, 9, 15);
-        User user1 = new User("name", baseDate, "introduction", "picture_url");
-        User user2 = new User("name", baseDate.minus(1, ChronoUnit.DAYS), "introduction", "picture_url");
+        User user1 = new User("name", baseDate, "introduction", "picture_url", null);
+        User user2 = new User("name", baseDate.minus(1, ChronoUnit.DAYS), "introduction", "picture_url", null);
         Event event1 = new Event("name", baseDate, EventType.BIRTHDAY, "description", user1);
         Event event2 = new Event("name", baseDate.minus(1, ChronoUnit.DAYS), EventType.BIRTHDAY, "description", user2);
 
@@ -65,8 +65,8 @@ class EventServiceTest {
         // given
         LocalDate baseDate = LocalDate.of(2024, 9, 15);
         LocalDate beforeDate = LocalDate.of(2023, 9, 15);
-        User user1 = new User("name", baseDate, "introduction", "picture_url");
-        User user2 = new User("name", beforeDate, "introduction", "picture_url");
+        User user1 = new User("name", baseDate, "introduction", "picture_url", null);
+        User user2 = new User("name", beforeDate, "introduction", "picture_url", null);
         Event event1 = new Event("name", baseDate, EventType.BIRTHDAY, "description", user1);
         Event event2 = new Event("name", beforeDate, EventType.BIRTHDAY, "description", user2);
 
@@ -91,8 +91,8 @@ class EventServiceTest {
         // given
         LocalDate baseDate = LocalDate.of(2024, 9, 15);
         LocalDate beforeDate = LocalDate.of(2024, 8, 15);
-        User user1 = new User("name", baseDate, "introduction", "picture_url");
-        User user2 = new User("name", beforeDate, "introduction", "picture_url");
+        User user1 = new User("name", baseDate, "introduction", "picture_url", null);
+        User user2 = new User("name", beforeDate, "introduction", "picture_url", null);
         Event event1 = new Event("name", baseDate, EventType.BIRTHDAY, "description", user1);
         Event event2 = new Event("name", beforeDate, EventType.BIRTHDAY, "description", user2);
 
@@ -117,8 +117,8 @@ class EventServiceTest {
         // given
         LocalDate baseDate = LocalDate.of(2024, 9, 15);
         LocalDate beforeDate = LocalDate.of(2024, 8, 15);
-        User user1 = new User("name", baseDate, "introduction", "picture_url");
-        User user2 = new User("name", beforeDate, "introduction", "picture_url");
+        User user1 = new User("name", baseDate, "introduction", "picture_url", null);
+        User user2 = new User("name", beforeDate, "introduction", "picture_url", null);
         Event event1 = new Event("name", baseDate, EventType.BIRTHDAY, "description", user1);
         Event event2 = new Event("name", beforeDate, EventType.BIRTHDAY, "description", user2);
 
