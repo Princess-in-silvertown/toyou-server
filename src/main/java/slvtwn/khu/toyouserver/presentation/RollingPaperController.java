@@ -1,5 +1,6 @@
 package slvtwn.khu.toyouserver.presentation;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +21,9 @@ public class RollingPaperController {
 
 	private final RollingPaperService rollingPaperService;
 
-	@GetMapping("/rollingpapers")
+	@GetMapping("/rollingpapers/{rollingPaperId}")
 	public ToyouResponse<RollingPaperResponse> findById(@UserAuthentication Long userId,
-	                                                    @RequestParam Long rollingPaperId) {
+	                                                    @PathVariable Long rollingPaperId) {
 		return ToyouResponse.from(rollingPaperService.findById(userId, rollingPaperId));
 	}
 
