@@ -28,8 +28,8 @@ public class GroupController {
 
 	@GetMapping("/groups")
 	public ToyouResponse<GroupsResponse> findGroups(@UserAuthentication Long userId,
-													String keywords) {
-		return ToyouResponse.from(groupService.findGroups(userId, keywords));
+													String keyword) {
+		return ToyouResponse.from(groupService.findGroups(userId, keyword));
 	}
 
 	@PostMapping("/groups/{groupId}/register")
