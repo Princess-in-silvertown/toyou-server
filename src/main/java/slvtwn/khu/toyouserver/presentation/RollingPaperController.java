@@ -26,6 +26,14 @@ public class RollingPaperController {
 		return ToyouResponse.from(rollingPaperService.findById(userId, rollingPaperId));
 	}
 
+	@GetMapping("/rollingpapers")
+	public ToyouResponse<List<RollingPaperResponse>> findReceivedRollingPapers(@UserAuthentication Long userId,
+	                                                                           @RequestParam Long groupId,
+	                                                                           @RequestParam Long targetId,
+	                                                                           @RequestParam Integer limit) {
+		return ToyouResponse.from(rollingPaperService.findReceivedRollingPapers(userId, groupId, targetId, limit));
+	}
+
 	@PostMapping("/users/{userId}/rollingpapers")
 	public void sendRollingPaper(@UserAuthentication Long RequestUserId,
 	                             @PathVariable(name = "userId") Long recipientUserId,
