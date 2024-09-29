@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import slvtwn.khu.toyouserver.common.authentication.JwtAuthenticationEntryPoint;
+import slvtwn.khu.toyouserver.common.authentication.SecurityWhiteListPaths;
 import slvtwn.khu.toyouserver.common.authentication.filter.ExceptionHandlerFilter;
 import slvtwn.khu.toyouserver.common.authentication.filter.JwtAuthenticationFilter;
 import slvtwn.khu.toyouserver.common.authentication.jwt.JwtProvider;
@@ -42,7 +43,9 @@ public class SecurityConfig {
 						sessionManagementConfigurer
 								.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-						authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
+						authorizationManagerRequestMatcherRegistry.requestMatchers(
+										SecurityWhiteListPaths.SECURITY_GLOBAL_WHITELIST).permitAll()
+								.anyRequest().authenticated())
 				.exceptionHandling(exceptionHandlingConfigurer ->
 						exceptionHandlingConfigurer
 								.authenticationEntryPoint(jwtAuthenticationEntryPoint))

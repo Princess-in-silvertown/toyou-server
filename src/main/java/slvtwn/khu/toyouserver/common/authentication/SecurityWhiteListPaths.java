@@ -7,9 +7,14 @@ import org.springframework.util.PathMatcher;
 
 public class SecurityWhiteListPaths {
 	private static final PathMatcher pathMatcher = new AntPathMatcher();
-	public static final String[] WHITE_LIST = {"/**"};
 
-	public static final List<String> FILTER_WHITE_LIST = List.of("/**");
+	/*
+	 * 전역 Security Whitelist (모든 사용자에게 인증 없이 접근 허용되는 경로)
+	 */
+	public static final String[] SECURITY_GLOBAL_WHITELIST = {
+			"/error",
+			"/auth/login"
+	};
 
 	public static boolean isWhitelisted(HttpServletRequest request) {
 		String path = request.getRequestURI();
