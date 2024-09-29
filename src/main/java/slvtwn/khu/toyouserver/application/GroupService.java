@@ -67,7 +67,8 @@ public class GroupService {
 	}
 
 	private List<GroupResponse> findGroupsByKeywords(String keyword) {
-		return groupRepository.findByNameLike(keyword).stream()
+		String keywordWithWildcard = "%" + keyword + "%";
+		return groupRepository.findTop30ByNameLike(keywordWithWildcard).stream()
 				.map(each -> new GroupResponse(each.getId(), each.getName()))
 				.toList();
 	}
