@@ -32,11 +32,26 @@ public class UserService {
 	}
 
 	// TODO: 쿼리 / 구조 최적화 & N + 1
-	public List<UserResponse> findUsersWithFilteringOptions(User user, String search, Long groupId) {
+	public List<UserResponse> findUsersWithFilteringOptions(Long userId, String search, Long groupId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
 		if (groupId == null) {
 			return findAllUsersWithSameGroups(user, search);
 		}
 		return findUsersWithSpecificGroup(user, search, groupId);
+	}
+
+	@Transactional
+	public void updateUser(Long userId, UserUpdateRequest request) {
+		User foundUser = userRepository.findById(userId)
+				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
+		User updatedUser = userRepository.findById(request.id())
+				.map(each -> each.updateInfo(request.name(), request.birthday(),
+						request.introduction(), request.imageUrl()))
+				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+
+		updateUserGroups(foundUser, request.groups());
+		userRepository.save(updatedUser);
 	}
 
 	private List<UserResponse> findAllUsersWithSameGroups(User user, String search) {
@@ -59,17 +74,6 @@ public class UserService {
 				.filter(each -> !each.getId().equals(user.getId()))
 				.map(UserResponse::of)
 				.toList();
-	}
-
-	@Transactional
-	public void updateUser(User user, UserUpdateRequest request) {
-		User updatedUser = userRepository.findById(request.id())
-				.map(each -> each.updateInfo(request.name(), request.birthday(),
-						request.introduction(), request.imageUrl()))
-				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
-
-		updateUserGroups(user, request.groups());
-		userRepository.save(updatedUser);
 	}
 
 	private void updateUserGroups(User user, List<GroupRequest> groupRequests) {

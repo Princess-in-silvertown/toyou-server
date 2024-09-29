@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import slvtwn.khu.toyouserver.application.UserService;
 import slvtwn.khu.toyouserver.common.authentication.UserAuthentication;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
-import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.UserResponse;
 import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 
 @RequiredArgsConstructor
 @RestController
-public class UserController {
+public class
+UserController {
 
 	private final UserService userService;
 
@@ -26,14 +26,14 @@ public class UserController {
 	}
 
 	@PutMapping("/users")
-	public void updateProfile(@UserAuthentication User user, @RequestBody UserUpdateRequest request) {
-		userService.updateUser(user, request);
+	public void updateProfile(@UserAuthentication Long userId, @RequestBody UserUpdateRequest request) {
+		userService.updateUser(userId, request);
 	}
 
 	@GetMapping("/users")
 	public ToyouResponse<List<UserResponse>> findMembersWithFilteringOptions(
-			@UserAuthentication User user,
+			@UserAuthentication Long userId,
 			@RequestParam String search, @RequestParam(required = false) Long groupId) {
-		return ToyouResponse.from(userService.findUsersWithFilteringOptions(user, search, groupId));
+		return ToyouResponse.from(userService.findUsersWithFilteringOptions(userId, search, groupId));
 	}
 }

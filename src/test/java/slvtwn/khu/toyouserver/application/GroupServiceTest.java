@@ -28,96 +28,96 @@ import slvtwn.khu.toyouserver.exception.ToyouException;
 @SpringBootTest
 class GroupServiceTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    private GroupService groupService;
+	@Autowired
+	private GroupService groupService;
 
-    @Test
-    void 그룹을_생성할_수_있다() {
-        // given
-        GroupCreateRequest request = new GroupCreateRequest("group_name");
+	@Test
+	void 그룹을_생성할_수_있다() {
+		// given
+		GroupCreateRequest request = new GroupCreateRequest("group_name");
 
-        // when
-        GroupResponse response = groupService.createGroup(request);
+		// when
+		GroupResponse response = groupService.createGroup(request);
 
-        // then
-        assertThat(response.name()).isEqualTo(request.name());
-    }
+		// then
+		assertThat(response.name()).isEqualTo(request.name());
+	}
 
-    @Test
-    void 유저는_그룹에_가입할_수_있다() {
-        // given
-        User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
-        Group group = new Group("group_name");
+	@Test
+	void 유저는_그룹에_가입할_수_있다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
+		Group group = new Group("group_name");
 
-        entityManager.persist(user);
-        entityManager.persist(group);
+		entityManager.persist(user);
+		entityManager.persist(group);
 
-        // when, then
-        assertThatCode(() -> groupService.registerMember(group.getId(), user))
-                .doesNotThrowAnyException();
-    }
+		// when, then
+		assertThatCode(() -> groupService.registerMember(group.getId(), user.getId()))
+				.doesNotThrowAnyException();
+	}
 
-    @Test
-    void 그룹이_존재하지_않는다면_가입이_불가능하다() {
-        // given
-        User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
-        long groupIdNonExists = 1L;
+	@Test
+	void 그룹이_존재하지_않는다면_가입이_불가능하다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
+		long groupIdNonExists = 1L;
 
-        entityManager.persist(user);
+		entityManager.persist(user);
 
-        // when, then
-        assertThatThrownBy(() -> groupService.registerMember(groupIdNonExists, user))
-                .isInstanceOf(ToyouException.class);
-    }
+		// when, then
+		assertThatThrownBy(() -> groupService.registerMember(groupIdNonExists, user.getId()))
+				.isInstanceOf(ToyouException.class);
+	}
 
-    @Test
-    void 그룹에_속한_멤버들을_찾을_수_있다() {
-        // given
-        User user1 = new User("name1", LocalDate.now(), "introduction", "profile_pic");
-        User user2 = new User("name2", LocalDate.now(), "introduction", "profile_pic");
+	@Test
+	void 그룹에_속한_멤버들을_찾을_수_있다() {
+		// given
+		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_pic");
+		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_pic");
 
-        Group group = new Group("group_name");
+		Group group = new Group("group_name");
 
-        Member member1 = new Member(user1, group);
-        Member member2 = new Member(user2, group);
+		Member member1 = new Member(user1, group);
+		Member member2 = new Member(user2, group);
 
-        entityManager.persist(user1);
-        entityManager.persist(user2);
-        entityManager.persist(group);
-        entityManager.persist(member1);
-        entityManager.persist(member2);
+		entityManager.persist(user1);
+		entityManager.persist(user2);
+		entityManager.persist(group);
+		entityManager.persist(member1);
+		entityManager.persist(member2);
 
-        // when
-        List<GroupMemberResponse> response = groupService.findMembers(group.getId());
+		// when
+		List<GroupMemberResponse> response = groupService.findMembers(group.getId());
 
-        // then
-        assertThat(response).extracting(GroupMemberResponse::name)
-                .containsExactlyInAnyOrder(user1.getName(), user2.getName());
-    }
+		// then
+		assertThat(response).extracting(GroupMemberResponse::name)
+				.containsExactlyInAnyOrder(user1.getName(), user2.getName());
+	}
 
-    @Test
-    void 유저는_가입한_그룹을_조회할_수_있다() {
-        // given
-        User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
-        Group group1 = new Group("group_name1");
-        Group group2 = new Group("group_name2");
-        Member member1 = new Member(user, group1);
-        Member member2 = new Member(user, group2);
+	@Test
+	void 유저는_가입한_그룹을_조회할_수_있다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_pic");
+		Group group1 = new Group("group_name1");
+		Group group2 = new Group("group_name2");
+		Member member1 = new Member(user, group1);
+		Member member2 = new Member(user, group2);
 
-        entityManager.persist(user);
-        entityManager.persist(group1);
-        entityManager.persist(group2);
-        entityManager.persist(member1);
-        entityManager.persist(member2);
+		entityManager.persist(user);
+		entityManager.persist(group1);
+		entityManager.persist(group2);
+		entityManager.persist(member1);
+		entityManager.persist(member2);
 
-        // when
-        List<GroupResponse> response = groupService.findRegisteredGroupsByUser(user);
+		// when
+		List<GroupResponse> response = groupService.findRegisteredGroupsByUser(user.getId());
 
-        // then
-        assertThat(response).extracting(GroupResponse::name)
-                .containsExactlyInAnyOrder(group1.getName(), group2.getName());
-    }
+		// then
+		assertThat(response).extracting(GroupResponse::name)
+				.containsExactlyInAnyOrder(group1.getName(), group2.getName());
+	}
 }

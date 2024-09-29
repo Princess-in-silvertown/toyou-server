@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import slvtwn.khu.toyouserver.application.RollingPaperService;
 import slvtwn.khu.toyouserver.common.authentication.UserAuthentication;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
-import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.CoverRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
@@ -22,20 +21,20 @@ public class RollingPaperController {
 	private final RollingPaperService rollingPaperService;
 
 	@GetMapping("/rollingpapers")
-	public ToyouResponse<RollingPaperResponse> findById(@UserAuthentication User user,
+	public ToyouResponse<RollingPaperResponse> findById(@UserAuthentication Long userId,
 	                                                    @RequestParam Long rollingPaperId) {
-		return ToyouResponse.from(rollingPaperService.findById(user, rollingPaperId));
+		return ToyouResponse.from(rollingPaperService.findById(userId, rollingPaperId));
 	}
 
 	@PostMapping("/users/{userId}/rollingpapers")
-	public void sendRollingPaper(@UserAuthentication User user,
+	public void sendRollingPaper(@UserAuthentication Long RequestUserId,
 	                             @PathVariable(name = "userId") Long recipientUserId,
 	                             @RequestBody RollingPaperRequest rollingPaperRequest) {
 		rollingPaperService.sendRollingPaper(recipientUserId, rollingPaperRequest);
 	}
 
 	@PostMapping("/rollingpapers/{rollingPaperId}/generate-cover")
-	public void generateCoverImage(@UserAuthentication User user,
+	public void generateCoverImage(@UserAuthentication Long userId,
 	                               @PathVariable Long rollingPaperId, @RequestBody CoverRequest request) {
 		rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaperId);
 	}

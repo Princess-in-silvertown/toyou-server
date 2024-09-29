@@ -1,5 +1,11 @@
 package slvtwn.khu.toyouserver.application;
 
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import slvtwn.khu.toyouserver.agent.modellabs.ModelLabsAgent;
+import slvtwn.khu.toyouserver.common.response.ResponseType;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
 import slvtwn.khu.toyouserver.domain.Sticker;
@@ -12,12 +18,7 @@ import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
 import slvtwn.khu.toyouserver.persistance.RollingPaperRepository;
 import slvtwn.khu.toyouserver.persistance.StickerRepository;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import slvtwn.khu.toyouserver.agent.modellabs.ModelLabsAgent;
-import slvtwn.khu.toyouserver.common.response.ResponseType;
+import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +32,7 @@ public class RollingPaperService {
 	private final MemberRepository memberRepository;
 	private final ModelLabsAgent modelLabsAgent;
 	private final RollingPaperRepository rollingpaperRepository;
+	private final UserRepository userRepository;
 
 	public void generateCoverImageAndUpdateRollingPaper(CoverRequest request, Long rollingPaperId) {
 		List<String> keywords = request.keywords();
@@ -51,7 +53,9 @@ public class RollingPaperService {
 		stickerRepository.saveAll(stickers);
 	}
 
-	public RollingPaperResponse findById(User user, Long rollingPaperId) {
+	public RollingPaperResponse findById(Long userId, Long rollingPaperId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
 		RollingPaper rollingPaper = rollingPaperRepository.findById(rollingPaperId)
 				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
 		assertUserIsRollingPaperOwner(user, rollingPaper);

@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -26,86 +25,86 @@ import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 @SpringBootTest
 class UserServiceTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Test
-    void 같은_그룹의_유저들을_키워드로_검색할_수_있다() {
-        // given
-        User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture");
-        User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture");
-        Group group = new Group("name");
-        Member member1 = new Member(user1, group);
-        Member member2 = new Member(user2, group);
+	@Test
+	void 같은_그룹의_유저들을_키워드로_검색할_수_있다() {
+		// given
+		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture");
+		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture");
+		Group group = new Group("name");
+		Member member1 = new Member(user1, group);
+		Member member2 = new Member(user2, group);
 
-        entityManager.persist(user1);
-        entityManager.persist(user2);
-        entityManager.persist(group);
-        entityManager.persist(member1);
-        entityManager.persist(member2);
+		entityManager.persist(user1);
+		entityManager.persist(user2);
+		entityManager.persist(group);
+		entityManager.persist(member1);
+		entityManager.persist(member2);
 
-        // when
-        List<UserResponse> response = userService.findUsersWithFilteringOptions(user1, "ame2", null);
+		// when
+		List<UserResponse> response = userService.findUsersWithFilteringOptions(user1.getId(), "ame2", null);
 
-        // then
-        assertThat(response)
-                .containsExactly(UserResponse.of(user2));
-    }
+		// then
+		assertThat(response)
+				.containsExactly(UserResponse.of(user2));
+	}
 
-    @Test
-    void 다른_그룹의_유저들을_키워드로_검색할_수_있다() {
-        // given
-        User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture");
-        User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture");
-        Group group1 = new Group("name");
-        Group group2 = new Group("name");
-        Member member1 = new Member(user1, group1);
-        Member member2 = new Member(user2, group2);
+	@Test
+	void 다른_그룹의_유저들을_키워드로_검색할_수_있다() {
+		// given
+		User user1 = new User("name1", LocalDate.now(), "introduction", "profile_picture");
+		User user2 = new User("name2", LocalDate.now(), "introduction", "profile_picture");
+		Group group1 = new Group("name");
+		Group group2 = new Group("name");
+		Member member1 = new Member(user1, group1);
+		Member member2 = new Member(user2, group2);
 
-        entityManager.persist(user1);
-        entityManager.persist(user2);
-        entityManager.persist(group1);
-        entityManager.persist(group2);
-        entityManager.persist(member1);
-        entityManager.persist(member2);
+		entityManager.persist(user1);
+		entityManager.persist(user2);
+		entityManager.persist(group1);
+		entityManager.persist(group2);
+		entityManager.persist(member1);
+		entityManager.persist(member2);
 
-        // when
-        List<UserResponse> response = userService.findUsersWithFilteringOptions(user1, "ame2", group2.getId());
+		// when
+		List<UserResponse> response = userService.findUsersWithFilteringOptions(user1.getId(), "ame2", group2.getId());
 
-        // then
-        assertThat(response)
-                .containsExactly(UserResponse.of(user2));
-    }
+		// then
+		assertThat(response)
+				.containsExactly(UserResponse.of(user2));
+	}
 
-    @Test
-    void 유저_정보를_업데이트_할_수_있다() {
-        // given
-        User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
-        Group group1 = new Group("name");
-        Group group2 = new Group("name");
-        Member member = new Member(user, group1);
+	@Test
+	void 유저_정보를_업데이트_할_수_있다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture");
+		Group group1 = new Group("name");
+		Group group2 = new Group("name");
+		Member member = new Member(user, group1);
 
-        entityManager.persist(user);
-        entityManager.persist(group1);
-        entityManager.persist(group2);
-        entityManager.persist(member);
+		entityManager.persist(user);
+		entityManager.persist(group1);
+		entityManager.persist(group2);
+		entityManager.persist(member);
 
-        UserUpdateRequest request = new UserUpdateRequest(user.getId(), LocalDate.now().plus(1, ChronoUnit.DAYS),
-                "new_name", "new_introduction", "new_image_url", List.of(
-                new GroupRequest(group1.getId(), group1.getName()),
-                new GroupRequest(group2.getId(), group2.getName())));
+		UserUpdateRequest request = new UserUpdateRequest(user.getId(), LocalDate.now().plusDays(1),
+				"new_name", "new_introduction", "new_image_url", List.of(
+				new GroupRequest(group1.getId(), group1.getName()),
+				new GroupRequest(group2.getId(), group2.getName())));
 
-        // when
-        userService.updateUser(user, request);
+		// when
+		userService.updateUser(user.getId(), request);
 
-        // then
-        User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl());
+		// then
+		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl());
 
-        assertThat(user).usingRecursiveComparison()
-                .ignoringFields("id", "createdDate", "lastModifiedDate")
-                .isEqualTo(expectedUser);
-    }
+		assertThat(user).usingRecursiveComparison()
+				.ignoringFields("id", "createdDate", "lastModifiedDate")
+				.isEqualTo(expectedUser);
+	}
 }
