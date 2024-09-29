@@ -18,7 +18,7 @@ public class UserProfileFacade {
     @Transactional(readOnly = true)
     public UserProfileResponse getProfile(Long userId) {
         UserResponse userResponse = userService.getProfile(userId);
-        List<GroupResponse> groupResponses = groupService.findGroups(userId, null);
+        List<GroupResponse> groupResponses = groupService.findGroups(userId, null).groups();
 
         return new UserProfileResponse(userResponse.id(), userResponse.birthday(), userResponse.name(),
                 userResponse.introduction(), userResponse.imageUrl(), groupResponses);

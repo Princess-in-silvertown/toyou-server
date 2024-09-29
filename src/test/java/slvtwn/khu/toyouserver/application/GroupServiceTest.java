@@ -115,7 +115,7 @@ class GroupServiceTest {
 		entityManager.persist(member2);
 
 		// when
-		List<GroupResponse> response = groupService.findGroups(user.getId(), null);
+		List<GroupResponse> response = groupService.findGroups(user.getId(), null).groups();
 
 		// then
 		assertThat(response).extracting(GroupResponse::name)
@@ -130,7 +130,7 @@ class GroupServiceTest {
 		String keyword = "경희";
 
 		// when
-		List<GroupResponse> response = groupService.findGroups(null, keyword);
+		List<GroupResponse> response = groupService.findGroups(null, keyword).groups();
 
 		// then
 		assertThat(response).containsExactlyInAnyOrder(new GroupResponse(group.getId(), group.getName()));
@@ -142,7 +142,7 @@ class GroupServiceTest {
 		String keyword = "섭섭어린이집";
 
 		// when
-		List<GroupResponse> response = groupService.findGroups(null, keyword);
+		List<GroupResponse> response = groupService.findGroups(null, keyword).groups();
 
 		// then
 		assertThat(response).isEmpty();
@@ -158,7 +158,7 @@ class GroupServiceTest {
 		String keyword = "경희어린이집";
 
 		// when
-		List<GroupResponse> response = groupService.findGroups(null, keyword);
+		List<GroupResponse> response = groupService.findGroups(null, keyword).groups();
 
 		// then
 		assertThat(response).containsExactlyInAnyOrder(

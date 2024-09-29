@@ -11,6 +11,7 @@ import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupCreateRequest;
 import slvtwn.khu.toyouserver.dto.GroupMemberResponse;
 import slvtwn.khu.toyouserver.dto.GroupResponse;
+import slvtwn.khu.toyouserver.dto.GroupsResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
@@ -48,11 +49,11 @@ public class GroupService {
 				.toList();
 	}
 
-	public List<GroupResponse> findGroups(Long userId, String keyword) {
+	public GroupsResponse findGroups(Long userId, String keyword) {
 		if (keyword == null) {
-			return findRegisteredGroups(userId);
+			return new GroupsResponse(findRegisteredGroups(userId));
 		}
-		return findGroupsByKeywords(keyword);
+		return new GroupsResponse(findGroupsByKeywords(keyword));
 	}
 
 	private List<GroupResponse> findRegisteredGroups(Long userId) {
