@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import slvtwn.khu.toyouserver.agent.gpt.ChatGptAgent;
 import slvtwn.khu.toyouserver.agent.gpt.ChatGptResponse;
+import slvtwn.khu.toyouserver.agent.model.StickerModelAgent;
+import slvtwn.khu.toyouserver.agent.model.StickerModelRequest;
+import slvtwn.khu.toyouserver.dto.GenerateStickerRequest;
+import slvtwn.khu.toyouserver.dto.GenerateStickerResponse;
 import slvtwn.khu.toyouserver.dto.KeywordRequest;
 import slvtwn.khu.toyouserver.dto.KeywordResponse;
 
@@ -13,13 +17,21 @@ import slvtwn.khu.toyouserver.dto.KeywordResponse;
 @Service
 public class AgentService {
 
+    private final StickerModelAgent stickerModelAgent;
     private final ChatGptAgent chatGptAgent;
+
+    public GenerateStickerResponse generateStickers(GenerateStickerRequest request) {
+        List<String> urls = stickerModelAgent.generateStickerUrls(
+                new StickerModelRequest(request.prompt(), request.color()));
+
+        return new GenerateStickerResponse(urls);
+    }
 
     public KeywordResponse generateKeywords(KeywordRequest request) {
         String content = request.content();
         String prompt = String.format("""
                 Suggest 3 keywords that could represent emotions or characteristics in the content.
-                
+                                
                 <example>
                     <request>
                         content:
@@ -31,7 +43,7 @@ public class AgentService {
                         반가움, 기대, 아쉬움
                     </response>
                 </example>
-                
+                                
                 <example>
                     <request>
                         content:
@@ -42,7 +54,7 @@ public class AgentService {
                         축하, 아쉬움, 즐거움
                     </response>
                 </example>
-                
+                                
                 content: %s
                 keywords:                                 
                 """, content);

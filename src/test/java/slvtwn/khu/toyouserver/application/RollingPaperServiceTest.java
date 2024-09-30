@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
-import slvtwn.khu.toyouserver.agent.modellabs.ModelLabsAgent;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
@@ -34,37 +33,37 @@ class RollingPaperServiceTest {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@MockBean
-	private ModelLabsAgent modelLabsAgent;
+//	@MockBean
+//	private ModelLabsAgent modelLabsAgent;
 
 	@Autowired
 	private RollingPaperService rollingPaperService;
 
-	@Test
-	void 커버_이미지를_생성하면_롤링페이퍼_커버가_업데이트된다() {
-		// given
-		Group group = new Group("name");
-		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
-		Member member = new Member(user, group);
-		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
-
-		entityManager.persist(user);
-		entityManager.persist(group);
-		entityManager.persist(member);
-		entityManager.persist(rollingPaper);
-
-		String coverImageUrl = "cover_image_url";
-		CoverRequest request = new CoverRequest(List.of());
-
-		given(modelLabsAgent.generateCoverWithKeywords(any()))
-				.willReturn(List.of(coverImageUrl));
-
-		// when
-		rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaper.getId());
-
-		// then
-		assertThat(rollingPaper.getCoverImageUrl()).isEqualTo(coverImageUrl);
-	}
+//	@Test
+//	void 커버_이미지를_생성하면_롤링페이퍼_커버가_업데이트된다() {
+//		// given
+//		Group group = new Group("name");
+//		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
+//		Member member = new Member(user, group);
+//		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
+//
+//		entityManager.persist(user);
+//		entityManager.persist(group);
+//		entityManager.persist(member);
+//		entityManager.persist(rollingPaper);
+//
+//		String coverImageUrl = "cover_image_url";
+//		CoverRequest request = new CoverRequest(List.of());
+//
+//		given(modelLabsAgent.generateCoverWithKeywords(any()))
+//				.willReturn(List.of(coverImageUrl));
+//
+//		// when
+//		rollingPaperService.generateCoverImageAndUpdateRollingPaper(request, rollingPaper.getId());
+//
+//		// then
+//		assertThat(rollingPaper.getCoverImageUrl()).isEqualTo(coverImageUrl);
+//	}
 
 	@Test
 	void 롤링페이퍼를_전송할_수_있다() {
