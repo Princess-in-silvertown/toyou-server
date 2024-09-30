@@ -17,6 +17,7 @@ import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
 import slvtwn.khu.toyouserver.domain.User;
+import slvtwn.khu.toyouserver.dto.RollingPaperPagedResponse;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 
@@ -120,11 +121,11 @@ class RollingPaperServiceTest {
 		entityManager.persist(rollingPaper);
 
 		// when
-		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(user.getId(), group.getId(),
+		RollingPaperPagedResponse response = rollingPaperService.findReceivedRollingPapers(user.getId(), group.getId(),
 				0L, 10);
 
 		// then
-		assertThat(response).usingRecursiveComparison()
+		assertThat(response.contents()).usingRecursiveComparison()
 				.isEqualTo(List.of(RollingPaperResponse.from(rollingPaper)));
 	}
 
@@ -148,13 +149,13 @@ class RollingPaperServiceTest {
 		entityManager.persist(anotherRollingPaper);
 
 		// when
-		List<RollingPaperResponse> responseWithoutGroupId = rollingPaperService.findReceivedRollingPapers(
+		RollingPaperPagedResponse responseWithoutGroupId = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				null,
 				0L, 10);
 
 		// then
-		assertThat(responseWithoutGroupId).usingRecursiveComparison()
+		assertThat(responseWithoutGroupId.contents()).usingRecursiveComparison()
 				.isEqualTo(List.of(
 						RollingPaperResponse.from(anotherRollingPaper),
 						RollingPaperResponse.from(rollingPaper)));
@@ -181,13 +182,13 @@ class RollingPaperServiceTest {
 		entityManager.persist(anotherRollingPaper);
 
 		// when
-		List<RollingPaperResponse> responseWithGroupId = rollingPaperService.findReceivedRollingPapers(
+		RollingPaperPagedResponse responseWithGroupId = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				group1.getId(),
 				0L, 10);
 
 		// then
-		assertThat(responseWithGroupId).usingRecursiveComparison()
+		assertThat(responseWithGroupId.contents()).usingRecursiveComparison()
 				.isEqualTo(List.of(RollingPaperResponse.from(rollingPaper)));
 	}
 
@@ -214,7 +215,7 @@ class RollingPaperServiceTest {
 		entityManager.persist(rollingPaper3);
 
 		// when
-		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(
+		RollingPaperPagedResponse response = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				group1.getId(),
 				0L, 10);
@@ -225,7 +226,7 @@ class RollingPaperServiceTest {
 				RollingPaperResponse.from(rollingPaper1)
 		);
 
-		assertThat(response).usingRecursiveComparison()
+		assertThat(response.contents()).usingRecursiveComparison()
 				.isEqualTo(expectedResponse);
 	}
 
@@ -248,7 +249,7 @@ class RollingPaperServiceTest {
 		entityManager.persist(rollingPaper3);
 
 		// when
-		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(
+		RollingPaperPagedResponse response = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				group.getId(),
 				0L, 10);
@@ -260,7 +261,7 @@ class RollingPaperServiceTest {
 				RollingPaperResponse.from(rollingPaper1)
 		);
 
-		assertThat(response).usingRecursiveComparison()
+		assertThat(response.contents()).usingRecursiveComparison()
 				.isEqualTo(expectedResponse);
 	}
 }
