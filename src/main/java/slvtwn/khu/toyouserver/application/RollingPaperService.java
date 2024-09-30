@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import slvtwn.khu.toyouserver.agent.modellabs.ModelLabsAgent;
 import slvtwn.khu.toyouserver.common.response.ResponseType;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
@@ -31,17 +30,18 @@ public class RollingPaperService {
 	private final RollingPaperRepository rollingPaperRepository;
 	private final StickerRepository stickerRepository;
 	private final MemberRepository memberRepository;
-	private final ModelLabsAgent modelLabsAgent;
 	private final RollingPaperRepository rollingpaperRepository;
 	private final UserRepository userRepository;
 
+	// TODO: ModelLabs 관련 문제로 DISABLED
+	@Deprecated
 	public void generateCoverImageAndUpdateRollingPaper(CoverRequest request, Long rollingPaperId) {
-		List<String> keywords = request.keywords();
-		String coverImageUrl = modelLabsAgent.generateCoverWithKeywords(keywords)
-				.get(FIRST_COVER_IMAGE);
-		RollingPaper rollingPaper = rollingpaperRepository.findById(rollingPaperId)
-				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
-		rollingPaper.updateCoverImage(coverImageUrl);
+//		List<String> keywords = request.keywords();
+//		String coverImageUrl = modelLabsAgent.generateCoverWithKeywords(keywords)
+//				.get(FIRST_COVER_IMAGE);
+//		RollingPaper rollingPaper = rollingpaperRepository.findById(rollingPaperId)
+//				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+//		rollingPaper.updateCoverImage(coverImageUrl);
 	}
 
 	public void sendRollingPaper(Long recipientUserId, RollingPaperRequest request) {

@@ -43,6 +43,8 @@ public class RollingPaperController {
 		return ToyouResponse.noContent();
 	}
 
+	// TODO: ModelLabs 관련 문제로 DISABLED
+	@Deprecated
 	@PostMapping("/rollingpapers/{rollingPaperId}/generate-cover")
 	public ToyouResponse<Void> generateCoverImage(@UserAuthentication Long userId,
 	                                              @PathVariable Long rollingPaperId,
