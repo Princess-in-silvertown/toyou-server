@@ -3,6 +3,7 @@ package slvtwn.khu.toyouserver.application;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.response.ResponseType;
@@ -12,6 +13,8 @@ import slvtwn.khu.toyouserver.domain.Sticker;
 import slvtwn.khu.toyouserver.domain.StickerSide;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.CoverRequest;
+import slvtwn.khu.toyouserver.dto.CursorPageInfo;
+import slvtwn.khu.toyouserver.dto.RollingPaperPagedResponse;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 import slvtwn.khu.toyouserver.exception.ToyouException;
@@ -63,13 +66,19 @@ public class RollingPaperService {
 		return RollingPaperResponse.from(rollingPaper);
 	}
 
-	public List<RollingPaperResponse> findReceivedRollingPapers(Long userId, Long groupId,
-	                                                            Long targetId, Integer limit) {
+	public RollingPaperPagedResponse findReceivedRollingPapers(Long userId, Long groupId,
+	                                                           Long targetId, Integer limit) {
 		List<Long> memberIds = getMemberIds(userId, groupId);
 		PageRequest pageRequest = PageRequest.ofSize(limit);
-		return rollingPaperRepository.findAllByMembersAfterCursor(memberIds, targetId, pageRequest).stream()
+		Slice<RollingPaper> rollingPapers = rollingPaperRepository.findAllByMembersAfterCursor(memberIds, targetId,
+				pageRequest);
+		Long nextCursorId = rollingPapers.hasNext() ?
+				rollingPapers.getContent().get(rollingPapers.getContent().size() - 1).getId() : null;
+		CursorPageInfo cursorPageInfo = CursorPageInfo.from(rollingPapers, nextCursorId);
+		List<RollingPaperResponse> responses = rollingPapers.stream()
 				.map(RollingPaperResponse::from)
 				.toList();
+		return RollingPaperPagedResponse.from(cursorPageInfo, responses);
 	}
 
 	private List<Sticker> parseStickers(RollingPaperRequest request, RollingPaper rollingPaper) {

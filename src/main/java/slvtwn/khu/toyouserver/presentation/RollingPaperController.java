@@ -1,6 +1,5 @@
 package slvtwn.khu.toyouserver.presentation;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +11,7 @@ import slvtwn.khu.toyouserver.application.RollingPaperService;
 import slvtwn.khu.toyouserver.common.authentication.UserAuthentication;
 import slvtwn.khu.toyouserver.common.response.ToyouResponse;
 import slvtwn.khu.toyouserver.dto.CoverRequest;
+import slvtwn.khu.toyouserver.dto.RollingPaperPagedResponse;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 
@@ -28,10 +28,10 @@ public class RollingPaperController {
 	}
 
 	@GetMapping("/rollingpapers")
-	public ToyouResponse<List<RollingPaperResponse>> findReceivedRollingPapers(@UserAuthentication Long userId,
-	                                                                           @RequestParam(required = false) Long groupId,
-	                                                                           @RequestParam(defaultValue = "0") Long targetId,
-	                                                                           @RequestParam(defaultValue = "10") int limit) {
+	public ToyouResponse<RollingPaperPagedResponse> findReceivedRollingPapers(@UserAuthentication Long userId,
+	                                                                          @RequestParam(required = false) Long groupId,
+	                                                                          @RequestParam(defaultValue = "0") Long targetId,
+	                                                                          @RequestParam(defaultValue = "10") int limit) {
 		return ToyouResponse.from(rollingPaperService.findReceivedRollingPapers(userId, groupId, targetId, limit));
 	}
 
