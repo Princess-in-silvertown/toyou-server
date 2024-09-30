@@ -10,6 +10,7 @@ import slvtwn.khu.toyouserver.common.authentication.jwt.JwtProvider;
 import slvtwn.khu.toyouserver.common.authentication.jwt.Token;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.KakaoAuthApiClient;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.KakaoResourceApiClient;
+import slvtwn.khu.toyouserver.common.feign.auth.kakao.web.KakaoTokenResponse;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.web.KakaoUserResponse;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.SocialAuthRequest;
@@ -39,17 +40,14 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 	@Override
 	@Transactional
 	public SocialAuthResponse login(SocialAuthRequest request) {
-//		KakaoTokenResponse tokenResponse = kakaoAuthApiClient.getOAuth2AccessToken(
-//				kakaoGrantType,
-//				kakaoClientId,
-//				kakaoRedirectUri,
-//				request.authorizationCode()
-//		);
-//		KakaoUserResponse userResponse = kakaoResourceApiClient.getUserInformation(
-//				"Bearer " + tokenResponse.accessToken());
-
+		KakaoTokenResponse tokenResponse = kakaoAuthApiClient.getOAuth2AccessToken(
+				kakaoGrantType,
+				kakaoClientId,
+				kakaoRedirectUri,
+				request.authorizationCode()
+		);
 		KakaoUserResponse userResponse = kakaoResourceApiClient.getUserInformation(
-				"Bearer " + "5KPI3VXXHURq8oW-Tf4QakyEigvBgSNoAAAAAQo8JCAAAAGSQcoJl-AsyCcGfplL");
+				"Bearer " + tokenResponse.accessToken());
 		User user = findOrCreateUser(userResponse);
 		Token token = jwtProvider.issueTokens(user.getId());
 		return SocialAuthResponse.of(user.getId(), user.getName(), KAKAO, token);
