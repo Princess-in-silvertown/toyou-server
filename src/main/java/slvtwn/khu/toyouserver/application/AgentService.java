@@ -28,6 +28,7 @@ public class AgentService {
     public GenerateStickerResponse generateStickers(GenerateStickerRequest request) {
         List<String> urls = stickerModelAgent.generateStickers(new StickerModelRequest(request.prompt(), request.color())).stream()
                 .map(each -> s3Agent.uploadFile(each, UUID.nameUUIDFromBytes(each).toString(), STICKER_MIME_TYPE))
+                .map(s3Agent::getUrl)
                 .toList();
 
         return new GenerateStickerResponse(urls);

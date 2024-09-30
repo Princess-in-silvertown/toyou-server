@@ -18,8 +18,6 @@ public class S3Agent {
 
     public String uploadFile(byte[] fileData, String fileName, String contentType) {
         try {
-            String fileUrl = "https://" + configuration.getBucket() + "/to-you/" + fileName;
-
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(contentType);
             metadata.setContentLength(fileData.length);
@@ -27,9 +25,13 @@ public class S3Agent {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(fileData);
             amazonS3Client.putObject(new PutObjectRequest(configuration.getBucket(), fileName, byteArrayInputStream, metadata));
 
-            return fileUrl;
+            return fileName;
         } catch (Exception e) {
             throw new ToyouException(ResponseType.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public String getUrl(String key) {
+        return amazonS3Client.getResourceUrl(configuration.getBucket(), key);
     }
 }
