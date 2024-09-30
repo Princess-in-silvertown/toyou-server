@@ -2,7 +2,6 @@ package slvtwn.khu.toyouserver.common.authentication.social.strategy;
 
 import static slvtwn.khu.toyouserver.domain.SocialAuthProvider.KAKAO;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,20 +10,16 @@ import slvtwn.khu.toyouserver.common.authentication.jwt.JwtProvider;
 import slvtwn.khu.toyouserver.common.authentication.jwt.Token;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.KakaoAuthApiClient;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.KakaoResourceApiClient;
-import slvtwn.khu.toyouserver.common.feign.auth.kakao.web.KakaoTokenResponse;
 import slvtwn.khu.toyouserver.common.feign.auth.kakao.web.KakaoUserResponse;
 import slvtwn.khu.toyouserver.domain.User;
-import slvtwn.khu.toyouserver.domain.UserSocialAccount;
 import slvtwn.khu.toyouserver.dto.SocialAuthRequest;
 import slvtwn.khu.toyouserver.dto.SocialAuthResponse;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
-import slvtwn.khu.toyouserver.persistance.UserSocialAccountRepository;
 
 @Service
 @RequiredArgsConstructor
 public class KakaoAuthStrategy implements SocialAuthStrategy {
 
-	private final UserSocialAccountRepository userSocialAccountRepository;
 	@Value("${oauth.kakao.client-id}")
 	private String kakaoClientId;
 	@Value("${oauth.kakao.redirect-uri}")
@@ -44,14 +39,17 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 	@Override
 	@Transactional
 	public SocialAuthResponse login(SocialAuthRequest request) {
-		KakaoTokenResponse tokenResponse = kakaoAuthApiClient.getOAuth2AccessToken(
-				kakaoGrantType,
-				kakaoClientId,
-				kakaoRedirectUri,
-				request.authorizationCode()
-		);
+//		KakaoTokenResponse tokenResponse = kakaoAuthApiClient.getOAuth2AccessToken(
+//				kakaoGrantType,
+//				kakaoClientId,
+//				kakaoRedirectUri,
+//				request.authorizationCode()
+//		);
+//		KakaoUserResponse userResponse = kakaoResourceApiClient.getUserInformation(
+//				"Bearer " + tokenResponse.accessToken());
+
 		KakaoUserResponse userResponse = kakaoResourceApiClient.getUserInformation(
-				"Bearer " + tokenResponse.accessToken());
+				"Bearer " + "5KPI3VXXHURq8oW-Tf4QakyEigvBgSNoAAAAAQo8JCAAAAGSQcoJl-AsyCcGfplL");
 		User user = findOrCreateUser(userResponse);
 		Token token = jwtProvider.issueTokens(user.getId());
 		return SocialAuthResponse.of(user.getId(), user.getName(), KAKAO, token);
@@ -63,26 +61,18 @@ public class KakaoAuthStrategy implements SocialAuthStrategy {
 	}
 
 	private User findOrCreateUser(KakaoUserResponse userResponse) {
-		Optional<UserSocialAccount> account = userSocialAccountRepository.findByProviderSerial(
-				userResponse.id());
-		if (account.isPresent()) {
-			UserSocialAccount verifiedSocialAccount = account.get();
-			return userRepository.findById(verifiedSocialAccount.getUserId()).orElseThrow(
-					() -> new IllegalStateException("등록된 카카오 계정에 해당하는 유저가 없습니다."));
-		} else {
-			return registerUser(userResponse);
-		}
+		return userRepository.findByProviderSerial(userResponse.id())
+				.orElseGet(() -> registerUser(userResponse));
 	}
 
 	private User registerUser(KakaoUserResponse userResponse) {
 		User user = User.create(
 				userResponse.kakaoAccount().profile().nickname(),
 				userResponse.kakaoAccount().profile().profileImageUrl(),
-				KAKAO
+				KAKAO,
+				userResponse.id()
 		);
 		userRepository.save(user);
-		UserSocialAccount newAccount = UserSocialAccount.createAccountByKakao(user.getId(), userResponse.id());
-		userSocialAccountRepository.save(newAccount);
 		return user;
 	}
 }
