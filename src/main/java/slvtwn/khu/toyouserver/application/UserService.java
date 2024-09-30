@@ -94,7 +94,7 @@ public class UserService {
 
 		for (int yearAfter = 1; yearAfter <= PERIOD_UPPER_BOUND; yearAfter++) {
 			LocalDate birthdayYearAfter = birthday.plus(yearAfter, ChronoUnit.YEARS);
-			events.add(new Event("생일", birthdayYearAfter, EventType.BIRTHDAY,
+			events.add(new Event(user.getName(), birthdayYearAfter, EventType.BIRTHDAY,
 					"오늘 생일이에요!", user));
 		}
 		return events;
