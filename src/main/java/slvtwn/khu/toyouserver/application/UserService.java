@@ -41,19 +41,6 @@ public class UserService {
 		return findUsersWithSpecificGroup(user, search, groupId);
 	}
 
-	@Transactional
-	public void updateUser(Long userId, UserUpdateRequest request) {
-		User foundUser = userRepository.findById(userId)
-				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
-		User updatedUser = userRepository.findById(request.id())
-				.map(each -> each.updateInfo(request.name(), request.birthday(),
-						request.introduction(), request.imageUrl()))
-				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
-
-		updateUserGroups(foundUser, request.groups());
-		userRepository.save(updatedUser);
-	}
-
 	private List<UserResponse> findAllUsersWithSameGroups(User user, String search) {
 		return memberRepository.findByUser(user).stream()
 				.map(Member::getGroup)
@@ -74,6 +61,19 @@ public class UserService {
 				.filter(each -> !each.getId().equals(user.getId()))
 				.map(UserResponse::of)
 				.toList();
+	}
+
+	@Transactional
+	public void updateUser(Long userId, UserUpdateRequest request) {
+		User foundUser = userRepository.findById(userId)
+				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
+		User updatedUser = userRepository.findById(request.id())
+				.map(each -> each.updateInfo(request.name(), request.birthday(),
+						request.introduction(), request.imageUrl()))
+				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+
+		updateUserGroups(foundUser, request.groups());
+		userRepository.save(updatedUser);
 	}
 
 	private void updateUserGroups(User user, List<GroupRequest> groupRequests) {
