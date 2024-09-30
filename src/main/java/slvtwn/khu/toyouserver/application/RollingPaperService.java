@@ -2,6 +2,7 @@ package slvtwn.khu.toyouserver.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.agent.modellabs.ModelLabsAgent;
@@ -62,6 +63,15 @@ public class RollingPaperService {
 		return RollingPaperResponse.from(rollingPaper);
 	}
 
+	public List<RollingPaperResponse> findReceivedRollingPapers(Long userId, Long groupId,
+	                                                            Long targetId, Integer limit) {
+		List<Long> memberIds = getMemberIds(userId, groupId);
+		PageRequest pageRequest = PageRequest.ofSize(limit);
+		return rollingPaperRepository.findAllByMembersAfterCursor(memberIds, targetId, pageRequest).stream()
+				.map(RollingPaperResponse::from)
+				.toList();
+	}
+
 	private List<Sticker> parseStickers(RollingPaperRequest request, RollingPaper rollingPaper) {
 		return request.stickers().stream()
 				.map(each -> new Sticker(rollingPaper, each.imageUrl(), each.x(), each.y(),
@@ -72,6 +82,21 @@ public class RollingPaperService {
 	private void assertUserIsRollingPaperOwner(User user, RollingPaper rollingPaper) {
 		if (!rollingPaper.getMember().getUser().equals(user)) {
 			throw new ToyouException(ResponseType.UNAUTHORIZED_USER_ACCESS);
+		}
+	}
+
+	private List<Long> getMemberIds(Long userId, Long groupId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
+		if (groupId == null) {
+			List<Member> members = memberRepository.findByUser(user);
+			return members.stream()
+					.map(Member::getId)
+					.toList();
+		} else {
+			Member member = memberRepository.findByUserIdAndGroupId(userId, groupId)
+					.orElseThrow(() -> new ToyouException(ResponseType.MEMBER_NOT_FOUND));
+			return List.of(member.getId());
 		}
 	}
 }

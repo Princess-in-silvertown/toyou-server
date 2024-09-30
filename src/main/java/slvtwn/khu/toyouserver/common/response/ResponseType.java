@@ -31,6 +31,7 @@ public enum ResponseType {
 	NOT_FOUND(HttpStatus.NOT_FOUND, "TYU-404", "요청한 자원을 찾을 수 없습니다."),
 	GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "TYU-4041", "그룹을 찾을 수 없습니다."),
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "TYU-4042", "사용자를 찾을 수 없습니다."),
+	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "TYU-4043", "가입 기록이 존재하지 않습니다."),
 
 	// 500 Internal Server Error
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "TYU-500", "서버 내부 오류");
