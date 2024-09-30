@@ -2,8 +2,10 @@ package slvtwn.khu.toyouserver.application;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import slvtwn.khu.toyouserver.agent.aws.S3Agent;
 import slvtwn.khu.toyouserver.agent.gpt.ChatGptAgent;
 import slvtwn.khu.toyouserver.agent.gpt.ChatGptResponse;
 import slvtwn.khu.toyouserver.agent.model.StickerModelAgent;
@@ -17,12 +19,16 @@ import slvtwn.khu.toyouserver.dto.KeywordResponse;
 @Service
 public class AgentService {
 
+    private static final String STICKER_MIME_TYPE = "image/png";
+
     private final StickerModelAgent stickerModelAgent;
     private final ChatGptAgent chatGptAgent;
+    private final S3Agent s3Agent;
 
     public GenerateStickerResponse generateStickers(GenerateStickerRequest request) {
-        List<String> urls = stickerModelAgent.generateStickerUrls(
-                new StickerModelRequest(request.prompt(), request.color()));
+        List<String> urls = stickerModelAgent.generateStickers(new StickerModelRequest(request.prompt(), request.color())).stream()
+                .map(each -> s3Agent.uploadFile(each, UUID.nameUUIDFromBytes(each).toString(), STICKER_MIME_TYPE))
+                .toList();
 
         return new GenerateStickerResponse(urls);
     }

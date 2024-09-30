@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class StickerModelConfiguration {
 
-    @Value("sticker-model.endpoint")
+    @Value("${sticker-model.endpoint}")
     private String endpoint;
 }
