@@ -55,9 +55,8 @@ public class UserService {
 				.map(Member::getGroup)
 				.map(each -> memberRepository.findByGroupAndUserNameLike(each, search))
 				.flatMap(List::stream)
-				.map(Member::getUser)
-				.filter(each -> !each.getId().equals(user.getId()))
-				.map(UserResponse::of)
+				.filter(each -> !each.getUser().getId().equals(user.getId()))
+				.map(each -> UserResponse.of(each.getUser(), each.getGroup().getId()))
 				.toList();
 	}
 
@@ -66,9 +65,8 @@ public class UserService {
 				.orElseThrow(() -> new ToyouException(ResponseType.GROUP_NOT_FOUND));
 
 		return memberRepository.findByGroupAndUserNameLike(group, search).stream()
-				.map(Member::getUser)
-				.filter(each -> !each.getId().equals(user.getId()))
-				.map(UserResponse::of)
+				.filter(each -> !each.getUser().getId().equals(user.getId()))
+				.map(each -> UserResponse.of(each.getUser(), each.getGroup().getId()))
 				.toList();
 	}
 
