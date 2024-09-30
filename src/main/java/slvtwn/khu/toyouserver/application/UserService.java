@@ -1,10 +1,15 @@
 package slvtwn.khu.toyouserver.application;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.response.ResponseType;
+import slvtwn.khu.toyouserver.domain.Event;
+import slvtwn.khu.toyouserver.domain.EventType;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.User;
@@ -12,6 +17,7 @@ import slvtwn.khu.toyouserver.dto.GroupRequest;
 import slvtwn.khu.toyouserver.dto.UserResponse;
 import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 import slvtwn.khu.toyouserver.exception.ToyouException;
+import slvtwn.khu.toyouserver.persistance.EventRepository;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
@@ -21,9 +27,12 @@ import slvtwn.khu.toyouserver.persistance.UserRepository;
 @Transactional(readOnly = true)
 public class UserService {
 
+	private static final int PERIOD_UPPER_BOUND = 100;
+
 	private final UserRepository userRepository;
 	private final MemberRepository memberRepository;
 	private final GroupRepository groupRepository;
+	private final EventRepository eventRepository;
 
 	public UserResponse getProfile(Long userId) {
 		User user = userRepository.findById(userId)
@@ -65,15 +74,30 @@ public class UserService {
 
 	@Transactional
 	public void updateUser(Long userId, UserUpdateRequest request) {
-		User foundUser = userRepository.findById(userId)
+		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
-		User updatedUser = userRepository.findById(request.id())
-				.map(each -> each.updateInfo(request.name(), request.birthday(),
-						request.introduction(), request.imageUrl()))
-				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
 
-		updateUserGroups(foundUser, request.groups());
-		userRepository.save(updatedUser);
+		user.updateInfo(request.name(), request.birthday(), request.introduction(), request.imageUrl());
+		createBirthdayEvents(user);
+		updateUserGroups(user, request.groups());
+	}
+
+	private void createBirthdayEvents(User user) {
+		eventRepository.deleteAllByUserIs(user);
+		List<Event> events = generatePeriodicalBirthdayEvents(user);
+		eventRepository.saveAll(events);
+	}
+
+	private static List<Event> generatePeriodicalBirthdayEvents(User user) {
+		List<Event> events = new ArrayList<>();
+		LocalDate birthday = user.getBirthday();
+
+		for (int yearAfter = 1; yearAfter <= PERIOD_UPPER_BOUND; yearAfter++) {
+			LocalDate birthdayYearAfter = birthday.plus(yearAfter, ChronoUnit.YEARS);
+			events.add(new Event("생일", birthdayYearAfter, EventType.BIRTHDAY,
+					"오늘 생일이에요!", user));
+		}
+		return events;
 	}
 
 	private void updateUserGroups(User user, List<GroupRequest> groupRequests) {
