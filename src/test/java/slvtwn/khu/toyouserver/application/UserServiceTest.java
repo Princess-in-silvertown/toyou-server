@@ -51,7 +51,7 @@ class UserServiceTest {
 
 		// then
 		assertThat(response)
-				.containsExactly(UserResponse.of(user2));
+				.containsExactly(UserResponse.of(user2, group.getId()));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ class UserServiceTest {
 
 		// then
 		assertThat(response)
-				.containsExactly(UserResponse.of(user2));
+				.containsExactly(UserResponse.of(user2, group2.getId()));
 	}
 
 	@Test
