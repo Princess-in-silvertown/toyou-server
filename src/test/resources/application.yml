@@ -34,7 +34,15 @@ openai:
     endpoint: test
     model: gpt-4o-mini
 
-model-labs:
-  endpoint: test
-  key: test
-  model-id: test
+sticker-model:
+  endpoint: abc
+
+cloud:
+  aws:
+    credentials:
+      access-key: abc
+      secret-key: abc
+    region:
+      static: abc
+    s3:
+      bucket: abc

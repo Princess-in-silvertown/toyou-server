@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import slvtwn.khu.toyouserver.common.entity.BaseTimeEntity;
@@ -16,6 +17,7 @@ import slvtwn.khu.toyouserver.common.entity.BaseTimeEntity;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class User extends BaseTimeEntity {
 
@@ -34,15 +36,18 @@ public class User extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private SocialAuthProvider provider;
 
-	public User(String name, LocalDate birthday, String introduction, String profilePicture, SocialAuthProvider provider) {
+	private String providerSerial;
+
+	public User(String name, LocalDate birthday, String introduction, String profilePicture,
+	            SocialAuthProvider provider) {
 		this.name = name;
 		this.birthday = birthday;
 		this.introduction = introduction;
 		this.profilePicture = profilePicture;
 	}
 
-	public static User create(String name, String profilePicture, SocialAuthProvider provider) {
-		return new User(name, null, null, profilePicture, provider);
+	public static User create(String name, String profilePicture, SocialAuthProvider provider, String providerSerial) {
+		return new User(null, name, null, null, profilePicture, provider, providerSerial);
 	}
 
 	public User updateInfo(String name, LocalDate birthday, String introduction, String profilePicture) {

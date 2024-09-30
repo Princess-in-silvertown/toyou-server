@@ -2,10 +2,16 @@ package slvtwn.khu.toyouserver.application;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import slvtwn.khu.toyouserver.agent.aws.S3Agent;
 import slvtwn.khu.toyouserver.agent.gpt.ChatGptAgent;
 import slvtwn.khu.toyouserver.agent.gpt.ChatGptResponse;
+import slvtwn.khu.toyouserver.agent.model.StickerModelAgent;
+import slvtwn.khu.toyouserver.agent.model.StickerModelRequest;
+import slvtwn.khu.toyouserver.dto.GenerateStickerRequest;
+import slvtwn.khu.toyouserver.dto.GenerateStickerResponse;
 import slvtwn.khu.toyouserver.dto.KeywordRequest;
 import slvtwn.khu.toyouserver.dto.KeywordResponse;
 
@@ -13,13 +19,26 @@ import slvtwn.khu.toyouserver.dto.KeywordResponse;
 @Service
 public class AgentService {
 
+    private static final String STICKER_MIME_TYPE = "image/png";
+
+    private final StickerModelAgent stickerModelAgent;
     private final ChatGptAgent chatGptAgent;
+    private final S3Agent s3Agent;
+
+    public GenerateStickerResponse generateStickers(GenerateStickerRequest request) {
+        List<String> urls = stickerModelAgent.generateStickers(new StickerModelRequest(request.prompt(), request.color())).stream()
+                .map(each -> s3Agent.uploadFile(each, UUID.nameUUIDFromBytes(each).toString(), STICKER_MIME_TYPE))
+                .map(s3Agent::getUrl)
+                .toList();
+
+        return new GenerateStickerResponse(urls);
+    }
 
     public KeywordResponse generateKeywords(KeywordRequest request) {
         String content = request.content();
         String prompt = String.format("""
                 Suggest 3 keywords that could represent emotions or characteristics in the content.
-                
+                                
                 <example>
                     <request>
                         content:
@@ -31,7 +50,7 @@ public class AgentService {
                         반가움, 기대, 아쉬움
                     </response>
                 </example>
-                
+                                
                 <example>
                     <request>
                         content:
@@ -42,7 +61,7 @@ public class AgentService {
                         축하, 아쉬움, 즐거움
                     </response>
                 </example>
-                
+                                
                 content: %s
                 keywords:                                 
                 """, content);
