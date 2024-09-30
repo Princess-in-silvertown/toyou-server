@@ -2,8 +2,6 @@ package slvtwn.khu.toyouserver.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,13 +12,11 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
 import slvtwn.khu.toyouserver.domain.User;
-import slvtwn.khu.toyouserver.dto.CoverRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
 import slvtwn.khu.toyouserver.dto.RollingPaperResponse;
 
@@ -125,7 +121,7 @@ class RollingPaperServiceTest {
 
 		// when
 		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(user.getId(), group.getId(),
-				rollingPaper.getId() + 1, 10);
+				0L, 10);
 
 		// then
 		assertThat(response).usingRecursiveComparison()
@@ -155,7 +151,7 @@ class RollingPaperServiceTest {
 		List<RollingPaperResponse> responseWithoutGroupId = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				null,
-				anotherRollingPaper.getId() + 1, 10);
+				0L, 10);
 
 		// then
 		assertThat(responseWithoutGroupId).usingRecursiveComparison()
@@ -188,7 +184,7 @@ class RollingPaperServiceTest {
 		List<RollingPaperResponse> responseWithGroupId = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				group1.getId(),
-				rollingPaper.getId() + 1, 10);
+				0L, 10);
 
 		// then
 		assertThat(responseWithGroupId).usingRecursiveComparison()
@@ -217,13 +213,11 @@ class RollingPaperServiceTest {
 		entityManager.persist(rollingPaper2);
 		entityManager.persist(rollingPaper3);
 
-		long totalRollingPapersCount = rollingPaper3.getId() + 1;
-
 		// when
 		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				group1.getId(),
-				totalRollingPapersCount, 10);
+				0L, 10);
 
 		// then
 		List<RollingPaperResponse> expectedResponse = List.of(
@@ -257,7 +251,7 @@ class RollingPaperServiceTest {
 		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				group.getId(),
-				rollingPaper3.getId() + 1, 10);
+				0L, 10);
 
 		// then
 		List<RollingPaperResponse> expectedResponse = List.of(

@@ -9,7 +9,7 @@ import slvtwn.khu.toyouserver.domain.RollingPaper;
 
 public interface RollingPaperRepository extends JpaRepository<RollingPaper, Long> {
 
-	@Query("SELECT r FROM RollingPaper r WHERE r.member.id IN :memberIds AND r.id < :targetId ORDER BY r.id DESC")
+	@Query("SELECT r FROM RollingPaper r WHERE r.member.id IN :memberIds AND r.id >= :targetId ORDER BY r.id DESC")
 	List<RollingPaper> findAllByMembersAfterCursor(@Param("memberIds") List<Long> memberIds,
 	                                               @Param("targetId") Long targetId,
 	                                               Pageable pageable);
