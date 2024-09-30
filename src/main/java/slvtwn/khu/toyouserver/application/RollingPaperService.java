@@ -1,7 +1,5 @@
 package slvtwn.khu.toyouserver.application;
 
-import static java.lang.Long.MIN_VALUE;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -67,10 +65,9 @@ public class RollingPaperService {
 
 	public List<RollingPaperResponse> findReceivedRollingPapers(Long userId, Long groupId,
 	                                                            Long targetId, Integer limit) {
-		Long currentCursor = targetId != null ? targetId : MIN_VALUE;
 		List<Long> memberIds = getMemberIds(userId, groupId);
 		PageRequest pageRequest = PageRequest.ofSize(limit);
-		return rollingPaperRepository.findAllByMembersAfterCursor(memberIds, currentCursor, pageRequest).stream()
+		return rollingPaperRepository.findAllByMembersAfterCursor(memberIds, targetId, pageRequest).stream()
 				.map(RollingPaperResponse::from)
 				.toList();
 	}

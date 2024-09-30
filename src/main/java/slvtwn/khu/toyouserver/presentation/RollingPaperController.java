@@ -29,7 +29,7 @@ public class RollingPaperController {
 
 	@GetMapping("/rollingpapers")
 	public ToyouResponse<List<RollingPaperResponse>> findReceivedRollingPapers(@UserAuthentication Long userId,
-	                                                                           @RequestParam Long groupId,
+	                                                                           @RequestParam(required = false) Long groupId,
 	                                                                           @RequestParam(defaultValue = "0") Long targetId,
 	                                                                           @RequestParam(defaultValue = "10") int limit) {
 		return ToyouResponse.from(rollingPaperService.findReceivedRollingPapers(userId, groupId, targetId, limit));

@@ -121,7 +121,7 @@ class RollingPaperServiceTest {
 
 		// when
 		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(user.getId(), group.getId(),
-				null, 10);
+				0L, 10);
 
 		// then
 		assertThat(response).usingRecursiveComparison()
@@ -251,7 +251,7 @@ class RollingPaperServiceTest {
 		List<RollingPaperResponse> response = rollingPaperService.findReceivedRollingPapers(
 				user.getId(),
 				group.getId(),
-				null, 10);
+				0L, 10);
 
 		// then
 		List<RollingPaperResponse> expectedResponse = List.of(
