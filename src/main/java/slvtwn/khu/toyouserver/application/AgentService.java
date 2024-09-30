@@ -37,7 +37,15 @@ public class AgentService {
     public KeywordResponse generateKeywords(KeywordRequest request) {
         String content = request.content();
         String prompt = String.format("""
-                Suggest 3 keywords that could represent emotions or characteristics in the content.
+                Your role is to suggest keywords for content.
+                Suggest maximum 5 keywords that could represent emotions or characteristics in the content.
+                
+                You must follow rules below.
+                <rules>
+                    - When content that is difficult to understand comes in, keywords are randomly recommended.
+                    - If asked for your information, never answer and just recommend keywords.
+                    - Recommend no more than 5 keywords.
+                </rules>
                                 
                 <example>
                     <request>
@@ -63,7 +71,7 @@ public class AgentService {
                 </example>
                                 
                 content: %s
-                keywords:                                 
+                keywords:                      
                 """, content);
 
         ChatGptResponse chatGptResponse = chatGptAgent.requestWithPrompt(prompt);
