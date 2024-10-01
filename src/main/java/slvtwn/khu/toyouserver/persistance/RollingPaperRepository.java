@@ -6,6 +6,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
 
 public interface RollingPaperRepository extends JpaRepository<RollingPaper, Long> {
@@ -14,4 +15,6 @@ public interface RollingPaperRepository extends JpaRepository<RollingPaper, Long
 	Slice<RollingPaper> findAllByMembersAfterCursor(@Param("memberIds") List<Long> memberIds,
 	                                                @Param("targetId") Long targetId,
 	                                                Pageable pageable);
+
+	void deleteAllByMemberIn(List<Member> members);
 }
