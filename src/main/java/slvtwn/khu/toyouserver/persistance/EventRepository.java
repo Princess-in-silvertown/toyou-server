@@ -8,7 +8,7 @@ import slvtwn.khu.toyouserver.domain.User;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    List<Event> findEventsByDateGreaterThanEqual(LocalDate date);
+    List<Event> findEventsByDateGreaterThanEqualAndDateBefore(LocalDate startDate, LocalDate endDate);
     List<Event> findEventsByDate(LocalDate date);
 
     void deleteAllByUserIs(User user);

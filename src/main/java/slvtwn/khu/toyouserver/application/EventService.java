@@ -1,6 +1,7 @@
 package slvtwn.khu.toyouserver.application;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +35,24 @@ public class EventService {
     }
 
     private ToyouResponse<EventsByYearMonthResponse> findEventsByYearMonth(YearMonth yearMonth) {
-        LocalDate baseDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), FIRST_DAY_OF_MONTH);
+        LocalDate startDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), FIRST_DAY_OF_MONTH);
+        LocalDate endDate = calculateEndDate(yearMonth);
 
         List<EventByDateResponse> eventByDateResponses = new ArrayList<>();
-        Map<LocalDate, List<Event>> eventsCollectedByDate = eventRepository.findEventsByDateGreaterThanEqual(baseDate)
+        Map<LocalDate, List<Event>> eventsCollectedByDate =
+                eventRepository.findEventsByDateGreaterThanEqualAndDateBefore(startDate, endDate)
                 .stream()
                 .collect(Collectors.groupingBy(Event::getDate));
 
         convertCollectedEventsToEventResponses(eventByDateResponses, eventsCollectedByDate);
         return ToyouResponse.from(new EventsByYearMonthResponse(eventByDateResponses));
+    }
+
+    private LocalDate calculateEndDate(YearMonth yearMonth) {
+        if (yearMonth.getMonth().equals(Month.DECEMBER)) {
+            return LocalDate.of(yearMonth.getYear() + 1, yearMonth.getMonth().plus(1), FIRST_DAY_OF_MONTH);
+        }
+        return LocalDate.of(yearMonth.getYear(), yearMonth.getMonth().plus(1), FIRST_DAY_OF_MONTH);
     }
 
     private static void convertCollectedEventsToEventResponses(List<EventByDateResponse> eventByDateResponses, Map<LocalDate,
