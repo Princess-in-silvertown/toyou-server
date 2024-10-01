@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.response.ResponseType;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
+import slvtwn.khu.toyouserver.domain.SenderSnapshot;
 import slvtwn.khu.toyouserver.domain.Sticker;
 import slvtwn.khu.toyouserver.domain.StickerSide;
 import slvtwn.khu.toyouserver.domain.User;
@@ -47,14 +48,21 @@ public class RollingPaperService {
 //		rollingPaper.updateCoverImage(coverImageUrl);
 	}
 
-	public void sendRollingPaper(Long recipientUserId, RollingPaperRequest request) {
-		Member member = memberRepository.findByUserIdAndGroupId(recipientUserId, request.groupId()).orElseThrow(
-				() -> new ToyouException(ResponseType.BAD_REQUEST));
-		RollingPaper rollingPaper = new RollingPaper(request.coverImageUrl(), request.title(),
-				request.content(), request.themeId(), member);
+	public void sendRollingPaper(Long requestUserId, Long recipientUserId, RollingPaperRequest request) {
+		RollingPaper rollingPaper = generateRollingPaper(requestUserId, recipientUserId, request);
 		List<Sticker> stickers = parseStickers(request, rollingPaper);
 		rollingPaperRepository.save(rollingPaper);
 		stickerRepository.saveAll(stickers);
+	}
+
+	private RollingPaper generateRollingPaper(Long requestUserId, Long recipientUserId, RollingPaperRequest request) {
+		Member member = memberRepository.findByUserIdAndGroupId(recipientUserId, request.groupId()).orElseThrow(
+				() -> new ToyouException(ResponseType.BAD_REQUEST));
+		User requestUser = userRepository.findById(requestUserId)
+				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
+
+		return new RollingPaper(request.coverImageUrl(), request.title(), request.content(), request.themeId(),
+				member, new SenderSnapshot(requestUser.getName(), requestUser.getProfilePicture()));
 	}
 
 	public RollingPaperResponse findById(Long userId, Long rollingPaperId) {

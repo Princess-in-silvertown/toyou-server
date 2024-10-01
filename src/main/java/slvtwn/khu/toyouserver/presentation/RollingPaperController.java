@@ -36,10 +36,10 @@ public class RollingPaperController {
 	}
 
 	@PostMapping("/users/{userId}/rollingpapers")
-	public ToyouResponse<Void> sendRollingPaper(@UserAuthentication Long RequestUserId,
+	public ToyouResponse<Void> sendRollingPaper(@UserAuthentication Long requestUserId,
 	                                            @PathVariable(name = "userId") Long recipientUserId,
 	                                            @RequestBody RollingPaperRequest rollingPaperRequest) {
-		rollingPaperService.sendRollingPaper(recipientUserId, rollingPaperRequest);
+		rollingPaperService.sendRollingPaper(requestUserId, recipientUserId, rollingPaperRequest);
 		return ToyouResponse.noContent();
 	}
 
