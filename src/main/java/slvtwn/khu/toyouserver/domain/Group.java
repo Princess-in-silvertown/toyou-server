@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,5 +37,18 @@ public class Group extends BaseTimeEntity {
 		this.address = address;
 		this.region = region;
 		this.homepageUrl = homepageUrl;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Group group = (Group) o;
+		return Objects.equals(id, group.id) && Objects.equals(name, group.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name);
 	}
 }
