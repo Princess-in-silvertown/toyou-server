@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
+import slvtwn.khu.toyouserver.domain.SenderSnapshot;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.RollingPaperPagedResponse;
 import slvtwn.khu.toyouserver.dto.RollingPaperRequest;
@@ -82,17 +83,19 @@ class RollingPaperServiceTest {
 				"title", "content", 1L, List.of());
 
 		// then
-		assertThatCode(() -> rollingPaperService.sendRollingPaper(user2.getId(), request))
+		assertThatCode(() -> rollingPaperService.sendRollingPaper(user1.getId(), user2.getId(), request))
 				.doesNotThrowAnyException();
 	}
 
 	@Test
 	void 롤링페이퍼를_조회할_수_있다() {
 		// given
+		User sender = new User("sender", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group = new Group("name");
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Member member = new Member(user, group);
-		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
+		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L,
+				member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);
@@ -110,10 +113,12 @@ class RollingPaperServiceTest {
 	@Test
 	void 사용자는_자신이_수신한_롤링페이퍼를_조회할_수_있다() {
 		// given
+		User sender = new User("sender", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group = new Group("name");
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Member member = new Member(user, group);
-		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L, member);
+		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L,
+				member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);
@@ -132,13 +137,16 @@ class RollingPaperServiceTest {
 	@Test
 	void 수신한_롤링페이퍼_조회는_그룹_식별자가_null인_경우_유저가_수신한_모든_롤링페이퍼를_반환한다() {
 		// given
+		User sender = new User("sender", LocalDate.now(), "introduction", "profile_picture", null);
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group1 = new Group("group1");
 		Group group2 = new Group("group2");
 		Member member1 = new Member(user, group1);
 		Member member2 = new Member(user, group2);
-		RollingPaper rollingPaper = new RollingPaper(null, "title", "rollingPaper", 1L, member1);
-		RollingPaper anotherRollingPaper = new RollingPaper(null, "title", "anotherRollingPaper", 1L, member2);
+		RollingPaper rollingPaper = new RollingPaper(null, "title", "rollingPaper", 1L,
+				member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+		RollingPaper anotherRollingPaper = new RollingPaper(null, "title", "anotherRollingPaper", 1L,
+				member2, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group1);
@@ -165,13 +173,16 @@ class RollingPaperServiceTest {
 	@Test
 	void 수신한_롤링페이퍼_조회는_그룹_식별자가_존재할_경우_해당_그룹의_롤링페이퍼만_반환한다() {
 		// given
+		User sender = new User("sender", LocalDate.now(), "introduction", "profile_picture", null);
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group1 = new Group("group1");
 		Group group2 = new Group("group2");
 		Member member1 = new Member(user, group1);
 		Member member2 = new Member(user, group2);
-		RollingPaper rollingPaper = new RollingPaper(null, "title", "rollingPaper", 1L, member1);
-		RollingPaper anotherRollingPaper = new RollingPaper(null, "title", "anotherRollingPaper", 1L, member2);
+		RollingPaper rollingPaper = new RollingPaper(null, "title", "rollingPaper", 1L,
+				member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+		RollingPaper anotherRollingPaper = new RollingPaper(null, "title", "anotherRollingPaper", 1L,
+				member2, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group1);
@@ -195,15 +206,19 @@ class RollingPaperServiceTest {
 	@Test
 	void 수신한_롤링페이퍼_조회는_다른_그룹의_커서를_사용해도_해당_그룹의_편지만_조회된다() {
 		// given
+		User sender = new User("sender", LocalDate.now(), "introduction", "profile_picture", null);
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group1 = new Group("group1");
 		Group group2 = new Group("group2");
 		Member member1 = new Member(user, group1);
 		Member member2 = new Member(user, group2);
 
-		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1", 1L, member1);
-		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2", 1L, member1);
-		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3", 1L, member2);
+		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1",
+				1L, member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2",
+				1L, member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3",
+				1L, member2, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group1);
@@ -233,13 +248,17 @@ class RollingPaperServiceTest {
 	@Test
 	void 수신한_롤링페이퍼_조회는_생성된_시간이_최신인_롤링페이퍼부터_조회된다() {
 		// given
+		User sender = new User("sender", LocalDate.now(), "introduction", "profile_picture", null);
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group = new Group("group");
 		Member member = new Member(user, group);
 
-		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1", 1L, member);
-		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2", 1L, member);
-		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3", 1L, member);
+		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1",
+				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2",
+				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3",
+				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);

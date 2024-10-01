@@ -1,6 +1,9 @@
 package slvtwn.khu.toyouserver.domain;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,12 +46,17 @@ public class RollingPaper extends BaseTimeEntity {
 	@JoinColumn(name = "groups_id")
 	private Group group;
 
-	public RollingPaper(String coverImageUrl, String title, String content, Long themeId, Member member) {
+	@Embedded
+	private SenderSnapshot senderSnapshot;
+
+	public RollingPaper(String coverImageUrl, String title, String content, Long themeId,
+						Member member, SenderSnapshot senderSnapshot) {
 		this.coverImageUrl = coverImageUrl;
 		this.title = title;
 		this.content = content;
 		this.themeId = themeId;
 		this.member = member;
+		this.senderSnapshot = senderSnapshot;
 	}
 
 	public void updateCoverImage(String coverImageUrl) {
