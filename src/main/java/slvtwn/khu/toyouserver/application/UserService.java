@@ -20,6 +20,7 @@ import slvtwn.khu.toyouserver.exception.ToyouException;
 import slvtwn.khu.toyouserver.persistance.EventRepository;
 import slvtwn.khu.toyouserver.persistance.GroupRepository;
 import slvtwn.khu.toyouserver.persistance.MemberRepository;
+import slvtwn.khu.toyouserver.persistance.RollingPaperRepository;
 import slvtwn.khu.toyouserver.persistance.UserRepository;
 
 @RequiredArgsConstructor
@@ -33,6 +34,7 @@ public class UserService {
 	private final MemberRepository memberRepository;
 	private final GroupRepository groupRepository;
 	private final EventRepository eventRepository;
+	private final RollingPaperRepository rollingPaperRepository;
 
 	public UserResponse getProfile(Long userId) {
 		User user = userRepository.findById(userId)
@@ -77,7 +79,7 @@ public class UserService {
 
 		user.updateInfo(request.name(), request.birthday(), request.introduction(), request.imageUrl());
 		createBirthdayEvents(user);
-		updateUserGroups(user, request.groups());
+		changeUserGroups(user, request.groups());
 	}
 
 	private void createBirthdayEvents(User user) {
@@ -98,9 +100,12 @@ public class UserService {
 		return events;
 	}
 
-	private void updateUserGroups(User user, List<GroupRequest> groupRequests) {
+	private void changeUserGroups(User user, List<GroupRequest> groupRequests) {
 		List<Member> members = memberRepository.findByUser(user);
+
+		rollingPaperRepository.deleteAllByMemberIn(members);
 		memberRepository.deleteAll(members);
+
 		saveMembersWithNewGroups(user, groupRequests);
 	}
 
