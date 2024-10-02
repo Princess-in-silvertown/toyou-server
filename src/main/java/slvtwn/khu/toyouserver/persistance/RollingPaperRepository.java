@@ -16,5 +16,6 @@ public interface RollingPaperRepository extends JpaRepository<RollingPaper, Long
 	                                                @Param("targetId") Long targetId,
 	                                                Pageable pageable);
 
+	List<RollingPaper> findAllByMemberIn(List<Member> members);
 	void deleteAllByMemberIn(List<Member> members);
 }
