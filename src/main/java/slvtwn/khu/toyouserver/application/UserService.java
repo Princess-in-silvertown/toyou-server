@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,9 +77,7 @@ public class UserService {
     public void updateUser(Long userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ToyouException(ResponseType.USER_NOT_FOUND));
-
         changeUserGroupsIfChanged(request, user);
-
         user.updateInfo(request.name(), request.birthday(), request.introduction(), request.imageUrl());
         createBirthdayEvents(user);
     }
@@ -87,37 +86,57 @@ public class UserService {
         List<Group> requestGroups = findGroupsFromRequest(request);
         List<Group> userGroups = findGroupsFromUser(user);
 
-        if (!requestGroups.equals(userGroups)) {
-            replaceUserGroups(user, request.groups());
+        if (isGroupUpdatedNeeded(requestGroups, userGroups)) {
+            List<Group> removedGroups = findRemoveGroups(requestGroups, userGroups);
+            List<Group> newGroups = findNewGroups(requestGroups, userGroups);
+            deleteRollingPaperAndMembers(user, removedGroups);
+            saveMembersWithNewGroups(user, newGroups);
         }
     }
 
+    private void deleteRollingPaperAndMembers(User user, List<Group> removedGroups) {
+        List<Member> members = memberRepository.findByUser(user);
+
+        rollingPaperRepository.deleteAllByMemberIn(members);
+        memberRepository.deleteByUserAndGroupIn(user, removedGroups);
+    }
+
     private List<Group> findGroupsFromRequest(UserUpdateRequest request) {
-        return request.groups().stream()
-                .map(each -> groupRepository.findById(each.id())
-                        .orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST)))
-                .toList();
+        List<Long> groupIds = request.groups().stream()
+                .map(GroupRequest::id)
+                .collect(Collectors.toList());
+
+        return groupRepository.findAllByIdIn(groupIds);
     }
 
     private List<Group> findGroupsFromUser(User user) {
         return memberRepository.findByUser(user).stream()
                 .map(Member::getGroup)
+                .collect(Collectors.toList());
+    }
+
+    private boolean isGroupUpdatedNeeded(List<Group> requestGroups, List<Group> userGroups) {
+        if (requestGroups.size() > userGroups.size()) {
+            return true;
+        }
+        userGroups.removeAll(requestGroups);
+        return !userGroups.isEmpty();
+    }
+
+    private List<Group> findRemoveGroups(List<Group> requestGroups, List<Group> userGroups) {
+        return userGroups.stream()
+                .filter(each -> !requestGroups.contains(each))
                 .toList();
     }
 
-    private void replaceUserGroups(User user, List<GroupRequest> groupRequests) {
-        List<Member> members = memberRepository.findByUser(user);
-
-        rollingPaperRepository.deleteAllByMemberIn(members);
-        memberRepository.deleteAll(members);
-
-        saveMembersWithNewGroups(user, groupRequests);
+    private List<Group> findNewGroups(List<Group> requestGroups, List<Group> userGroups) {
+        return requestGroups.stream()
+                .filter(each -> !userGroups.contains(each))
+                .toList();
     }
 
-    private void saveMembersWithNewGroups(User user, List<GroupRequest> groupRequests) {
-        List<Member> newMembers = groupRequests.stream()
-                .map(each -> groupRepository.findById(each.id())
-                        .orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST)))
+    private void saveMembersWithNewGroups(User user, List<Group> groups) {
+        List<Member> newMembers = groups.stream()
                 .map(each -> new Member(user, each))
                 .map(memberRepository::save)
                 .toList();

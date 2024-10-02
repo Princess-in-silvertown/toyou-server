@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
+import slvtwn.khu.toyouserver.domain.RollingPaper;
 import slvtwn.khu.toyouserver.domain.User;
 import slvtwn.khu.toyouserver.dto.GroupRequest;
 import slvtwn.khu.toyouserver.dto.UserResponse;
@@ -80,7 +82,7 @@ class UserServiceTest {
 	}
 
 	@Test
-	void 유저_정보를_업데이트_할_수_있다() {
+	void 유저_정보_업데이트_시_새로_그룹을_추가할_수_있다() {
 		// given
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Group group1 = new Group("name");
@@ -102,9 +104,129 @@ class UserServiceTest {
 
 		// then
 		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl(), null);
+		List<Member> userRelatedMembers = entityManager.createQuery("select m from Member m where user = :user")
+				.setParameter("user", user)
+				.getResultList();
 
-		assertThat(user).usingRecursiveComparison()
-				.ignoringFields("id", "createdDate", "lastModifiedDate")
-				.isEqualTo(expectedUser);
+		SoftAssertions.assertSoftly(softly -> {
+			softly.assertThat(user)
+					.usingRecursiveComparison()
+					.ignoringFields("id", "createdDate", "lastModifiedDate")
+					.isEqualTo(expectedUser);
+
+			softly.assertThat(userRelatedMembers)
+					.extracting(Member::getGroup)
+					.containsExactlyInAnyOrder(group1, group2);
+		});
+	}
+
+	@Test
+	void 유저_정보_업데이트_시_그룹을_대체할_수_있다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
+		Group group1 = new Group("name");
+		Group group2 = new Group("name");
+		Member member = new Member(user, group1);
+
+		entityManager.persist(user);
+		entityManager.persist(group1);
+		entityManager.persist(group2);
+		entityManager.persist(member);
+
+		UserUpdateRequest request = new UserUpdateRequest(user.getId(), LocalDate.now().plusDays(1),
+				"new_name", "new_introduction", "new_image_url", List.of(
+				new GroupRequest(group2.getId(), group2.getName())));
+
+		// when
+		userService.updateUser(user.getId(), request);
+
+		// then
+		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl(), null);
+		List<Member> userRelatedMembers = entityManager.createQuery("select m from Member m where user = :user")
+				.setParameter("user", user)
+				.getResultList();
+
+		SoftAssertions.assertSoftly(softly -> {
+			softly.assertThat(user)
+					.usingRecursiveComparison()
+					.ignoringFields("id", "createdDate", "lastModifiedDate")
+					.isEqualTo(expectedUser);
+
+			softly.assertThat(userRelatedMembers)
+					.extracting(Member::getGroup)
+					.containsExactlyInAnyOrder(group2);
+		});
+	}
+
+	@Test
+	void 유저_정보_업데이트_시_그룹을_삭제할_수_있다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
+		Group group1 = new Group("name");
+		Group group2 = new Group("name");
+		Member member1 = new Member(user, group1);
+		Member member2 = new Member(user, group2);
+
+		entityManager.persist(user);
+		entityManager.persist(group1);
+		entityManager.persist(group2);
+		entityManager.persist(member1);
+		entityManager.persist(member2);
+
+		UserUpdateRequest request = new UserUpdateRequest(user.getId(), LocalDate.now().plusDays(1),
+				"new_name", "new_introduction", "new_image_url", List.of());
+
+		// when
+		userService.updateUser(user.getId(), request);
+
+		// then
+		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl(), null);
+		List<Member> userRelatedMembers = entityManager.createQuery("select m from Member m where user = :user")
+				.setParameter("user", user)
+				.getResultList();
+
+		SoftAssertions.assertSoftly(softly -> {
+			softly.assertThat(user)
+					.usingRecursiveComparison()
+					.ignoringFields("id", "createdDate", "lastModifiedDate")
+					.isEqualTo(expectedUser);
+
+			softly.assertThat(userRelatedMembers)
+					.hasSize(0);
+		});
+	}
+
+	@Test
+	void 유저_정보_업데이트_시_그룹을_삭제하면_관련_롤링페이퍼도_삭제된다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
+		Group group = new Group("name");
+		Member member = new Member(user, group);
+		RollingPaper rollingPaper = new RollingPaper("image_url", "title", "content",
+				null, member, null);
+
+		entityManager.persist(user);
+		entityManager.persist(group);
+		entityManager.persist(member);
+		entityManager.persist(rollingPaper);
+
+		UserUpdateRequest request = new UserUpdateRequest(user.getId(), LocalDate.now().plusDays(1),
+				"new_name", "new_introduction", "new_image_url", List.of());
+
+		// when
+		userService.updateUser(user.getId(), request);
+
+		// then
+		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl(), null);
+
+		SoftAssertions.assertSoftly(softly -> {
+			softly.assertThat(user)
+					.usingRecursiveComparison()
+					.ignoringFields("id", "createdDate", "lastModifiedDate")
+					.isEqualTo(expectedUser);
+
+			softly.assertThat(entityManager.contains(rollingPaper))
+					.isFalse();
+		});
 	}
 }
