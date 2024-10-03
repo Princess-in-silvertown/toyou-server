@@ -61,9 +61,9 @@ public class UserService {
                 .map(Member::getGroup)
                 .map(each -> memberRepository.findByGroupAndUserNameLike(each, search))
                 .flatMap(List::stream)
+                .distinct()
                 .filter(each -> !each.getUser().getId().equals(user.getId()))
                 .map(each -> UserResponse.of(each.getUser(), each.getGroup().getId()))
-                .distinct()
                 .toList();
     }
 
