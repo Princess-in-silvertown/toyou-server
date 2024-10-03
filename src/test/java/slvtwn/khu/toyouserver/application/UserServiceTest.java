@@ -82,6 +82,43 @@ class UserServiceTest {
 	}
 
 	@Test
+	void 유저_정보를_업데이트_할_수_있다() {
+		// given
+		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
+		Group group = new Group("name");
+		Member member = new Member(user, group);
+
+		entityManager.persist(user);
+		entityManager.persist(group);
+		entityManager.persist(member);
+
+		UserUpdateRequest request = new UserUpdateRequest(user.getId(), LocalDate.now().plusDays(1),
+				"new_name", "new_introduction", "new_image_url", List.of(
+				new GroupRequest(group.getId(), group.getName())));
+
+		// when
+		userService.updateUser(user.getId(), request);
+
+		// then
+		User expectedUser = new User(request.name(), request.birthday(), request.introduction(), request.imageUrl(), null);
+		List<Member> userRelatedMembers = entityManager.createQuery("select m from Member m where user = :user")
+				.setParameter("user", user)
+				.getResultList();
+
+		SoftAssertions.assertSoftly(softly -> {
+			softly.assertThat(user)
+					.usingRecursiveComparison()
+					.ignoringFields("id", "createdDate", "lastModifiedDate")
+					.isEqualTo(expectedUser);
+
+			softly.assertThat(userRelatedMembers)
+					.extracting(Member::getGroup)
+					.containsExactlyInAnyOrder(group)
+					.hasSize(1);
+		});
+	}
+
+	@Test
 	void 유저_정보_업데이트_시_새로_그룹을_추가할_수_있다() {
 		// given
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
