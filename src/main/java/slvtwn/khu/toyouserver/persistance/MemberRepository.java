@@ -20,4 +20,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	Optional<Member> findByUserIdAndGroupId(Long userId, Long groupId);
 
 	void deleteByUserAndGroupIn(User user, List<Group> group);
+
+	List<Member> findAllByGroupIn(List<Group> removedGroups);
 }

@@ -15,7 +15,6 @@ import slvtwn.khu.toyouserver.domain.Group;
 import slvtwn.khu.toyouserver.domain.Member;
 import slvtwn.khu.toyouserver.domain.RollingPaper;
 import slvtwn.khu.toyouserver.domain.User;
-import slvtwn.khu.toyouserver.dto.GroupRequest;
 import slvtwn.khu.toyouserver.dto.UserResponse;
 import slvtwn.khu.toyouserver.dto.UserUpdateRequest;
 import slvtwn.khu.toyouserver.exception.ToyouException;
@@ -87,19 +86,28 @@ public class UserService {
     }
 
     private void changeUserGroupsIfChanged(UserUpdateRequest request, User user) {
-        List<Group> requestGroups = findGroupsFromRequest(request);
-        List<Group> userGroups = findGroupsFromUser(user);
+        deleteRollingPaperAndMembersIfGroupRemoved(request, user);
+        createMembersIfGroupAdded(request, user);
+    }
 
-        if (isGroupUpdatedNeeded(requestGroups, userGroups)) {
-            List<Group> removedGroups = findRemoveGroups(requestGroups, userGroups);
-            List<Group> newGroups = findNewGroups(requestGroups, userGroups);
+    private void deleteRollingPaperAndMembersIfGroupRemoved(UserUpdateRequest request, User user) {
+        List<Group> removedGroups = findRemoveGroups(user, request);
+        if (!removedGroups.isEmpty()) {
             deleteRollingPaperAndMembers(user, removedGroups);
-            saveMembersWithNewGroups(user, newGroups);
         }
     }
 
+    private List<Group> findRemoveGroups(User user, UserUpdateRequest request) {
+        List<Group> requestGroups = findRequestGroups(request);
+        List<Group> userGroups = findUserGroups(user);
+
+        return userGroups.stream()
+                .filter(each -> !requestGroups.contains(each))
+                .toList();
+    }
+
     private void deleteRollingPaperAndMembers(User user, List<Group> removedGroups) {
-        List<Member> members = memberRepository.findByUser(user);
+        List<Member> members = memberRepository.findAllByGroupIn(removedGroups) ;
         List<RollingPaper> rollingPapers = rollingPaperRepository.findAllByMemberIn(members);
 
         stickerRepository.deleteAllByRollingPaperIn(rollingPapers);
@@ -107,37 +115,32 @@ public class UserService {
         memberRepository.deleteByUserAndGroupIn(user, removedGroups);
     }
 
-    private List<Group> findGroupsFromRequest(UserUpdateRequest request) {
-        List<Long> groupIds = request.groups().stream()
-                .map(GroupRequest::id)
-                .collect(Collectors.toList());
-
-        return groupRepository.findAllByIdIn(groupIds);
-    }
-
-    private List<Group> findGroupsFromUser(User user) {
-        return memberRepository.findByUser(user).stream()
-                .map(Member::getGroup)
-                .collect(Collectors.toList());
-    }
-
-    private boolean isGroupUpdatedNeeded(List<Group> requestGroups, List<Group> userGroups) {
-        if (requestGroups.size() > userGroups.size()) {
-            return true;
+    private void createMembersIfGroupAdded(UserUpdateRequest request, User user) {
+        List<Group> newGroups = findNewGroups(user, request);
+        if (!newGroups.isEmpty()) {
+            saveMembersWithNewGroups(user, newGroups);
         }
-        userGroups.removeAll(requestGroups);
-        return !userGroups.isEmpty();
     }
 
-    private List<Group> findRemoveGroups(List<Group> requestGroups, List<Group> userGroups) {
-        return userGroups.stream()
-                .filter(each -> !requestGroups.contains(each))
+    private List<Group> findNewGroups(User user, UserUpdateRequest request) {
+        List<Group> requestGroups = findRequestGroups(request);
+        List<Group> userGroups = findUserGroups(user); // TODO: 중복 제거
+
+        return requestGroups.stream()
+                .filter(each -> !userGroups.contains(each))
                 .toList();
     }
 
-    private List<Group> findNewGroups(List<Group> requestGroups, List<Group> userGroups) {
-        return requestGroups.stream()
-                .filter(each -> !userGroups.contains(each))
+    private List<Group> findRequestGroups(UserUpdateRequest request) {
+        return request.groups().stream()
+                .map(each -> groupRepository.findById(each.id())
+                        .orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST)))
+                .toList();
+    }
+
+    private List<Group> findUserGroups(User user) {
+        return memberRepository.findByUser(user).stream()
+                .map(Member::getGroup)
                 .toList();
     }
 
