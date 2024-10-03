@@ -63,6 +63,7 @@ public class UserService {
                 .flatMap(List::stream)
                 .filter(each -> !each.getUser().getId().equals(user.getId()))
                 .map(each -> UserResponse.of(each.getUser(), each.getGroup().getId()))
+                .distinct()
                 .toList();
     }
 
