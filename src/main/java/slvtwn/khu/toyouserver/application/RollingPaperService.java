@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import slvtwn.khu.toyouserver.common.response.ResponseType;
@@ -77,15 +78,17 @@ public class RollingPaperService {
 	public RollingPaperPagedResponse findReceivedRollingPapers(Long userId, Long groupId,
 	                                                           Long targetId, Integer limit) {
 		List<Long> memberIds = getMemberIds(userId, groupId);
-		PageRequest pageRequest = PageRequest.ofSize(limit);
-		Slice<RollingPaper> rollingPapers = rollingPaperRepository.findAllByMembersAfterCursor(memberIds, targetId,
+		PageRequest pageRequest = PageRequest.of(0, limit + 1, Sort.by(Sort.Direction.DESC, "id"));
+		Slice<RollingPaper> rollingPapers = rollingPaperRepository.findByMembersWithCursor(memberIds, targetId,
 				pageRequest);
-		Long nextCursorId = rollingPapers.hasNext() ?
-				rollingPapers.getContent().get(rollingPapers.getContent().size() - 1).getId() : null;
-		CursorPageInfo cursorPageInfo = CursorPageInfo.from(rollingPapers, nextCursorId);
+		Long nextCursorId =
+				rollingPapers.getContent().size() > limit ? rollingPapers.getContent().get(0).getId() : null;
 		List<RollingPaperResponse> responses = rollingPapers.stream()
+				.limit(limit)
 				.map(RollingPaperResponse::from)
 				.toList();
+		CursorPageInfo cursorPageInfo = CursorPageInfo.from(rollingPapers, nextCursorId, responses.size(),
+				nextCursorId != null);
 		return RollingPaperPagedResponse.from(cursorPageInfo, responses);
 	}
 
