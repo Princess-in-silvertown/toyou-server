@@ -35,7 +35,6 @@ public class RollingPaperService {
 	private final RollingPaperRepository rollingPaperRepository;
 	private final StickerRepository stickerRepository;
 	private final MemberRepository memberRepository;
-	private final RollingPaperRepository rollingpaperRepository;
 	private final UserRepository userRepository;
 
 	// TODO: ModelLabs 관련 문제로 DISABLED
