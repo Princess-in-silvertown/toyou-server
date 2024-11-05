@@ -95,7 +95,7 @@ class RollingPaperServiceTest {
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Member member = new Member(user, group);
 		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L,
-				member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);
@@ -118,7 +118,7 @@ class RollingPaperServiceTest {
 		User user = new User("name", LocalDate.now(), "introduction", "profile_picture", null);
 		Member member = new Member(user, group);
 		RollingPaper rollingPaper = new RollingPaper(null, "title", "content", 1L,
-				member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);
@@ -144,9 +144,9 @@ class RollingPaperServiceTest {
 		Member member1 = new Member(user, group1);
 		Member member2 = new Member(user, group2);
 		RollingPaper rollingPaper = new RollingPaper(null, "title", "rollingPaper", 1L,
-				member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				member1, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper anotherRollingPaper = new RollingPaper(null, "title", "anotherRollingPaper", 1L,
-				member2, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				member2, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group1);
@@ -180,9 +180,9 @@ class RollingPaperServiceTest {
 		Member member1 = new Member(user, group1);
 		Member member2 = new Member(user, group2);
 		RollingPaper rollingPaper = new RollingPaper(null, "title", "rollingPaper", 1L,
-				member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				member1, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper anotherRollingPaper = new RollingPaper(null, "title", "anotherRollingPaper", 1L,
-				member2, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				member2, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group1);
@@ -214,11 +214,11 @@ class RollingPaperServiceTest {
 		Member member2 = new Member(user, group2);
 
 		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1",
-				1L, member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member1, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2",
-				1L, member1, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member1, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3",
-				1L, member2, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member2, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group1);
@@ -254,11 +254,11 @@ class RollingPaperServiceTest {
 		Member member = new Member(user, group);
 
 		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);
@@ -293,11 +293,11 @@ class RollingPaperServiceTest {
 		Member member = new Member(user, group);
 
 		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);
@@ -331,11 +331,11 @@ class RollingPaperServiceTest {
 		Member member = new Member(user, group);
 
 		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);
@@ -363,11 +363,11 @@ class RollingPaperServiceTest {
 		Member member = new Member(user, group);
 
 		RollingPaper rollingPaper1 = new RollingPaper(null, "title1", "rollingPaper1",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper2 = new RollingPaper(null, "title2", "rollingPaper2",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 		RollingPaper rollingPaper3 = new RollingPaper(null, "title3", "rollingPaper3",
-				1L, member, new SenderSnapshot(sender.getName(), sender.getProfilePicture()));
+				1L, member, new SenderSnapshot(sender.getId(), sender.getName(), sender.getProfilePicture()));
 
 		entityManager.persist(user);
 		entityManager.persist(group);

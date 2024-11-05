@@ -60,9 +60,8 @@ public class RollingPaperService {
 				() -> new ToyouException(ResponseType.BAD_REQUEST));
 		User requestUser = userRepository.findById(requestUserId)
 				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
-
 		return new RollingPaper(request.coverImageUrl(), request.title(), request.content(), request.themeId(),
-				member, new SenderSnapshot(requestUser.getName(), requestUser.getProfilePicture()));
+				member, SenderSnapshot.of(requestUser));
 	}
 
 	public RollingPaperResponse findById(Long userId, Long rollingPaperId) {
