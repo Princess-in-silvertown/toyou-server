@@ -18,5 +18,9 @@ public interface RollingPaperRepository extends JpaRepository<RollingPaper, Long
 
 	List<RollingPaper> findAllByMemberIn(List<Member> members);
 
+	Long countAllBySenderSnapshot_SenderId(Long senderId);
+
+	List<RollingPaper> findAllBySenderSnapshot_SenderId(Long senderId);
+
 	void deleteAllByMemberIn(List<Member> members);
 }

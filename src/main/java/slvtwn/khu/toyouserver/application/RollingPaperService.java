@@ -90,6 +90,17 @@ public class RollingPaperService {
 		return RollingPaperPagedResponse.from(cursorPageInfo, responses);
 	}
 
+	public Long countSentRollingPapers(Long userId) {
+		return rollingPaperRepository.countAllBySenderSnapshot_SenderId(userId);
+	}
+
+	public Long countReceivedRollingPapers(Long userId) {
+		List<Member> members = memberRepository.findByUserId(userId);
+		return rollingPaperRepository.findAllByMemberIn(members).stream()
+				.filter(rollingPaper -> !rollingPaper.getSenderSnapshot().getSenderId().equals(userId))
+				.count();
+	}
+
 	private List<Sticker> parseStickers(RollingPaperRequest request, RollingPaper rollingPaper) {
 		return request.stickers().stream()
 				.map(each -> new Sticker(rollingPaper, each.imageUrl(), each.x(), each.y(),

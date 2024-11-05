@@ -14,6 +14,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	List<Member> findByUser(User user);
 
+	List<Member> findByUserId(Long userId);
+
 	@Query("select m from Member m join m.user u where m.group = :group and u.name like %:pattern%")
 	List<Member> findByGroupAndUserNameLike(Group group, String pattern);
 
