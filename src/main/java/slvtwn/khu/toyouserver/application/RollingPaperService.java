@@ -35,7 +35,6 @@ public class RollingPaperService {
 	private final RollingPaperRepository rollingPaperRepository;
 	private final StickerRepository stickerRepository;
 	private final MemberRepository memberRepository;
-	private final RollingPaperRepository rollingpaperRepository;
 	private final UserRepository userRepository;
 
 	// TODO: ModelLabs 관련 문제로 DISABLED
@@ -61,9 +60,8 @@ public class RollingPaperService {
 				() -> new ToyouException(ResponseType.BAD_REQUEST));
 		User requestUser = userRepository.findById(requestUserId)
 				.orElseThrow(() -> new ToyouException(ResponseType.BAD_REQUEST));
-
 		return new RollingPaper(request.coverImageUrl(), request.title(), request.content(), request.themeId(),
-				member, new SenderSnapshot(requestUser.getName(), requestUser.getProfilePicture()));
+				member, SenderSnapshot.of(requestUser));
 	}
 
 	public RollingPaperResponse findById(Long userId, Long rollingPaperId) {
@@ -90,6 +88,17 @@ public class RollingPaperService {
 		CursorPageInfo cursorPageInfo = CursorPageInfo.from(rollingPapers, nextCursorId, responses.size(),
 				nextCursorId != null);
 		return RollingPaperPagedResponse.from(cursorPageInfo, responses);
+	}
+
+	public Long countSentRollingPapers(Long userId) {
+		return rollingPaperRepository.countAllBySenderSnapshot_SenderId(userId);
+	}
+
+	public Long countReceivedRollingPapers(Long userId) {
+		List<Member> members = memberRepository.findByUserId(userId);
+		return rollingPaperRepository.findAllByMemberIn(members).stream()
+				.filter(rollingPaper -> !rollingPaper.getSenderSnapshot().getSenderId().equals(userId))
+				.count();
 	}
 
 	private List<Sticker> parseStickers(RollingPaperRequest request, RollingPaper rollingPaper) {
